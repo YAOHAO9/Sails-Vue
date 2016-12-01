@@ -22,27 +22,28 @@ module.exports = {
     alias: {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components')
+      'components': path.resolve(__dirname, '../src/components'),
+      'jquery': 'jquery'
     }
   },
   resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
-  /*  preLoaders: [
-      {
-        test: /\.vue$/,
-        loader: 'eslint',
-        include: projectRoot,
-        exclude: /node_modules/
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint',
-        include: projectRoot,
-        exclude: /node_modules/
-      }
-    ],*/
+    /*  preLoaders: [
+        {
+          test: /\.vue$/,
+          loader: 'eslint',
+          include: projectRoot,
+          exclude: /node_modules/
+        },
+        {
+          test: /\.js$/,
+          loader: 'eslint',
+          include: projectRoot,
+          exclude: /node_modules/
+        }
+      ],*/
     loaders: [
       {
         test: /\.vue$/,

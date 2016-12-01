@@ -1,8 +1,8 @@
 <template>
-  <hiv v-for="row in rows" v-bind:width="width" class="image-grid">
-    <div v-for="column in row ">
+  <hiv v-for="row in rows" :width="width" class="image-grid">
+    <div v-for="column in row">
       <div v-square="{padding:'2%'}">
-        <div><img src="../../../assets/images/blog/long.jpg" /></div>
+        <div><img src="../../../assets/images/blog/long.jpg" @click="column.click && column.click()"/></div>
       </div>
     </div>
   </hiv>

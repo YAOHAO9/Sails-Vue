@@ -1,16 +1,43 @@
 <template>
-  <form>
-    <textarea placeholder="这一刻的想法..."></textarea>
-    <input v-for="name in rows" :name="name"/>
-  </form>
+  <div>
+    <form>
+      <textarea placeholder="这一刻的想法..." :value="form.text"></textarea>
+      <input v-for="row in rows" :name="row.name"  hidden type="file" multiple="multiple" accept="image/*"/>
+    </form>
+    <div class="image-grid-parent">
+      <image-grid :urls="rows"></image-grid>
+    </div>
+
+  </div>
+
 </template>
 <script>
+
+import  ImageGrid  from '../../components/image-grid'
+
 export default {
   data (){
     return {
-      column:9,
-      rows:['image1','image2','image3','image4','image5','image6','image7','image8','image9']
+      rows: (function () {
+          var rows =[]
+          for(var i=0;i< 9;i++){
+            var name = "image"+i
+            rows.push({
+              name:name,
+              click:function(name){
+                return function(){ 
+                  $('input[name='+name+']').click() 
+                }
+              }(name)
+            })
+          }
+          return rows
+      })(),
+      form:{text:"这一刻的想法..."}
     }
+  },
+  components:{
+    ImageGrid
   }
 }
 </script>
@@ -22,5 +49,10 @@ export default {
     padding: 0 5px;
     text-indent: 2em;
     height: 100px;
+  }
+  
+  .image-grid-parent {
+    width: 55%;
+    margin: 10px 20px;
   }
 </style>
