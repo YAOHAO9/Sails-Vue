@@ -47,7 +47,6 @@ export default {
     let childElementCount = this.$el.childElementCount
     for (var i = 0; i < this.$el.childElementCount; i++) {
       if(this.width){
-        console.log(this.width)
         this.$el.children[i].style.width = this.width
       }else{
         this.$el.children[i].style.width = 100 / childElementCount + '%'

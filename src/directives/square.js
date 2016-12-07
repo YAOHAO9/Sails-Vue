@@ -11,7 +11,6 @@ export default {
       data.bottom = arr[2] ? arr[2] : data.top
       data.right = arr[3] ? arr[3] : data.left
     }
-    console.log(data)
     this.el.style.width = data.width
     this.el.style['padding-top'] = data.width
     this.el.style['max-height'] = 0
