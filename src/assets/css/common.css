@@ -44,3 +44,6 @@ hr{
 	height: 1px;
 	background:#e7e7e7;
 }
+.btn:active{
+	background-color: #F08F99
+}

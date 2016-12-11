@@ -8,7 +8,24 @@
 module.exports = {
 
   attributes: {
-
+    images: {
+      type: 'array'
+    },
+    content: {
+      type: 'longtext'
+    },
+    comment: {
+      type: 'array'
+    },
+    approve: {
+      type: 'array'
+    },
+    disapprove: {
+      type: 'array',
+      agreement: {
+        version: "string",
+      }
+    }
   }
 };
 

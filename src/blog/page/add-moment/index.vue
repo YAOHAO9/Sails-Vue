@@ -1,7 +1,7 @@
 <template>
   <div>
     <form>
-      <textarea placeholder="这一刻的想法..." :value="form.text"></textarea>
+      <textarea placeholder="这一刻的想法..." :value="content"></textarea>
     </form>
     <div v-for="row in rows" class="image-grid">
       <div v-for="column in row">
@@ -17,6 +17,9 @@
           </div>
         </div>
       </hiv>
+    </div>
+    <div class="submit btn" @click="submit()">
+      确认
     </div>
   </div>
 
@@ -45,7 +48,7 @@ export default {
          rows[0][0].display='block'
          return rows
       })(),
-      form:{text:"这一刻的想法..."}
+     content:"这一刻的想法..."
     }
   },
   ready:function(){
@@ -83,6 +86,27 @@ export default {
     Lrz
   },
   methods: {
+    submit:function(){
+      var formData = new FormData()
+      var compressPictures=[]
+      this.rows.forEach(function(row){
+        row.forEach(function(column){
+          if(column.compressPicture){
+            compressPictures.push(column.compressPicture)
+            column.compressPicture=false
+            column.display = 'node'
+          }
+        })
+      })
+      compressPictures.forEach(function(compressPicture){
+        formData.append("images",compressPicture.file)
+      })
+      formData.append("content",this.content)
+      this.$http.post('api/moment/create', formData)
+				.then((response) => {
+					console.log(response)
+				})
+    },
     refresh:function(){
     var compressPictures=[]
      this.rows.forEach(function(row){
@@ -128,5 +152,16 @@ export default {
   .image-grid-parent {
     width: 55%;
     margin: 10px 20px;
+  }
+  
+  .submit {
+    line-height: 40px;
+    text-align: center;
+    width: 40%;
+    margin: 20px auto;
+    height: 40px;
+    border-radius: 7px;
+    color: #3690FF;
+    border: 2px solid #3690FF;
   }
 </style>
