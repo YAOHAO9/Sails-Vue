@@ -8,6 +8,9 @@
 module.exports = {
 
   attributes: {
+    user: {
+      model: 'User'
+    },
     images: {
       type: 'array'
     },
