@@ -1,15 +1,15 @@
 <template>
   <simple-header title="Moment"></simple-header>
   <content>
-    <div >
+    <div v-for="item in list">
       <!--Item header-->
       <hav margin='3px 40px 3px 46px' center>
         <div>
           <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
         </div>
         <div class="title-parent">
-          <div class="title">匿名者</div>
-          <div class="date">{{ new Date() | date}}</div>
+          <div class="title">{{item.user.name}}</div>
+          <div class="date">{{ new Date(item.createdAt) | date}}</div>
         </div>
         <div class="edit">
           <i class="fa fa-chevron-down"></i>
@@ -17,10 +17,10 @@
       </hav>
       <hr>
       <div class="text">
-        今天在Apple Store 感受了一下 TouchBar，感受一般。 1.不同类型的应用 TouchBar 有用程度良莠不齐。 2.依赖 Apple 官方应用软件支持，然而我基本一个内置应用都不用。 不过想想，如果可以只定义按钮映射到常用快捷键组合，倒是可以一用。
+        {{item.content}}
       </div>
-      <div class="blog-content" >
-        <image-grid ></image-grid>
+      <div class="blog-content">
+        <image-grid :urls="item.images"></image-grid>
       </div>
       <hr>
       <hev center class="item">
@@ -42,28 +42,37 @@
 </template>
 
 <script>
-import { SimpleHeader } from '../../components/header'
-import Content from '../../components/content'
-import Hav from '../../components/hav'
-import Hev from '../../components/hev'
-import ImageGrid from '../components/image-grid'
-import AddBtn from '../components/add-btn'
+  import { SimpleHeader } from '../../components/header'
+  import Content from '../../components/content'
+  import Hav from '../../components/hav'
+  import Hev from '../../components/hev'
+  import ImageGrid from '../components/image-grid'
+  import AddBtn from '../components/add-btn'
 
-export default {
-  data () {
-    return {
-      a: 1111111111111
+  export default {
+    data() {
+      return {
+        list: []
+      }
+    },
+    ready: function () {
+      this.$http.get('api/moment/find')
+        .then
+        (function (res) {
+         this.list = res.body
+        }, function (err) {
+
+        })
+    },
+    components: {
+      SimpleHeader,
+      Content,
+      Hav,
+      Hev,
+      ImageGrid,
+      AddBtn
     }
-  },
-  components: {
-    SimpleHeader,
-    Content,
-    Hav,
-    Hev,
-    ImageGrid,
-    AddBtn
   }
-}
 </script>
 <style lang="less" scoped>
   .portrait {
@@ -82,7 +91,6 @@ export default {
   .blog-content {
     width: 70%;
     margin: 0 auto;
-    background: deepskyblue;
   }
   
   .title {

@@ -2,7 +2,7 @@
   <hiv v-for="row in rows" :width="width" class="image-grid">
     <div v-for="column in row">
       <div v-square="{padding:'2%'}">
-        <div><img src="../../../assets/images/blog/long.jpg" @click="column.click && column.click()"/></div>
+        <div><img :src="'api/file/find/' + column" @click="column.click && column.click()"/></div>
       </div>
     </div>
   </hiv>
@@ -21,7 +21,7 @@ export default {
     urls: {
       type: Array,
       default: function(){
-        return ["haha",2,3,4,5,6,7,8,9,10]
+        return [1,2,3,4]
       }
     }
   },
