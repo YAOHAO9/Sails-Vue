@@ -1,41 +1,42 @@
 <template>
   <simple-header title="Moment"></simple-header>
   <content>
-    <div v-for="item in list">
-      <!--Item header-->
-      <hav margin='3px 40px 3px 46px' center>
-        <div>
-          <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
+    <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
+      <div v-for="item in list" class="item">
+        <!--Item header-->
+        <hav margin='3px 40px 3px 46px' center>
+          <div>
+            <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
+          </div>
+          <div class="title-parent">
+            <div class="title">{{item.user.name}}</div>
+            <div class="date">{{ new Date(item.createdAt) | date}}</div>
+          </div>
+          <div class="edit">
+            <i class="fa fa-chevron-down"></i>
+          </div>
+        </hav>
+        <div class="text">
+          {{item.content}}
         </div>
-        <div class="title-parent">
-          <div class="title">{{item.user.name}}</div>
-          <div class="date">{{ new Date(item.createdAt) | date}}</div>
+        <div class="blog-content">
+          <image-grid :urls="item.images"></image-grid>
         </div>
-        <div class="edit">
-          <i class="fa fa-chevron-down"></i>
-        </div>
-      </hav>
-      <hr>
-      <div class="text">
-        {{item.content}}
+        <hr>
+        <hev center>
+          <div>
+            <i class="fa btn fa-thumbs-down"></i>
+          </div>
+          <div>
+            <i class="fa btn fa-commenting"></i>
+          </div>
+          <div>
+            <i class="fa btn fa-thumbs-up"></i>
+          </div>
+        </hev>
+        <hr>
       </div>
-      <div class="blog-content">
-        <image-grid :urls="item.images"></image-grid>
-      </div>
-      <hr>
-      <hev center class="item">
-        <div>
-          <i class="fa  fa-thumbs-down"></i>
-        </div>
-        <div>
-          <i class="fa  fa-star-o"></i>
-        </div>
-        <div>
-          <i class="fa  fa-thumbs-up"></i>
-        </div>
-      </hev>
-      <hr>
-    </div>
+    </scroll>
     <add-btn></add-btn>
   </content>
 
@@ -48,6 +49,7 @@
   import Hev from '../../components/hev'
   import ImageGrid from '../components/image-grid'
   import AddBtn from '../components/add-btn'
+  import Scroll from '../../components/scroll'
 
   export default {
     data() {
@@ -56,10 +58,10 @@
       }
     },
     ready: function () {
-      this.$http.get('api/moment/find')
+      this.$http.get('api/moment?limit=4')
         .then
         (function (res) {
-         this.list = res.body
+          this.list = res.body
         }, function (err) {
 
         })
@@ -70,11 +72,43 @@
       Hav,
       Hev,
       ImageGrid,
-      AddBtn
+      AddBtn,
+      Scroll
+    },
+    methods: {
+      onRefresh(done) {
+        this.$http.get('api/moment?limit=2')
+          .then
+          (function (res) {
+            this.list = res.body
+            done()
+          }, function (err) {
+            alert(err)
+            done()
+          })
+      },
+      onInfinite(done) {
+        var ctx = this
+        this.$http.get('api/moment?limit=2&skip=' + ctx.list.length)
+          .then(
+          function (res) {
+            ctx.list = ctx.list.concat(res.body)
+            done()
+          },
+          function (err) {
+            alert(err)
+            done()
+          })
+      }
     }
   }
 </script>
 <style lang="less" scoped>
+  .item{
+    margin-top: 8px;
+    padding-top: 2px; 
+    background-color: white;
+  }
   .portrait {
     border-radius: 18px;
     background-color: gray;
@@ -87,7 +121,6 @@
   img {
     width: 100%;
   }
-  
   .blog-content {
     width: 70%;
     margin: 0 auto;
@@ -95,12 +128,12 @@
   
   .title {
     font-weight: 900;
-    font-size: 15px;
+    font-size: 13px;
     color: #333333
   }
   
   .date {
-    font-size: 10px;
+    font-size: 8px;
     color: #888888
   }
   
@@ -108,6 +141,7 @@
     text-indent: 2em;
     font-size: 13px;
     color: #333333;
+    margin: 3px 0px;
   }
   
   i {

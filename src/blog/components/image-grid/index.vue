@@ -38,8 +38,6 @@ export default {
       column = 2
     }else if(this.urls.length == 1){
       column = 1
-    }else{
-      throw new Error('Urls is requird')
     }
     var rows
     for(var i=0 ;i <= (this.urls.length-1) / column ; i++ ){

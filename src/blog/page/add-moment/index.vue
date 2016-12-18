@@ -1,7 +1,7 @@
 <template>
   <div>
     <form>
-      <textarea placeholder="这一刻的想法..." :value="content"></textarea>
+      <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
     </form>
     <div v-for="row in rows" class="image-grid">
       <div v-for="column in row">
