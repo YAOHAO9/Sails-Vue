@@ -37,7 +37,10 @@
         <hr>
       </div>
     </scroll>
-    <add-btn></add-btn>
+    <add-btn @click="showFull = true"></add-btn>
+    <popup :show.sync="showFull" :full="true" :title="'Add moment'">
+      <add-moment :submit-cb='closePopup'></add-moment>
+    </popup>
   </content>
 
 </template>
@@ -50,21 +53,18 @@
   import ImageGrid from '../components/image-grid'
   import AddBtn from '../components/add-btn'
   import Scroll from '../../components/scroll'
+  import Popup from '../../components/popup'
+  import AddMoment from '../page/add-moment'
 
   export default {
     data() {
       return {
-        list: []
+        list: [],
+        showFull: false,
       }
     },
     ready: function () {
-      this.$http.get('api/moment?limit=4')
-        .then
-        (function (res) {
-          this.list = res.body
-        }, function (err) {
-
-        })
+      this.onRefresh()
     },
     components: {
       SimpleHeader,
@@ -73,23 +73,25 @@
       Hev,
       ImageGrid,
       AddBtn,
-      Scroll
+      Scroll,
+      Popup,
+      AddMoment
     },
     methods: {
       onRefresh(done) {
-        this.$http.get('api/moment?limit=2')
+        this.$http.get('api/moment?sort=createdAt DESC&limit=10')
           .then
           (function (res) {
             this.list = res.body
-            done()
+            done && done()
           }, function (err) {
             alert(err)
-            done()
+            done && done()
           })
       },
       onInfinite(done) {
         var ctx = this
-        this.$http.get('api/moment?limit=2&skip=' + ctx.list.length)
+        this.$http.get('api/moment?sort=createdAt DESC&limit=10&skip=' + ctx.list.length)
           .then(
           function (res) {
             ctx.list = ctx.list.concat(res.body)
@@ -99,6 +101,12 @@
             alert(err)
             done()
           })
+      },
+      closePopup() {
+        var ctx = this
+        ctx.onRefresh(function () {
+          ctx.showFull = false
+        })
       }
     }
   }

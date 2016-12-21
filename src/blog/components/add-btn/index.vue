@@ -1,11 +1,18 @@
 <template>
-  <a id="AddLost" v-link="{ path: 'add-moment' }">
+  <a id="AddLost" v-link="{ path:link}">
     <div>
       <div></div>
     </div>
   </a>
 </template>
 <script>
+  export default {
+    props: {
+      link: {
+        type: String,
+      }
+    }
+  }
 </script>
 <style>
   #AddLost {
