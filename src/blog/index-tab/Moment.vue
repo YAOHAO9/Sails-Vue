@@ -38,7 +38,7 @@
       </div>
     </scroll>
     <add-btn @click="showFull = true"></add-btn>
-    <popup :show.sync="showFull" :full="true" :title="'Add moment'">
+    <popup :show.sync="showFull" :full="true" :title="''" :show-title-bar="true" >
       <add-moment :submit-cb='closePopup'></add-moment>
     </popup>
   </content>

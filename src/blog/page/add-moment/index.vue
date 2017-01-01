@@ -115,7 +115,6 @@
         }
         this.$http.post('api/moment/create', formData)
           .then((response) => {
-            debugger
             this.submitCb && this.submitCb()
             this.submiting = false
           })

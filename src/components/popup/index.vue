@@ -5,7 +5,9 @@
        class="popup-modal {{className}} {{full ? 'full' : ''}}">
     <page-header v-if="showTitleBar">
       <header-title>{{title}}</header-title>
-      <header-link @click="close()">{{closeButtonText}}</header-link>
+      <header-link @click="close()">
+        <i class="fa fa-close"></i>
+      </header-link>
     </page-header>
     <div class="modal-content">
       <slot></slot>
@@ -38,10 +40,6 @@ export default {
     showTitleBar: {
       type: Boolean,
       default: true
-    },
-    closeButtonText: {
-      type: String,
-      default: 'Close'
     },
     full: {
       type: Boolean,

@@ -10,15 +10,13 @@ var UploadService = require("../services/UploadService")
 module.exports = {
   create: function (req, res) {
     UploadService(req, "images")
-      .then(filesUploaded => {
+      .then(uploadedFiles => {
         User.findOrCreate({ id: req.cookies['UserId'] })
           .then(user => {
             return Moment.create({
               user: user,
               content: req.body.content,
-              images: filesUploaded.map(file => {
-                return file.extra.fileId
-              })
+              images: uploadedFiles
             })
           })
           .then(moment => {

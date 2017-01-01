@@ -24,7 +24,6 @@
     "sails": "~0.12.11",
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.1",
-    "skipper-gridfs": "^0.5.3",
     "vue": "^1.0.21",
     "vue-resource": "^1.0.3"
   },
@@ -95,7 +94,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/anonymous node/sails user/sailsDemo.git"
+    "url": "https://github.com/YAOHAO9/Sails-Vue.git"
   },
   "author": "anonymous node/sails user",
   "license": ""
