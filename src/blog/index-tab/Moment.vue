@@ -2,43 +2,43 @@
   <simple-header title="Moment"></simple-header>
   <content>
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
-      <div v-for="item in list" class="item">
-        <!--Item header-->
-        <hav margin='3px 40px 3px 46px' center>
-          <div>
-            <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
+      <div v-for="item in list" class="item" @click="detail(item)">
+          <!--Item header-->
+          <hav margin='3px 40px 3px 46px' center>
+            <div>
+              <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
+            </div>
+            <div class="title-parent">
+              <div class="title">{{item.user.name}}</div>
+              <div class="date">{{ new Date(item.createdAt) | date}}</div>
+            </div>
+            <div class="edit">
+              <i class="fa fa-chevron-down"></i>
+            </div>
+          </hav>
+          <div class="text">
+            {{item.content}}
           </div>
-          <div class="title-parent">
-            <div class="title">{{item.user.name}}</div>
-            <div class="date">{{ new Date(item.createdAt) | date}}</div>
+          <div class="blog-content">
+            <image-grid :urls="item.images"></image-grid>
           </div>
-          <div class="edit">
-            <i class="fa fa-chevron-down"></i>
-          </div>
-        </hav>
-        <div class="text">
-          {{item.content}}
-        </div>
-        <div class="blog-content">
-          <image-grid :urls="item.images"></image-grid>
-        </div>
-        <hr>
-        <hev center>
-          <div>
-            <i class="fa btn fa-thumbs-down"></i>
-          </div>
-          <div>
-            <i class="fa btn fa-commenting"></i>
-          </div>
-          <div>
-            <i class="fa btn fa-thumbs-up"></i>
-          </div>
-        </hev>
-        <hr>
+          <hr>
+          <hev center>
+            <div>
+              <i class="fa btn fa-thumbs-down"></i>
+            </div>
+            <div>
+              <i class="fa btn fa-commenting"></i>
+            </div>
+            <div>
+              <i class="fa btn fa-thumbs-up"></i>
+            </div>
+          </hev>
+          <hr>
       </div>
     </scroll>
     <add-btn @click="showFull = true"></add-btn>
-    <popup :show.sync="showFull" :full="true" :title="''" :show-title-bar="true" >
+    <popup :show.sync="showFull" :full="true" :title="''" :show-title-bar="true">
       <add-moment :submit-cb='closePopup'></add-moment>
     </popup>
   </content>
@@ -107,6 +107,12 @@
         ctx.onRefresh(function () {
           ctx.showFull = false
         })
+      },
+      detail(item) {
+        if (item.images && item.images.length > 0) {
+          this.$router.go({ name: 'Detail', query: { item: JSON.stringify(item) } })
+          return
+        }
       }
     }
   }
