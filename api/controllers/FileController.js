@@ -31,6 +31,8 @@ module.exports = {
     // Stream the file down
     File.findOne(req.param('id'))
       .then(file => {
+        if (!file)
+          throw new Error('Not found')
         fileAdapter.read(file.fd)
           .on('error', function (err) {
             return res.serverError(err)
