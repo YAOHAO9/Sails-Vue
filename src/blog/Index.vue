@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import Page from '../components/page'
 import { Footer, Item } from '../components/footer'
 import Moment from './index-tab/Moment'
 import Blog from './index-tab/Blog'
@@ -34,7 +33,6 @@ import At from './index-tab/At'
 
 export default {
   components: {
-    Page,
     'page-footer': Footer,
     'footer-item': Item,
     'moment': Moment,

@@ -24,11 +24,12 @@
       imgLoad: function () {
         var slider = document.getElementById("slider")
         slider.style.height = slider.children[0].offsetHeight + 'px'
+        slider.style.position ='relative'
       }
     }
   }
 </script>
 <style>
 @import "./ideal-image-slider.css";
-@import "./default.css"
+@import "./default.css";
 </style>

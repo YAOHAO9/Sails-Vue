@@ -32,7 +32,7 @@ module.exports = {
     File.findOne(req.param('id'))
       .then(file => {
         if (!file)
-          throw new Error('Not found')
+          return res.notFound(req.param('id'))
         fileAdapter.read(file.fd)
           .on('error', function (err) {
             return res.serverError(err)

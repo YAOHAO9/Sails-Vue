@@ -2,39 +2,42 @@
   <simple-header title="Moment"></simple-header>
   <content>
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
-      <div v-for="item in list" class="item" @click="detail(item)">
-          <!--Item header-->
-          <hav margin='3px 40px 3px 46px' center>
-            <div>
-              <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
-            </div>
-            <div class="title-parent">
-              <div class="title">{{item.user.name}}</div>
-              <div class="date">{{ new Date(item.createdAt) | date}}</div>
-            </div>
-            <div class="edit">
-              <i class="fa fa-chevron-down"></i>
-            </div>
-          </hav>
-          <div class="text">
-            {{item.content}}
+      <div v-for="item in list" class="item">
+        <!--header-->
+        <hav margin='3px 40px 3px 46px' center>
+          <div>
+            <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
           </div>
-          <div class="blog-content">
-            <image-grid :urls="item.images"></image-grid>
+          <div class="title-parent">
+            <div class="title">{{item.user.name}}</div>
+            <div class="date">{{ new Date(item.createdAt) | date}}</div>
           </div>
-          <hr>
-          <hev center>
-            <div>
-              <i class="fa btn fa-thumbs-down"></i>
-            </div>
-            <div>
-              <i class="fa btn fa-commenting"></i>
-            </div>
-            <div>
-              <i class="fa btn fa-thumbs-up"></i>
-            </div>
-          </hev>
-          <hr>
+          <div class="edit">
+            <i class="fa fa-chevron-down"></i>
+          </div>
+        </hav>
+        <!--content-->
+        <div class="text">
+          {{item.content}}
+        </div>
+        <!--image-->
+        <div class="blog-content" @click="detail(item)">
+          <image-grid :urls="item.images"></image-grid>
+        </div>
+        <hr>
+        <!--footer-->
+        <hev center>
+          <div>
+            <i class="fa btn fa-thumbs-down"></i>
+          </div>
+          <div>
+            <i class="fa btn fa-commenting"></i>
+          </div>
+          <div>
+            <i class="fa btn fa-thumbs-up"></i>
+          </div>
+        </hev>
+        <hr>
       </div>
     </scroll>
     <add-btn @click="showFull = true"></add-btn>

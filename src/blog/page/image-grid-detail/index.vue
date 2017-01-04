@@ -1,5 +1,5 @@
 <template>
-  <ideal-image-slide class="silderPraent" :urls="getImageUrls()"></ideal-image-slide>
+  <ideal-image-slide :urls="getImageUrls()"></ideal-image-slide>
 </template>
 <script>
 
@@ -39,16 +39,6 @@
     overflow: auto
   }
   
-  .silderPraent{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-
-  }
-
   textarea {
     margin-top: 15px;
     max-width: 100%;

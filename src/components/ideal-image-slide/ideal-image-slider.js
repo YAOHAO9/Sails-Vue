@@ -8,24 +8,24 @@
  * https://raw.githubusercontent.com/gilbitron/Ideal-Image-Slider/master/LICENSE
  */
 
-var IdealImageSlider = (function() {
+var IdealImageSlider = (function () {
 	"use strict";
 
 	/*
 	 * requestAnimationFrame polyfill
 	 */
-	var _requestAnimationFrame = function(win, t) {
-		return win["r" + t] || win["webkitR" + t] || win["mozR" + t] || win["msR" + t] || function(fn) {
+	var _requestAnimationFrame = function (win, t) {
+		return win["r" + t] || win["webkitR" + t] || win["mozR" + t] || win["msR" + t] || function (fn) {
 			setTimeout(fn, 1000 / 60);
 		};
-	}(window, 'equestAnimationFrame');
+	} (window, 'equestAnimationFrame');
 
 	/**
 	 * Behaves the same as setTimeout except uses requestAnimationFrame() where possible for better performance
 	 * @param {function} fn The callback function
 	 * @param {int} delay The delay in milliseconds
 	 */
-	var _requestTimeout = function(fn, delay) {
+	var _requestTimeout = function (fn, delay) {
 		var start = new Date().getTime(),
 			handle = {};
 
@@ -47,16 +47,16 @@ var IdealImageSlider = (function() {
 	/*
 	 * Helper functions
 	 */
-	var _isType = function(type, obj) {
+	var _isType = function (type, obj) {
 		var _class = Object.prototype.toString.call(obj).slice(8, -1);
 		return obj !== undefined && obj !== null && _class === type;
 	};
 
-	var _isInteger = function(x) {
+	var _isInteger = function (x) {
 		return Math.round(x) === x;
 	};
 
-	var _deepExtend = function(out) {
+	var _deepExtend = function (out) {
 		out = out || {};
 		for (var i = 1; i < arguments.length; i++) {
 			var obj = arguments[i];
@@ -74,7 +74,7 @@ var IdealImageSlider = (function() {
 		return out;
 	};
 
-	var _hasClass = function(el, className) {
+	var _hasClass = function (el, className) {
 		if (!className) return false;
 		if (el.classList) {
 			return el.classList.contains(className);
@@ -83,7 +83,7 @@ var IdealImageSlider = (function() {
 		}
 	};
 
-	var _addClass = function(el, className) {
+	var _addClass = function (el, className) {
 		if (!className) return;
 		if (el.classList) {
 			el.classList.add(className);
@@ -92,7 +92,7 @@ var IdealImageSlider = (function() {
 		}
 	};
 
-	var _removeClass = function(el, className) {
+	var _removeClass = function (el, className) {
 		if (!className) return;
 		if (el.classList) {
 			el.classList.remove(className);
@@ -101,18 +101,18 @@ var IdealImageSlider = (function() {
 		}
 	};
 
-	var _toArray = function(obj) {
+	var _toArray = function (obj) {
 		return Array.prototype.slice.call(obj);
 	};
 
-	var _arrayRemove = function(array, from, to) {
+	var _arrayRemove = function (array, from, to) {
 		var rest = array.slice((to || from) + 1 || array.length);
 		array.length = from < 0 ? array.length + from : from;
 		return array.push.apply(array, rest);
 	};
 
-	var _addEvent = function(object, type, callback) {
-		if (object === null || typeof(object) === 'undefined') return;
+	var _addEvent = function (object, type, callback) {
+		if (object === null || typeof (object) === 'undefined') return;
 
 		if (object.addEventListener) {
 			object.addEventListener(type, callback, false);
@@ -123,20 +123,20 @@ var IdealImageSlider = (function() {
 		}
 	};
 
-	var _loadImg = function(slide, callback) {
+	var _loadImg = function (slide, callback) {
 		if (!slide.style.backgroundImage) {
 			var img = new Image();
 			img.setAttribute('src', slide.getAttribute('data-src'));
-			img.onload = function() {
+			img.onload = function () {
 				slide.style.backgroundImage = 'url(' + slide.getAttribute('data-src') + ')';
 				slide.setAttribute('data-actual-width', this.naturalWidth);
 				slide.setAttribute('data-actual-height', this.naturalHeight);
-				if (typeof(callback) === 'function') callback(this);
+				if (typeof (callback) === 'function') callback(this);
 			};
 		}
 	};
 
-	var _isHighDPI = function() {
+	var _isHighDPI = function () {
 		var mediaQuery = "(-webkit-min-device-pixel-ratio: 1.5),(min--moz-device-pixel-ratio: 1.5),(-o-min-device-pixel-ratio: 3/2),(min-resolution: 1.5dppx)";
 		if (window.devicePixelRatio > 1)
 			return true;
@@ -145,7 +145,7 @@ var IdealImageSlider = (function() {
 		return false;
 	};
 
-	var _translate = function(slide, dist, speed) {
+	var _translate = function (slide, dist, speed) {
 		slide.style.webkitTransitionDuration =
 			slide.style.MozTransitionDuration =
 			slide.style.msTransitionDuration =
@@ -158,7 +158,7 @@ var IdealImageSlider = (function() {
 			slide.style.OTransform = 'translateX(' + dist + 'px)';
 	};
 
-	var _unTranslate = function(slide) {
+	var _unTranslate = function (slide) {
 		slide.style.removeProperty('-webkit-transition-duration');
 		slide.style.removeProperty('transition-duration');
 
@@ -167,11 +167,11 @@ var IdealImageSlider = (function() {
 		slide.style.removeProperty('transform');
 	};
 
-	var _animate = function(item) {
+	var _animate = function (item) {
 		var duration = item.time,
 			end = +new Date() + duration;
 
-		var step = function() {
+		var step = function () {
 			var current = +new Date(),
 				remaining = end - current;
 
@@ -188,7 +188,7 @@ var IdealImageSlider = (function() {
 		step();
 	};
 
-	var _setContainerHeight = function(slider, shouldAnimate) {
+	var _setContainerHeight = function (slider, shouldAnimate) {
 		if (typeof shouldAnimate === 'undefined') {
 			shouldAnimate = true;
 		}
@@ -223,11 +223,21 @@ var IdealImageSlider = (function() {
 		if (newHeight === currentHeight) {
 			return;
 		}
+		slider._attributes.container.style.top = 0;
+		slider._attributes.container.style.right = 0;
+		slider._attributes.container.style.bottom = 0;
+		slider._attributes.container.style.left = 0;
+		slider._attributes.container.style.margin = 'auto';
 
+		if (newHeight > document.body.offsetHeight) {
+			slider._attributes.container.style.position = 'relative';
+		} else {
+			slider._attributes.container.style.position = 'absolute';
+		}
 		if (shouldAnimate) {
 			_animate({
 				time: slider.settings.transitionDuration,
-				run: function(progress) {
+				run: function (progress) {
 					slider._attributes.container.style.height = Math.round(progress * (newHeight - currentHeight) + currentHeight) + 'px';
 				}
 			});
@@ -245,7 +255,7 @@ var IdealImageSlider = (function() {
 			direction: null
 		},
 
-		start: function(event) {
+		start: function (event) {
 			if (_hasClass(this._attributes.container, this.settings.classes.animating)) return;
 
 			var touches = event.touches[0];
@@ -264,7 +274,7 @@ var IdealImageSlider = (function() {
 			_addClass(this._attributes.container, this.settings.classes.touching);
 		},
 
-		move: function(event) {
+		move: function (event) {
 			if (_hasClass(this._attributes.container, this.settings.classes.animating)) return;
 			// Ensure swiping with one touch and not pinching
 			if (event.touches.length > 1 || event.scale && event.scale !== 1) return;
@@ -289,7 +299,7 @@ var IdealImageSlider = (function() {
 			}
 		},
 
-		end: function(event) {
+		end: function (event) {
 			if (_hasClass(this._attributes.container, this.settings.classes.animating)) return;
 
 			var duration = +new Date() - _touch.vars.start.time;
@@ -327,14 +337,14 @@ var IdealImageSlider = (function() {
 
 				if (speed) {
 					_addClass(this._attributes.container, this.settings.classes.animating);
-					_requestTimeout(function() {
+					_requestTimeout(function () {
 						_removeClass(this._attributes.container, this.settings.classes.animating);
 					}.bind(this), speed);
 				}
 			}
 		},
 
-		transitionEnd: function(event) {
+		transitionEnd: function (event) {
 			if (_touch.vars.direction) {
 				_unTranslate(this._attributes.previousSlide);
 				_unTranslate(this._attributes.currentSlide);
@@ -396,7 +406,7 @@ var IdealImageSlider = (function() {
 	/*
 	 * Slider class
 	 */
-	var Slider = function(args) {
+	var Slider = function (args) {
 		// Defaults
 		this.settings = {
 			selector: '',
@@ -424,12 +434,12 @@ var IdealImageSlider = (function() {
 				directionPrevious: 'iis-direction-previous',
 				directionNext: 'iis-direction-next'
 			},
-			onInit: function() {},
-			onStart: function() {},
-			onStop: function() {},
-			onDestroy: function() {},
-			beforeChange: function() {},
-			afterChange: function() {}
+			onInit: function () { },
+			onStart: function () { },
+			onStop: function () { },
+			onDestroy: function () { },
+			beforeChange: function () { },
+			afterChange: function () { }
 		};
 
 		// Parse args
@@ -447,7 +457,7 @@ var IdealImageSlider = (function() {
 		var origChildren = _toArray(sliderEl.children),
 			validSlides = [];
 		sliderEl.innerHTML = '';
-		Array.prototype.forEach.call(origChildren, function(slide, i) {
+		Array.prototype.forEach.call(origChildren, function (slide, i) {
 			if (slide instanceof HTMLImageElement || slide instanceof HTMLAnchorElement) {
 				var slideEl = document.createElement('a'),
 					href = '',
@@ -506,7 +516,7 @@ var IdealImageSlider = (function() {
 		var slides = validSlides;
 		if (slides.length <= 1) {
 			sliderEl.innerHTML = '';
-			Array.prototype.forEach.call(origChildren, function(child, i) {
+			Array.prototype.forEach.call(origChildren, function (child, i) {
 				sliderEl.appendChild(child);
 			});
 			return null;
@@ -530,12 +540,12 @@ var IdealImageSlider = (function() {
 
 			_addClass(previousNav, this.settings.classes.previousNav);
 			_addClass(nextNav, this.settings.classes.nextNav);
-			_addEvent(previousNav, 'click', function() {
+			_addEvent(previousNav, 'click', function () {
 				if (_hasClass(this._attributes.container, this.settings.classes.animating)) return false;
 				this.stop();
 				this.previousSlide();
 			}.bind(this));
-			_addEvent(nextNav, 'click', function() {
+			_addEvent(nextNav, 'click', function () {
 				if (_hasClass(this._attributes.container, this.settings.classes.animating)) return false;
 				this.stop();
 				this.nextSlide();
@@ -555,7 +565,7 @@ var IdealImageSlider = (function() {
 
 			// Keyboard Navigation
 			if (this.settings.keyboardNav) {
-				_addEvent(document, 'keyup', function(e) {
+				_addEvent(document, 'keyup', function (e) {
 					e = e || window.event;
 					var button = (typeof e.which == 'number') ? e.which : e.keyCode;
 					if (button == 37) {
@@ -601,7 +611,7 @@ var IdealImageSlider = (function() {
 				}
 			}
 
-			_addEvent(window, 'resize', function() {
+			_addEvent(window, 'resize', function () {
 				_setContainerHeight(this, false);
 			}.bind(this));
 		}
@@ -609,7 +619,7 @@ var IdealImageSlider = (function() {
 		// Add classes
 		_addClass(sliderEl, this.settings.classes.container);
 		_addClass(sliderEl, 'iis-effect-' + this.settings.effect);
-		Array.prototype.forEach.call(this._attributes.slides, function(slide, i) {
+		Array.prototype.forEach.call(this._attributes.slides, function (slide, i) {
 			_addClass(slide, this.settings.classes.slide);
 		}.bind(this));
 		_addClass(this._attributes.previousSlide, this.settings.classes.previousSlide);
@@ -620,7 +630,7 @@ var IdealImageSlider = (function() {
 		this._attributes.currentSlide.setAttribute('aria-hidden', 'false');
 
 		// Load first image
-		_loadImg(this._attributes.currentSlide, (function() {
+		_loadImg(this._attributes.currentSlide, (function () {
 			this.settings.onInit.apply(this);
 			_setContainerHeight(this, false);
 		}).bind(this));
@@ -629,37 +639,37 @@ var IdealImageSlider = (function() {
 		_loadImg(this._attributes.nextSlide);
 	};
 
-	Slider.prototype.get = function(attribute) {
+	Slider.prototype.get = function (attribute) {
 		if (!this._attributes) return null;
 		if (this._attributes.hasOwnProperty(attribute)) {
 			return this._attributes[attribute];
 		}
 	};
 
-	Slider.prototype.set = function(attribute, value) {
+	Slider.prototype.set = function (attribute, value) {
 		if (!this._attributes) return null;
 		return (this._attributes[attribute] = value);
 	};
 
-	Slider.prototype.start = function() {
+	Slider.prototype.start = function () {
 		if (!this._attributes) return;
 		this._attributes.timerId = setInterval(this.nextSlide.bind(this), this.settings.interval);
 		this.settings.onStart.apply(this);
 
 		// Stop if window blur
-		window.onblur = function() {
+		window.onblur = function () {
 			this.stop();
 		}.bind(this);
 	};
 
-	Slider.prototype.stop = function() {
+	Slider.prototype.stop = function () {
 		if (!this._attributes) return;
 		clearInterval(this._attributes.timerId);
 		this._attributes.timerId = 0;
 		this.settings.onStop.apply(this);
 	};
 
-	Slider.prototype.previousSlide = function() {
+	Slider.prototype.previousSlide = function () {
 		this.settings.beforeChange.apply(this);
 		_removeClass(this._attributes.previousSlide, this.settings.classes.previousSlide);
 		_removeClass(this._attributes.currentSlide, this.settings.classes.currentSlide);
@@ -690,13 +700,13 @@ var IdealImageSlider = (function() {
 		this._attributes.currentSlide.setAttribute('aria-hidden', 'false');
 
 		_addClass(this._attributes.container, this.settings.classes.directionPrevious);
-		_requestTimeout(function() {
+		_requestTimeout(function () {
 			_removeClass(this._attributes.container, this.settings.classes.directionPrevious);
 		}.bind(this), this.settings.transitionDuration);
 
 		if (this.settings.transitionDuration) {
 			_addClass(this._attributes.container, this.settings.classes.animating);
-			_requestTimeout(function() {
+			_requestTimeout(function () {
 				_removeClass(this._attributes.container, this.settings.classes.animating);
 			}.bind(this), this.settings.transitionDuration);
 		}
@@ -705,7 +715,7 @@ var IdealImageSlider = (function() {
 		this.settings.afterChange.apply(this);
 	};
 
-	Slider.prototype.nextSlide = function() {
+	Slider.prototype.nextSlide = function () {
 		this.settings.beforeChange.apply(this);
 		_removeClass(this._attributes.previousSlide, this.settings.classes.previousSlide);
 		_removeClass(this._attributes.currentSlide, this.settings.classes.currentSlide);
@@ -736,13 +746,13 @@ var IdealImageSlider = (function() {
 		this._attributes.currentSlide.setAttribute('aria-hidden', 'false');
 
 		_addClass(this._attributes.container, this.settings.classes.directionNext);
-		_requestTimeout(function() {
+		_requestTimeout(function () {
 			_removeClass(this._attributes.container, this.settings.classes.directionNext);
 		}.bind(this), this.settings.transitionDuration);
 
 		if (this.settings.transitionDuration) {
 			_addClass(this._attributes.container, this.settings.classes.animating);
-			_requestTimeout(function() {
+			_requestTimeout(function () {
 				_removeClass(this._attributes.container, this.settings.classes.animating);
 			}.bind(this), this.settings.transitionDuration);
 		}
@@ -751,7 +761,7 @@ var IdealImageSlider = (function() {
 		this.settings.afterChange.apply(this);
 	};
 
-	Slider.prototype.gotoSlide = function(index) {
+	Slider.prototype.gotoSlide = function (index) {
 		this.settings.beforeChange.apply(this);
 		this.stop();
 
@@ -785,19 +795,19 @@ var IdealImageSlider = (function() {
 
 		if (index < oldIndex) {
 			_addClass(this._attributes.container, this.settings.classes.directionPrevious);
-			_requestTimeout(function() {
+			_requestTimeout(function () {
 				_removeClass(this._attributes.container, this.settings.classes.directionPrevious);
 			}.bind(this), this.settings.transitionDuration);
 		} else {
 			_addClass(this._attributes.container, this.settings.classes.directionNext);
-			_requestTimeout(function() {
+			_requestTimeout(function () {
 				_removeClass(this._attributes.container, this.settings.classes.directionNext);
 			}.bind(this), this.settings.transitionDuration);
 		}
 
 		if (this.settings.transitionDuration) {
 			_addClass(this._attributes.container, this.settings.classes.animating);
-			_requestTimeout(function() {
+			_requestTimeout(function () {
 				_removeClass(this._attributes.container, this.settings.classes.animating);
 			}.bind(this), this.settings.transitionDuration);
 		}
@@ -806,12 +816,12 @@ var IdealImageSlider = (function() {
 		this.settings.afterChange.apply(this);
 	};
 
-	Slider.prototype.destroy = function() {
+	Slider.prototype.destroy = function () {
 		clearInterval(this._attributes.timerId);
 		this._attributes.timerId = 0;
 
 		this._attributes.container.innerHTML = '';
-		Array.prototype.forEach.call(this._attributes.origChildren, function(child, i) {
+		Array.prototype.forEach.call(this._attributes.origChildren, function (child, i) {
 			this._attributes.container.appendChild(child);
 		}.bind(this));
 
