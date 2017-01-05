@@ -1,6 +1,8 @@
 <template>
-  <div id="slider">
-    <img :src="url" v-for="url in urls" @load="urls.length <= 1 && imgLoad()">
+  <div class="sliderParent">
+    <div id="slider">
+      <img :src="url" v-for="url in urls" @load="urls.length <= 1 && imgLoad()">
+    </div>
   </div>
 </template>
 
@@ -24,7 +26,11 @@
       imgLoad: function () {
         var slider = document.getElementById("slider")
         slider.style.height = slider.children[0].offsetHeight + 'px'
-        slider.style.position ='relative'
+        if (slider.children[0].offsetHeight > document.body.offsetHeight) {
+          slider.style.position = 'relative';
+        } else {
+          slider.style.position = 'absolute';
+        }
       }
     }
   }
@@ -32,4 +38,15 @@
 <style>
 @import "./ideal-image-slider.css";
 @import "./default.css";
+.sliderParent{
+  position: relative;
+  height: 100vh;
+}
+#slider{
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 </style>

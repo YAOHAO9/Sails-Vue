@@ -24,34 +24,34 @@
 </template>
 
 <script>
-import { Footer, Item } from '../components/footer'
-import Moment from './index-tab/Moment'
-import Blog from './index-tab/Blog'
-import Emotion from './index-tab/Emotion'
-import Note from './index-tab/Note'
-import At from './index-tab/At'
+  import { Footer, Item } from '../components/footer'
+  import Moment from './index-tab/Moment'
+  import Blog from './index-tab/Blog'
+  import Emotion from './index-tab/Emotion'
+  import Note from './index-tab/Note'
+  import At from './index-tab/At'
 
-export default {
-  components: {
-    'page-footer': Footer,
-    'footer-item': Item,
-    'moment': Moment,
-    'blog': Blog,
-    'emotion': Emotion,
-    'note': Note,
-    'at': At
-  },
-  data () {
-    return {
-      currentView: 'moment'
-    }
-  },
-  methods: {
-    changeView (view) {
-      this.currentView = view
+  export default {
+    components: {
+      'page-footer': Footer,
+      'footer-item': Item,
+      Moment,
+      Blog,
+      Emotion,
+      Note,
+      At
+    },
+    data() {
+      return {
+        currentView: 'moment'
+      }
+    },
+    methods: {
+      changeView(view) {
+        this.currentView = view
+      }
     }
   }
-}
 </script>
 
 <style lang="less" scoped>

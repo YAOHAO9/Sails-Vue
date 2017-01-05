@@ -1,5 +1,7 @@
 <template>
-  <ideal-image-slide :urls="getImageUrls()"></ideal-image-slide>
+  <div>
+    <ideal-image-slide :urls="getImageUrls()"></ideal-image-slide>
+  </div>
 </template>
 <script>
 

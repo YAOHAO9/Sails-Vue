@@ -37,7 +37,6 @@ import $ from 'jquery'
 
 // blog
 import BlogIndex from './blog/Index'
-import AddMoment from './blog/page/add-moment'
 import ImageGridDetail from './blog/page/image-grid-detail'
 
 Vue.config.debug = true

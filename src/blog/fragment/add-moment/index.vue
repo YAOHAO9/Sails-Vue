@@ -12,7 +12,7 @@
       <hiv v-for="row in rows" class="image-grid">
         <div v-for="column in row">
           <div v-square="{padding:'2%'}">
-            <div><img src="../../../assets/images/add.png" :style="'display:'+column.display" @click="column.click && column.click()"
+            <div><img src="../../../assets/images/add.png" :style="'display:'+column.display" @click="isLoadImging && column.click && column.click()"
                 :name="column.name" /></div>
           </div>
         </div>
@@ -49,7 +49,8 @@
           return rows
         })(),
         content: "",
-        submiting: false
+        submiting: false,
+        loadImging: false
       }
     },
     props: {
@@ -64,6 +65,7 @@
         for (var j = 0; j < 3; j++) {
           (function (column) {
             $('input[name=' + column.name + ']')[0].addEventListener('change', function () {
+              ctx.loadImging = true
               lrz(this.files[0], { width: 1000 })
                 .then(function (rst) {
                   // 处理成功会执行
@@ -80,6 +82,7 @@
                 })
                 .always(function () {
                   // 不管是成功失败，都会执行
+                  ctx.loadImging = false
                 });
             });
           })(row[j])
@@ -92,6 +95,13 @@
       Lrz
     },
     methods: {
+      isLoadImging: function () {
+        if (this.loadImging) {
+          alert('请稍等，正在加载上一张图片...')
+          return false
+        }
+        return true
+      },
       submit: function () {
         this.submiting = true
         var formData = new FormData()

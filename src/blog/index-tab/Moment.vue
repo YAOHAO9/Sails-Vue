@@ -57,7 +57,7 @@
   import AddBtn from '../components/add-btn'
   import Scroll from '../../components/scroll'
   import Popup from '../../components/popup'
-  import AddMoment from '../page/add-moment'
+  import AddMoment from '../fragment/add-moment'
 
   export default {
     data() {
