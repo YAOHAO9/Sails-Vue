@@ -8,7 +8,6 @@
   </hev>
 </template>
 <script>
-import Hev from '../../../components/hev'
 
 export default {
   data (){
@@ -26,7 +25,6 @@ export default {
     }
   },
   components:{
-    Hev
   },
   ready: function () {
     var column=1,rows=[];

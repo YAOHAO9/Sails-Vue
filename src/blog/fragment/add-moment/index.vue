@@ -27,7 +27,6 @@
 <script>
 
   import ImageGrid from '../../components/image-grid'
-  import Hev from '../../../components/hev'
   import Lrz from 'lrz'
 
   export default {
@@ -91,7 +90,6 @@
     },
     components: {
       ImageGrid,
-      Hev,
       Lrz
     },
     methods: {

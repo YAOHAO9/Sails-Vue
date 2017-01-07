@@ -55,7 +55,6 @@
   import { SimpleHeader } from '../../components/header'
   import Content from '../../components/content'
   import Hav from '../../components/hav'
-  import Hev from '../../components/hev'
   import ImageGrid from '../components/image-grid'
   import AddBtn from '../components/add-btn'
   import Scroll from '../../components/scroll'
@@ -78,7 +77,6 @@
       SimpleHeader,
       Content,
       Hav,
-      Hev,
       ImageGrid,
       AddBtn,
       Scroll,
