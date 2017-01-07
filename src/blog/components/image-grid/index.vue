@@ -1,14 +1,14 @@
 <template>
-  <hiv v-for="row in rows" :width="width" class="image-grid">
+  <hev v-for="row in rows" :child-width="childWidth" class="image-grid">
     <div v-for="column in row">
       <div v-square="{padding:'2%'}">
         <div><img :src="'api/file/find/' + column" @click="column.click && column.click()"/></div>
       </div>
     </div>
-  </hiv>
+  </hev>
 </template>
 <script>
-import Hiv from '../../../components/hiv'
+import Hev from '../../../components/hev'
 
 export default {
   data (){
@@ -26,7 +26,7 @@ export default {
     }
   },
   components:{
-    Hiv
+    Hev
   },
   ready: function () {
     var column=1,rows=[];
@@ -51,7 +51,7 @@ export default {
     this.rows = rows
   },
   computed: {
-    width: function () {
+    childWidth: function () {
       return 100 / this.column + '%'
     }
   }

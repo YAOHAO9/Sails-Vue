@@ -3,20 +3,34 @@
     <form>
       <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
     </form>
-    <div v-for="row in rows" class="image-grid">
-      <div v-for="column in row">
-        <input :name="column.name" hidden type="file" multiple="multiple" accept="image/*" />
-      </div>
-    </div>
-    <div class="image-grid-parent">
-      <hev v-for="row in rows" class="image-grid">
-        <div v-for="column in row">
-          <div v-square="{padding:'2%'}">
-            <div><img src="../../../assets/images/add.png" :style="'display:'+column.display" @click="isLoadImging && column.click && column.click()"
-                :name="column.name" /></div>
-          </div>
+    <div>
+      <div class="item hiv">
+        <div class="portraitParent">
+          <div class="portrait"><img src="../../../assets/images/blog/widget_dface.png" /></div>
         </div>
-      </hev>
+        <div>
+          <div class="commentInfo ">
+            <span class="name">item.user.name</span>
+            <span class="date"> new Date(item.createdAt) | date</span>
+            <span class="date"> new Date(item.createdAt) | date</span>
+            <span class="date"> new Date(item.createdAt) | date</span>
+            <span class="date"> new Date(item.createdAt) | date</span>
+          </div>
+          <div class="commentContent"></div>
+        </div>
+      </div>
+      <div class="item hiv">
+        <div class="portraitParent">
+          <div class="portrait"><img src="../../../assets/images/blog/widget_dface.png" /></div>
+        </div>
+        <div>
+          <div class="commentInfo ">
+            <span class="name">item.user.name</span>
+            <span class="date"> new Date(item.createdAt) | date</span>
+          </div>
+          <div class="commentContent"></div>
+        </div>
+      </div>
     </div>
     <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
       确认
@@ -27,7 +41,6 @@
 <script>
 
   import ImageGrid from '../../components/image-grid'
-  import Hev from '../../../components/hev'
   import Lrz from 'lrz'
 
   export default {
@@ -91,7 +104,6 @@
     },
     components: {
       ImageGrid,
-      Hev,
       Lrz
     },
     methods: {
@@ -161,7 +173,6 @@
   body {
     overflow: auto
   }
-  
   textarea {
     margin-top: 10px;
     max-width: 100%;
@@ -170,17 +181,23 @@
     text-indent: 2em;
     height: 80px;
   }
-  
-  .image-grid-parent {
-    width: 55%;
-    margin: 5px 20px;
+  .portraitParent{
+    width: 46px;
+  }
+  .portrait {
+    border-radius: 18px;
+    background-color: gray;
+    height: 36px;
+    width: 36px;
+    margin: 0 5px;
+    overflow: hidden;
   }
   
   .submit {
     line-height: 40px;
     text-align: center;
     width: 40%;
-    margin: 10px auto;
+    margin: 20px auto;
     height: 40px;
     border-radius: 7px;
     color: #3690FF;

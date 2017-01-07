@@ -28,9 +28,9 @@
         <!--footer-->
         <hev center>
           <div class="btn" @click="disapprove(item)">
-            <i class="fa fa-thumbs-down" >{{item.disapproves && item.disapproves.length}}</i>
+            <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
           </div>
-          <div class="btn">
+          <div class="btn" @click="showCommentPopup = true">
             <i class="fa fa-commenting"></i>
           </div>
           <div class="btn" @click="approve(item)">
@@ -40,9 +40,12 @@
         <hr>
       </div>
     </scroll>
-    <add-btn @click="showFull = true"></add-btn>
-    <popup :show.sync="showFull" :full="true" :title="''" :show-title-bar="true">
-      <add-moment :submit-cb='closePopup'></add-moment>
+    <add-btn @click="showAddMomentPopup = true"></add-btn>
+    <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
+      <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
+    </popup>
+    <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
+      <comment></comment>
     </popup>
   </content>
 
@@ -58,12 +61,14 @@
   import Scroll from '../../components/scroll'
   import Popup from '../../components/popup'
   import AddMoment from '../fragment/add-moment'
+  import Comment from '../fragment/comment'
 
   export default {
     data() {
       return {
         list: [],
-        showFull: false,
+        showAddMomentPopup: false,
+        showCommentPopup: false
       }
     },
     ready: function () {
@@ -78,7 +83,8 @@
       AddBtn,
       Scroll,
       Popup,
-      AddMoment
+      AddMoment,
+      Comment
     },
     methods: {
       onRefresh(done) {
@@ -103,10 +109,10 @@
             done()
           })
       },
-      closePopup() {
+      closeAddMomentPopup() {
         var ctx = this
         ctx.onRefresh(function () {
-          ctx.showFull = false
+          ctx.showAddMomentPopup = false
         })
       },
       detail(item) {
@@ -131,6 +137,9 @@
             item.disapproves = updatedItem.body.disapproves
           })
       },
+      comment(item) {
+
+      }
     }
   }
 </script>

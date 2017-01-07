@@ -1,8 +1,11 @@
+/*directives*/
 import BackLink from './directives/back-link'
 import Swipe from './directives/swipe'
 import Transitionend from './directives/transitionend'
 import Square from './directives/square'
-import Hev from './directives/hev'
+/*components*/
+import Hev from './components/hev'
+/*others*/
 import db from './db'
 import Vue from 'vue'
 
@@ -58,7 +61,7 @@ export default {
     Vue.directive('swipe', Swipe)
     Vue.directive('transitionend', Transitionend)
     Vue.directive('square', Square)
-    Vue.directive('hev', Hev)
+    Vue.component('hev', Hev)
   },
   router(router) {
     const rc = new RouterConfig(router)
