@@ -20,14 +20,14 @@ module.exports = {
     comment: {
       type: 'array'
     },
-    approve: {
+    city: {
+      type: 'string'
+    },
+    approves: {
       type: 'array'
     },
-    disapprove: {
-      type: 'array',
-      agreement: {
-        version: "string",
-      }
+    disapproves: {
+      type: 'array'
     }
   }
 };

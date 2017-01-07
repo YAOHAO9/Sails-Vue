@@ -27,14 +27,14 @@
         <hr>
         <!--footer-->
         <hev center>
-          <div>
-            <i class="fa btn fa-thumbs-down"></i>
+          <div class="btn" @click="disapprove(item)">
+            <i class="fa fa-thumbs-down" >{{item.disapproves && item.disapproves.length}}</i>
           </div>
-          <div>
-            <i class="fa btn fa-commenting"></i>
+          <div class="btn">
+            <i class="fa fa-commenting"></i>
           </div>
-          <div>
-            <i class="fa btn fa-thumbs-up"></i>
+          <div class="btn" @click="approve(item)">
+            <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
           </div>
         </hev>
         <hr>
@@ -88,7 +88,6 @@
             this.list = res.body
             done && done()
           }, function (err) {
-            alert(err)
             done && done()
           })
       },
@@ -101,7 +100,6 @@
             done()
           },
           function (err) {
-            alert(err)
             done()
           })
       },
@@ -116,7 +114,23 @@
           this.$router.go({ name: 'Detail', query: { item: JSON.stringify(item) } })
           return
         }
-      }
+      },
+      approve(item) {
+        var ctx = this
+        ctx.$http.get('api/moment/approve/' + item.id)
+          .then(function (updatedItem) {
+            item.approves = updatedItem.body.approves
+            item.disapproves = updatedItem.body.disapproves
+          })
+      },
+      disapprove(item) {
+        var ctx = this
+        ctx.$http.get('api/moment/disapprove/' + item.id)
+          .then(function (updatedItem) {
+            item.approves = updatedItem.body.approves
+            item.disapproves = updatedItem.body.disapproves
+          })
+      },
     }
   }
 </script>
@@ -162,10 +176,9 @@
   }
   
   i {
-    width: 32px;
     height: 32px;
     text-align: center;
-    line-height: 33px;
+    line-height: 32px;
     border-radius: 5px;
     color: #929292;
   }
