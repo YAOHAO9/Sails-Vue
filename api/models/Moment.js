@@ -17,8 +17,9 @@ module.exports = {
     content: {
       type: 'longtext'
     },
-    comment: {
-      type: 'array'
+    comments: {
+      collection: 'Comment',
+      via: 'owner'
     },
     city: {
       type: 'string'

@@ -4,31 +4,30 @@
       <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
     </form>
     <div>
-      <div class="item hiv">
+      <div class="item hiv" v-for="row in rows">
         <div class="portraitParent">
           <div class="portrait"><img src="../../../assets/images/blog/widget_dface.png" /></div>
         </div>
-        <div>
-          <div class="commentInfo ">
-            <span class="name">item.user.name</span>
-            <span class="date"> new Date(item.createdAt) | date</span>
-            <span class="date"> new Date(item.createdAt) | date</span>
-            <span class="date"> new Date(item.createdAt) | date</span>
-            <span class="date"> new Date(item.createdAt) | date</span>
+        <div class="comment">
+          <div class="info">
+            <span class="name">周星驰</span><span class="date">2017-01-02 01:18</span>
           </div>
-          <div class="commentContent"></div>
+          <div class="content">
+            暴打的视频
+          </div>
         </div>
       </div>
       <div class="item hiv">
         <div class="portraitParent">
           <div class="portrait"><img src="../../../assets/images/blog/widget_dface.png" /></div>
         </div>
-        <div>
-          <div class="commentInfo ">
-            <span class="name">item.user.name</span>
-            <span class="date"> new Date(item.createdAt) | date</span>
+        <div class="comment">
+          <div class="info">
+            <span class="name">李湘</span><span class="date">2017-01-02 01:18</span>
           </div>
-          <div class="commentContent"></div>
+          <div class="content">
+            暴打的视频
+          </div>
         </div>
       </div>
     </div>
@@ -36,106 +35,46 @@
       确认
     </div>
   </div>
-
 </template>
 <script>
-
-  import ImageGrid from '../../components/image-grid'
-  import Lrz from 'lrz'
-
   export default {
     data() {
       return {
         rows: (function () {
-          var rows = []
-          var nameIndex = 0;
-          for (var i = 0; i < 3; i++) {
-            var row = []
-            for (var j = 0; j < 3; j++) {
-              (function (name) {
-                row.push({ display: 'none', name: name, click: function () { $('input[name=' + name + ']').click() } })
-              })("image" + nameIndex++)
-            }
-            rows.push(row)
-          }
-          rows[0][0].display = 'block'
+          var rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
           return rows
         })(),
         content: "",
-        submiting: false,
-        loadImging: false
+        submiting: false
       }
     },
     props: {
+      item: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      },
       submitCb: {
         type: Function
       }
     },
     ready: function () {
       var ctx = this;
-      for (var i = 0; i < 3; i++) {
-        var row = this.rows[i]
-        for (var j = 0; j < 3; j++) {
-          (function (column) {
-            $('input[name=' + column.name + ']')[0].addEventListener('change', function () {
-              ctx.loadImging = true
-              lrz(this.files[0], { width: 1000 })
-                .then(function (rst) {
-                  // 处理成功会执行
-                  // document.getElementById('HeadIcon').src= rst.base64;
-                  // formData.append('ImgUrlImage',rst.file);
-                  column.compressPicture = rst
-                  var img = $('img[name=' + column.name + ']')[0]
-                  img.src = column.compressPicture.base64;
-                  ctx.refresh()
-                })
-                .catch(function (err) {
-                  // 处理失败会执行
-                  alert("处理失败");
-                })
-                .always(function () {
-                  // 不管是成功失败，都会执行
-                  ctx.loadImging = false
-                });
-            });
-          })(row[j])
-        }
-      }
     },
     components: {
-      ImageGrid,
-      Lrz
     },
     methods: {
-      isLoadImging: function () {
-        if (this.loadImging) {
-          alert('请稍等，正在加载上一张图片...')
-          return false
-        }
-        return true
-      },
       submit: function () {
         this.submiting = true
         var formData = new FormData()
-        var compressPictures = []
-        this.rows.forEach(function (row) {
-          row.forEach(function (column) {
-            if (column.compressPicture) {
-              compressPictures.push(column.compressPicture)
-              column.compressPicture = false
-              column.display = 'node'
-            }
-          })
-        })
-        compressPictures.forEach(function (compressPicture) {
-          formData.append("images", compressPicture.file)
-        })
         formData.append("content", this.content)
-        if ((!this.content || this.content == '') && compressPictures.length == 0) {
+        if ((!this.content || this.content == '')) {
           alert('留下点什么吧')
+          this.submiting = false
           return
         }
-        this.$http.post('api/moment/create', formData)
+        this.$http.post('api/comment/create/' + this.item.id, formData)
           .then((response) => {
             this.submitCb && this.submitCb()
             this.submiting = false
@@ -181,8 +120,11 @@
     text-indent: 2em;
     height: 80px;
   }
+  .item{
+    margin: 10px 0px
+  }
   .portraitParent{
-    width: 46px;
+    width: 56px;
   }
   .portrait {
     border-radius: 18px;
@@ -192,7 +134,24 @@
     margin: 0 5px;
     overflow: hidden;
   }
-  
+  .comment{
+    width: 100%;
+  }
+  .info{
+    font-size: 12px;
+    overflow: hidden;
+  }
+  .name{
+    float: left;
+    min-width: 5em;
+  }
+  .date{
+    float: left;
+    margin-left: 1em;
+  }
+  .content{
+    font-size: 13px;
+  }
   .submit {
     line-height: 40px;
     text-align: center;

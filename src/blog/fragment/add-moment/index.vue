@@ -119,6 +119,7 @@
         formData.append("content", this.content)
         if ((!this.content || this.content == '') && compressPictures.length == 0) {
           alert('留下点什么吧')
+          this.submiting = false
           return
         }
         this.$http.post('api/moment/create', formData)

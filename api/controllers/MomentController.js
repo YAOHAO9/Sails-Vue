@@ -75,10 +75,7 @@ module.exports = {
       })
   },
   approve: function (req, res) {
-    User.findOrCreate({ id: req.cookies['UserId'] })
-      .then(user => {
-        return Promise.all([user, Moment.findOne(req.param('id'))])
-      })
+    Promise.all([User.findOrCreate({ id: req.cookies['UserId'] }), Moment.findOne(req.param('id'))])
       .spread((user, moment) => {
         if (!moment.approves)
           moment.approves = []
@@ -101,10 +98,7 @@ module.exports = {
       })
   },
   disapprove: function (req, res) {
-    User.findOrCreate({ id: req.cookies['UserId'] })
-      .then(user => {
-        return Promise.all([user, Moment.findOne(req.param('id'))])
-      })
+    Promise.all([User.findOrCreate({ id: req.cookies['UserId'] }), Moment.findOne(req.param('id'))])
       .spread((user, moment) => {
         if (!moment.approves)
           moment.approves = []

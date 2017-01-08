@@ -30,7 +30,7 @@
           <div class="btn" @click="disapprove(item)">
             <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
           </div>
-          <div class="btn" @click="showCommentPopup = true">
+          <div class="btn" @click="comment(item)">
             <i class="fa fa-commenting"></i>
           </div>
           <div class="btn" @click="approve(item)">
@@ -45,7 +45,7 @@
       <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
     </popup>
     <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
-      <comment></comment>
+      <comment :item="currentItem"></comment>
     </popup>
   </content>
 
@@ -67,7 +67,8 @@
       return {
         list: [],
         showAddMomentPopup: false,
-        showCommentPopup: false
+        showCommentPopup: false,
+        currentItem: {}
       }
     },
     ready: function () {
@@ -113,6 +114,12 @@
           ctx.showAddMomentPopup = false
         })
       },
+      closeCommentPoupu() {
+        var ctx = this
+        ctx.onRefresh(function () {
+          ctx.showAddMomentPopup = false
+        })
+      },
       detail(item) {
         if (item.images && item.images.length > 0) {
           this.$router.go({ name: 'Detail', query: { item: JSON.stringify(item) } })
@@ -136,7 +143,8 @@
           })
       },
       comment(item) {
-
+        this.currentItem = item
+        this.showCommentPopup = true;
       }
     }
   }

@@ -1,5 +1,5 @@
 /**
- * File.js
+ * Comment.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
@@ -8,17 +8,15 @@
 module.exports = {
 
   attributes: {
-    fd: {
+    user: {
+      model: 'User'
+    },
+    content: {
       type: 'string'
     },
-    size: {
-      type: 'float'
-    },
-    type: {
-      type: 'string'
-    },
-    "filename": {
-      type: 'string'
+    owner: {
+      model: 'Moment',
+      unique: true
     }
   }
 };
