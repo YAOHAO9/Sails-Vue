@@ -6,7 +6,7 @@
         <!--header-->
         <hav margin='3px 40px 3px 46px' center>
           <div>
-            <div class="portrait"><img src="../../assets/images/blog/widget_dface.png" /></div>
+            <avatar :avatar="item.user.avatar"></avatar>
           </div>
           <div class="title-parent">
             <div class="title">{{item.user.name}}</div>
@@ -31,7 +31,7 @@
             <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
           </div>
           <div class="btn" @click="comment(item)">
-            <i class="fa fa-commenting"></i>
+            <i class="fa fa-commenting">{{item.comments && item.comments.length}}</i>
           </div>
           <div class="btn" @click="approve(item)">
             <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
@@ -61,6 +61,7 @@
   import Popup from '../../components/popup'
   import AddMoment from '../fragment/add-moment'
   import Comment from '../fragment/comment'
+  import Avatar from '../components/avatar'
 
   export default {
     data() {
@@ -83,11 +84,12 @@
       Scroll,
       Popup,
       AddMoment,
-      Comment
+      Comment,
+      Avatar
     },
     methods: {
       onRefresh(done) {
-        this.$http.get('api/moment?sort=createdAt DESC&limit=10')
+        this.$http.get('api/moment?sort=createdAt DESC&limit=3')
           .then
           (function (res) {
             this.list = res.body

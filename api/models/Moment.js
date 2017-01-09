@@ -19,7 +19,7 @@ module.exports = {
     },
     comments: {
       collection: 'Comment',
-      via: 'owner'
+      via: 'moment'
     },
     city: {
       type: 'string'

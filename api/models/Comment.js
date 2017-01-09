@@ -14,9 +14,8 @@ module.exports = {
     content: {
       type: 'string'
     },
-    owner: {
-      model: 'Moment',
-      unique: true
+    moment: {
+      model: 'Moment'
     }
   }
 };

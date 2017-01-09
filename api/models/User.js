@@ -22,6 +22,9 @@ module.exports = {
             // minLength: 6,
             // required: true
         },
+        avatar: {
+            type: 'string'
+        },
         toJSON: function () {
             var obj = this.toObject();
             delete obj.password;

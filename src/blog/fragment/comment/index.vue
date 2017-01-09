@@ -1,49 +1,33 @@
 <template>
-  <div>
-    <form>
+  <div class="comment">
+    <form class="form">
       <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
     </form>
-    <div>
-      <div class="item hiv" v-for="row in rows">
+    <div class="scroll">
+      <div class="item hiv" v-for="comment in item.comments">
         <div class="portraitParent">
-          <div class="portrait"><img src="../../../assets/images/blog/widget_dface.png" /></div>
+          <avatar :avatar="comment.user.avatar"></avatar>
         </div>
-        <div class="comment">
+        <div class="commentInfo">
           <div class="info">
-            <span class="name">周星驰</span><span class="date">2017-01-02 01:18</span>
+            <span class="name">{{(comment.user.name || getCommentDetails(comment))}}</span><span class="date">{{ new Date(comment.createdAt) | date}}</span>
           </div>
           <div class="content">
-            暴打的视频
+            {{comment.content}}
           </div>
         </div>
       </div>
-      <div class="item hiv">
-        <div class="portraitParent">
-          <div class="portrait"><img src="../../../assets/images/blog/widget_dface.png" /></div>
-        </div>
-        <div class="comment">
-          <div class="info">
-            <span class="name">李湘</span><span class="date">2017-01-02 01:18</span>
-          </div>
-          <div class="content">
-            暴打的视频
-          </div>
-        </div>
+      <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
+        确认
       </div>
-    </div>
-    <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-      确认
     </div>
   </div>
 </template>
 <script>
+  import Avatar from '../../components/avatar'
   export default {
     data() {
       return {
-        rows: (function () {
-          var rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-          return rows
-        })(),
         content: "",
         submiting: false
       }
@@ -60,12 +44,14 @@
       }
     },
     ready: function () {
-      var ctx = this;
+
     },
     components: {
+      Avatar
     },
     methods: {
       submit: function () {
+        var ctx = this
         this.submiting = true
         var formData = new FormData()
         formData.append("content", this.content)
@@ -75,35 +61,22 @@
           return
         }
         this.$http.post('api/comment/create/' + this.item.id, formData)
-          .then((response) => {
-            this.submitCb && this.submitCb()
-            this.submiting = false
+          .then((res) => {
+            ctx.submitCb && ctx.submitCb()
+            ctx.submiting = false
+            ctx.content = ''
+            ctx.item.comments.push(res.body)
           })
       },
-      refresh: function () {
-        var compressPictures = []
-        this.rows.forEach(function (row) {
-          row.forEach(function (column) {
-            if (column.compressPicture) {
-              compressPictures.push(column.compressPicture)
-              column.compressPicture = false
-              column.display = 'node'
+      getCommentDetails: function (comment) {
+        var ctx = this;
+        this.$http.get('api/comment/' + comment.id)
+          .then(function (res) {
+            for (var prop in res.body) {
+              comment[prop] = res.body[prop]
             }
+            comment.user.avatar = '1'
           })
-        })
-        var index = 0;
-        this.rows.forEach(function (row) {
-          row.forEach(function (column) {
-            if (index < compressPictures.length) {
-              column.compressPicture = compressPictures[index++]
-              var img = $('img[name=' + column.name + ']')[0]
-              img.src = column.compressPicture.base64;
-              column.display = 'block'
-            } else if (index++ == compressPictures.length) {
-              column.display = 'block'
-            }
-          })
-        })
       }
     }
   }
@@ -111,6 +84,16 @@
 <style scoped>
   body {
     overflow: auto
+  }
+  .form{
+    position: absolute;
+    width: 100%;
+    background-color: #EFEFF4;
+  }
+  .scroll{
+    height: 100%;
+    padding:95px 0 0px 0;
+    overflow: auto;
   }
   textarea {
     margin-top: 10px;
@@ -134,7 +117,7 @@
     margin: 0 5px;
     overflow: hidden;
   }
-  .comment{
+  .commentInfo{
     width: 100%;
   }
   .info{

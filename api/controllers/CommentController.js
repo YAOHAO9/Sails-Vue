@@ -12,7 +12,7 @@ module.exports = {
         return Comment.create({
           user: user,
           content: req.body.content,
-          owner: moment
+          moment: moment
         })
       })
       .then(comment => {
