@@ -75,7 +75,6 @@
             for (var prop in res.body) {
               comment[prop] = res.body[prop]
             }
-            comment.user.avatar = '1'
           })
       }
     }

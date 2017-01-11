@@ -11,6 +11,9 @@
         type: String,
         default: null
       }
+    },
+    methods:{
+      
     }
   }
 </script>
