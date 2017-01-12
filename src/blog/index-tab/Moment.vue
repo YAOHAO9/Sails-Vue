@@ -9,7 +9,7 @@
             <avatar :avatar="item.user.avatar"></avatar>
           </div>
           <div class="title-parent">
-            <div class="title">{{item.user.name}}</div>
+            <div class="title">{{item.user.name}}{{counterValue}}</div>
             <div class="date">{{ new Date(item.createdAt) | date}}</div>
           </div>
           <div class="edit">
@@ -75,6 +75,19 @@
     ready: function () {
       this.onRefresh()
     },
+    vuex: {
+      getters: {
+        // 注意在这里你需要 `getCount` 函数本身而不是它的执行结果 'getCount()'
+        counterValue: function (state) {
+          return 123
+        }
+      },
+      actions: {
+        set: function ({ dispatch, state }) {
+          dispatch('SAVEUSER', '123')
+        }
+      }
+    },
     components: {
       SimpleHeader,
       Content,
@@ -90,8 +103,7 @@
     methods: {
       onRefresh(done) {
         this.$http.get('api/moment?sort=createdAt DESC&limit=3')
-          .then
-          (function (res) {
+          .then(function (res) {
             this.list = res.body
             done && done()
           }, function (err) {
@@ -101,8 +113,7 @@
       onInfinite(done) {
         var ctx = this
         this.$http.get('api/moment?sort=createdAt DESC&limit=10&skip=' + ctx.list.length)
-          .then(
-          function (res) {
+          .then(function (res) {
             ctx.list = ctx.list.concat(res.body)
             done()
           },

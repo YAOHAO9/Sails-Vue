@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import FastClick from 'fastclick'
 import VueResource from 'vue-resource'
 import Vum from './vum.js'
-
 // demos
 import Index from './demos/Index'
 import Page from './demos/Page'
@@ -45,8 +44,6 @@ Vue.use(Router)
 Vue.use(VueResource)
 Vue.use(Vum)
 Vue.use(Filters)
-
-let App = Vue.extend()
 
 let router = new Router()
 
@@ -143,7 +140,7 @@ router.map({
     component: CircleProgress
   }
 })
-
+import App from './app'
 router.start(App, '#app')
 
 Vum.router(router)

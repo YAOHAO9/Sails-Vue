@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+// 告诉 vue “使用” vuex
 Vue.use(Vuex)
 
 const state = {
-  user: {}
+  user: 123
 }
 
 const mutations = {
