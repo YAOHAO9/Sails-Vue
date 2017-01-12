@@ -18,11 +18,11 @@
 
 
 module.exports.policies = {
-  '*': true,
+  '*': 'sessionUser',
 
-  'PostController': {
-    '*': 'isAuthenticated'
-  },
+  // 'PostController': {
+  //   '*': 'isAuthenticated'
+  // },
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions (`true` allows public     *

@@ -54,15 +54,12 @@ module.exports = {
   create: function (req, res) {
     UploadService(req, "images")
       .then(uploadedFiles => {
-        return Promise.all([User.findOrCreate({ id: req.cookies['UserId'] }), uploadedFiles])
+        return Promise.all([uploadedFiles, getUserCityInfo(req)])
       })
-      .spread((user, uploadedFiles) => {
-        return Promise.all([user, uploadedFiles, getUserCityInfo(req)])
-      })
-      .spread((user, uploadedFiles, cityInfo) => {
+      .spread((uploadedFiles, cityInfo) => {
         var city = cityInfo instanceof Object ? (cityInfo.province + ' ' + cityInfo.city) : undefined
         return Moment.create({
-          user: user,
+          user: req.session.user,
           content: req.body.content,
           images: uploadedFiles,
           city: city,
@@ -75,8 +72,9 @@ module.exports = {
       })
   },
   approve: function (req, res) {
-    Promise.all([User.findOrCreate({ id: req.cookies['UserId'] }), Moment.findOne(req.param('id'))])
-      .spread((user, moment) => {
+    Moment.findOne(req.param('id'))
+      .then((moment) => {
+        let user = req.session.user
         if (!moment.approves)
           moment.approves = []
         if (!moment.disapproves)
@@ -98,8 +96,9 @@ module.exports = {
       })
   },
   disapprove: function (req, res) {
-    Promise.all([User.findOrCreate({ id: req.cookies['UserId'] }), Moment.findOne(req.param('id'))])
-      .spread((user, moment) => {
+    Moment.findOne(req.param('id'))
+      .then((moment) => {
+        let user = req.session.user
         if (!moment.approves)
           moment.approves = []
         if (!moment.disapproves)

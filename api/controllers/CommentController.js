@@ -7,10 +7,10 @@
 'use strict'
 module.exports = {
   create: function (req, res) {
-    Promise.all([User.findOrCreate({ id: req.cookies['UserId'] }), Moment.findOne(req.param('id'))])
-      .spread((user,moment) => {
+    Moment.findOne(req.param('id'))
+      .then((moment) => {
         return Comment.create({
-          user: user,
+          user: req.session.user,
           content: req.body.content,
           moment: moment
         })
