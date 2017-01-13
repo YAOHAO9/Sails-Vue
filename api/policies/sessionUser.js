@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
 
   User.findOrCreate({ id: id })
     .then(user => {
-      res.cookie('UserId', MixCrypto.encrypt(user.id))
+      res.cookie('UserId', MixCrypto.encrypt(user.id), { maxAge: 10 * 365 * 24 * 60 * 60 * 1000, httpOnly: true })
       req.session.user = user
       next()
     })

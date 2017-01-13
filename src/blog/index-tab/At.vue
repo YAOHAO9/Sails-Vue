@@ -3,7 +3,6 @@
   <content>
    <ideal-image-slide></ideal-image-slide>
   </content>
-
 </template>
 
 <script>

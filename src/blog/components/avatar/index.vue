@@ -1,5 +1,5 @@
 <template>
-  <div class="portrait" @click="">
+  <div class="portrait">
     <img v-if="!avatar" src="../../../assets/images/blog/widget_dface.png" />
     <img v-if="avatar" :src="'api/file/find/'+avatar" />
   </div>
@@ -10,34 +10,6 @@
       avatar: {
         type: String,
         default: null
-      },
-      user: {
-        type: Object
-      }
-    },
-    methods: {
-      editUserInfo: function () {
-        var ctx = this
-        if (ctx.getUser()) {
-          ctx.$http.get('api/user/get')
-            .then(res => {
-              ctx.saveUser(res.body)
-            })
-        } else {
-          if
-        }
-      }
-    },
-    vuex: {
-      getters: {
-        getUser: function (state) {
-          return state.user
-        }
-      },
-      actions: {
-        saveUser: function (store, val) {
-          store.dispatch('SAVEUSER', val);
-        }
       }
     }
   }

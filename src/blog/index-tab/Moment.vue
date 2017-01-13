@@ -1,5 +1,9 @@
 <template>
-  <simple-header title="Moment"></simple-header>
+  <simple-header title="Moment">
+    <header-link>
+      <user-icon class="userIcon"></user-icon>
+    </header-link>
+  </simple-header>
   <content>
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
       <div v-for="item in list" class="item">
@@ -52,7 +56,7 @@
 </template>
 
 <script>
-  import { SimpleHeader } from '../../components/header'
+  import { SimpleHeader, HeaderLink } from '../../components/header'
   import Content from '../../components/content'
   import Hav from '../../components/hav'
   import ImageGrid from '../components/image-grid'
@@ -62,6 +66,7 @@
   import AddMoment from '../fragment/add-moment'
   import Comment from '../fragment/comment'
   import Avatar from '../components/avatar'
+  import UserIcon from '../components/user-icon'
 
   export default {
     data() {
@@ -76,6 +81,7 @@
       this.onRefresh()
     },
     components: {
+      HeaderLink,
       SimpleHeader,
       Content,
       Hav,
@@ -85,7 +91,8 @@
       Popup,
       AddMoment,
       Comment,
-      Avatar
+      Avatar,
+      UserIcon
     },
     methods: {
       onRefresh(done) {
@@ -150,6 +157,9 @@
   }
 </script>
 <style lang="less" scoped>
+  .userIcon{
+    margin-top: 4px;
+  }
   .item{
     margin-top: 8px;
     padding-top: 2px; 
