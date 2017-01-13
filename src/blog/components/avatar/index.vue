@@ -1,6 +1,5 @@
 <template>
-  <div class="portrait">
-    {{counterValue}}
+  <div class="portrait" @click="">
     <img v-if="!avatar" src="../../../assets/images/blog/widget_dface.png" />
     <img v-if="avatar" :src="'api/file/find/'+avatar" />
   </div>
@@ -11,15 +10,33 @@
       avatar: {
         type: String,
         default: null
+      },
+      user: {
+        type: Object
       }
     },
     methods: {
+      editUserInfo: function () {
+        var ctx = this
+        if (ctx.getUser()) {
+          ctx.$http.get('api/user/get')
+            .then(res => {
+              ctx.saveUser(res.body)
+            })
+        } else {
+          if
+        }
+      }
     },
     vuex: {
       getters: {
-        // 注意在这里你需要 `getCount` 函数本身而不是它的执行结果 'getCount()'
-        counterValue: function () {
-          return 123
+        getUser: function (state) {
+          return state.user
+        }
+      },
+      actions: {
+        saveUser: function (store, val) {
+          store.dispatch('SAVEUSER', val);
         }
       }
     }

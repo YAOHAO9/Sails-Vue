@@ -1,5 +1,5 @@
 export function getUser(state) {
-  return "123"
+  return state.user
 }
 
 export function saveUser(store, val) {
