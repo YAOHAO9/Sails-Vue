@@ -1,5 +1,5 @@
 <template>
-  <div @click="showUser()">
+  <div @click="goPersonalCenter()">
     <avatar :avatar="user.avatar || getUser()"></avatar>
   </div>
 </template>
@@ -24,8 +24,8 @@
             ctx.saveUser(res.body)
           })
       },
-      showUser: function () {
-        alert(JSON.stringify(this.user))
+      goPersonalCenter: function () {
+        this.$router.go({ path: 'personal-center' })
       }
     },
     vuex: {

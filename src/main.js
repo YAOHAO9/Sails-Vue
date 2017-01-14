@@ -37,6 +37,7 @@ import $ from 'jquery'
 // blog
 import BlogIndex from './blog/Index'
 import ImageGridDetail from './blog/page/image-grid-detail'
+import PersonalCenter from './blog/page/personal-center'
 
 Vue.config.debug = true
 
@@ -54,6 +55,10 @@ router.map({
   '/image-grid-detail': {
     name: 'Detail',
     component: ImageGridDetail
+  },
+  '/personal-center': {
+    name: 'personal-center',
+    component: PersonalCenter
   },
   '/index': {
     name: 'index',

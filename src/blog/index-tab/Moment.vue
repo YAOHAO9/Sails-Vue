@@ -31,13 +31,13 @@
         <hr>
         <!--footer-->
         <hev center>
-          <div class="btn" @click="disapprove(item)">
+          <div class="btn" :class="operated(item.disapproves)" @click="disapprove(item)">
             <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
           </div>
           <div class="btn" @click="comment(item)">
             <i class="fa fa-commenting">{{item.comments && item.comments.length}}</i>
           </div>
-          <div class="btn" @click="approve(item)">
+          <div class="btn" :class="operated(item.approves)" @click="approve(item)">
             <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
           </div>
         </hev>
@@ -94,6 +94,18 @@
       Avatar,
       UserIcon
     },
+    vuex: {
+      getters: {
+        user: function (state) {
+          return state.user
+        }
+      },
+      actions: {
+        saveUser: function (store, val) {
+          store.dispatch('SAVEUSER', val);
+        }
+      }
+    },
     methods: {
       onRefresh(done) {
         this.$http.get('api/moment?sort=createdAt DESC&limit=3')
@@ -129,7 +141,7 @@
       },
       detail(item) {
         if (item.images && item.images.length > 0) {
-          this.$router.go({ name: 'Detail', query: { item: JSON.stringify(item) } })
+          this.$router.go({ path: 'image-grid-detail', query: { item: JSON.stringify(item) } })
           return
         }
       },
@@ -152,6 +164,9 @@
       comment(item) {
         this.currentItem = item
         this.showCommentPopup = true;
+      },
+      operated(arr) {
+        return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
       }
     }
   }
@@ -206,5 +221,8 @@
     line-height: 32px;
     border-radius: 5px;
     color: #929292;
+  }
+  .operated>i{
+    color: #61CDE7;
   }
 </style>
