@@ -1,6 +1,6 @@
 <template>
   <div @click="goPersonalCenter()">
-    <avatar :avatar="user.avatar || getUser()"></avatar>
+    <avatar :avatar="(user || getUser()) && user.avatar "></avatar>
   </div>
 </template>
 <script>

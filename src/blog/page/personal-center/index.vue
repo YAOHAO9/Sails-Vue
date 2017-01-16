@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="avatar" @click="selectHeder('avatar')">
-      <img v-if="!user.avatar && getUser()" name="avatar" src="../../../assets/images/blog/widget_dface.png" />
-      <img v-if="user.avatar" name="avatar" :src="'api/file/find/'+user.avatar" />
+      <img v-if="(user || getUser()) && !user.avatar" name="avatar" src="../../../assets/images/blog/widget_dface.png" />
+      <img v-if="user && user.avatar" name="avatar" :src="'api/file/find/'+user.avatar" />
     </div>
     <input name="avatar" hidden type="file" multiple="multiple" accept="image/*" />
     <div class="hiv">
-      <span>name:</span> <input v-model="form.name" :value="user.name" placeholder="请输入你的名字" />
+      <span>name:</span> <input v-model="form.name" :value="user && user.name" placeholder="请输入你的名字" />
     </div>
     <hr/>
     <!--<div class="hiv">
@@ -62,7 +62,6 @@
           .then(res => {
             ctx.saveUser(res.body)
           })
-        return true
       },
       showUser: function () {
         alert(JSON.stringify(this.user))
