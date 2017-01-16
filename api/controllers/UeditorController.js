@@ -5,7 +5,6 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 'use strict'
-var ueditor = require("ueditor");
 var path = require('path')
 module.exports = {
   ue: function (req, res, next) {
