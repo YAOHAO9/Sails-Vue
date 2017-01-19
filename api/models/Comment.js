@@ -16,6 +16,9 @@ module.exports = {
     },
     moment: {
       model: 'Moment'
+    },
+    article: {
+      model: 'article'
     }
   }
 };

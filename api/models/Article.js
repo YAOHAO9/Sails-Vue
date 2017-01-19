@@ -8,7 +8,28 @@
 module.exports = {
 
   attributes: {
-
+    user: {
+      model: 'User'
+    },
+    images: {
+      type: 'integer'
+    },
+    title: {
+      type: 'string'
+    },
+    file: {
+      type: 'integer'
+    },
+    comments: {
+      collection: 'Comment',
+      via: 'article'
+    },
+    approves: {
+      type: 'array'
+    },
+    disapproves: {
+      type: 'array'
+    }
   }
 };
 
