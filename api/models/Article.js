@@ -17,8 +17,8 @@ module.exports = {
     title: {
       type: 'string'
     },
-    file: {
-      type: 'integer'
+    content: {
+      type: 'longtext'
     },
     comments: {
       collection: 'Comment',

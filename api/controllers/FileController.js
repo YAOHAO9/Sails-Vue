@@ -34,7 +34,7 @@ module.exports = {
         if (!file)
           return res.notFound(req.param('id'))
         if (file.type == 'html')
-          res.setHeader("Content-Type", "text/html");
+          res.setHeader("Content-Type", "text/html;charset=UTF-8");
         fileAdapter.read(file.fd)
           .on('error', function (err) {
             return res.serverError(err)
