@@ -19,6 +19,7 @@
           <div class="edit">
             <i class="fa fa-chevron-down"></i>
           </div>
+          <hr>
         </hav>
         <!--content-->
         <div class="text">

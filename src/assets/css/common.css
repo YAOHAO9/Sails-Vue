@@ -56,6 +56,10 @@ hr{
 	height: 1px;
 	background:#e7e7e7;
 }
+.hr-gray{
+	height: 1px;
+	background:gray;
+}
 .btn:active{
 	background-color: #F08F99
 }

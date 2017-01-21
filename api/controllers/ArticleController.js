@@ -28,10 +28,10 @@ module.exports = {
   update: function () {
 
   },
-  find: function (req, res) {
+  findOne: function (req, res) {
     Article.findOne(req.param('id'))
       .then(article => {
-        if (!article || (article && !article.conetnt)) {
+        if (!article) {
           return res.notFound()
         }
         return res.view('article', {
