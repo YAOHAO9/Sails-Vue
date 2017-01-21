@@ -196,12 +196,21 @@
       alert('内容不能为空')
       return
     }
-    if (!$('#title').val() || $('#title').val() == '') {
+    var title = $('#title').val()
+    if (!title || title == '') {
       alert('请输入标题')
       return
     }
+    var description = UE.getEditor('editor').getContentTxt()
+    description = description.replace(title, '').substr(0, 100);
+    if (!description) {
+      alert('输入内容无效')
+      return
+    }
+    formData.append('description', description)
     formData.append('title', $('#title').val())
-    formData.append('conetnt', UE.getEditor('editor').getContent())
+    formData.append('content', UE.getEditor('editor').getContent())
+
     $('.submit').addClass('disabled')
     $.ajax({
       url: '/api/article/create',

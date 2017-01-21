@@ -7,26 +7,25 @@
   <content>
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
       <div v-for="item in list">
-        <div class="item hiv" class="item" @click="detail(item)">
-          <div class="iconParent">
-            <avatar :avatar="item.icon"></avatar>
-          </div>
-          <div class="articleInfo">
-            <div class="info">
-              <span class="name">YAOHAO</span><span class="date">{{ formatDate(item.createdAt)}}</span>
-            </div>
-            <div class="content">
-              {{item.title}}
+        <div class="item" @click="detail(item)">
+          <div class="title">{{item.title}}</div>
+          <div class="content hiv">
+            <div class="description">{{item.description}}…</div>
+            <div class="icon" hidden>
+              <img src="/static/imgs/mm.jpg"><img>
             </div>
           </div>
-          <div class="operate">
-            operated
+          <div class="other">
+            <div class="name">YAOHAO </div>
+            <div class="date">{{formatDate(item.createdAt)}}</div>
           </div>
         </div>
         <hr>
       </div>
+      <hr>
+      </div>
     </scroll>
-    
+
   </content>
 
 </template>
@@ -147,46 +146,35 @@
     }
   }
 </script>
-<style  scoped>
+<style scoped>
   .item{
     padding: 5px 5px;
     background-color: white;  
   }
-  .iconParent{
-    width: 60px;
+  .title{
+    font-size: 15px;
+    color: black;
   }
-  .portrait {
-    border-radius: 10px;
-    background-color: gray;
-    height: 50px;
-    width: 50px;
-    margin: 0 5px;
+  .description{
+    font-size: 13px;
+    color: gray;
+    width: 100%;
     overflow: hidden;
   }
-  .articleInfo{
-    padding: 0 10px 0;
-    width: 100%;
+  .icon{
+    width:150px;
+    max-height: 70px;
+    overflow: hidden;
   }
-  .info{
-    color: #828282;
+  .other{
+    font-size: 12px;
+    color: gray;
     overflow: hidden;
   }
   .name{
     float: left;
-    font-size: 13px;
-    
-    min-width: 5em;
   }
   .date{
-    font-size: 13px;
     float: right;
-    margin-left: 1em;
-  }
-  .content{
-    font-size: 16px;
-    color: #0A0A0A;
-  }
-  .operate{
-
   }
 </style>

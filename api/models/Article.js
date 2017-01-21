@@ -11,14 +11,17 @@ module.exports = {
     user: {
       model: 'User'
     },
-    images: {
+    icon: {
       type: 'integer'
     },
     title: {
       type: 'string'
     },
+    description: {
+      type: 'string'
+    },
     content: {
-      type: 'longtext'
+      model: 'ArticleContent'
     },
     comments: {
       collection: 'Comment',
