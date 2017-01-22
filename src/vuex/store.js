@@ -5,12 +5,16 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  user: null
+  user: null,
+  indexView: 'moment'
 }
 
 const mutations = {
   SAVEUSER(state, val) {
     state.user = val;
+  },
+  SAVECURRENTVIEW(state, val) {
+    state.indexView = val;
   }
 }
 

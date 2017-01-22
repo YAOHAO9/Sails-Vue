@@ -22,8 +22,6 @@
         </div>
         <hr>
       </div>
-      <hr>
-      </div>
     </scroll>
 
   </content>
@@ -111,7 +109,7 @@
         })
       },
       detail(item) {
-        location = '/api/article/findOne/' + item.id
+        this.$router.go({ path: 'article-detail', query: { id: item.id } })
       },
       approve(item) {
         var ctx = this

@@ -50,7 +50,8 @@
       });
     },
     components: {
-      IdealImageSlide
+      IdealImageSlide,
+      Lrz
     },
     methods: {
       selectHeder: function (name) {
@@ -80,9 +81,6 @@
             alert('保存成功！')
           })
       }
-    },
-    components: {
-      Lrz
     },
     vuex: {
       getters: {

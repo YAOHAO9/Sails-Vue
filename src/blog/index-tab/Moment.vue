@@ -5,7 +5,19 @@
     </header-link>
   </simple-header>
   <content>
-    <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
+
+    <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
+      <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
+    </popup>
+    <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
+      <comment :item="currentItem"></comment>
+    </popup>
+    <div class="popupParent" :class="setImageGridDetailPopupToFrontMost()">
+      <popup :show.sync="showImageGridDetail" :full="true" :show-title-bar="false">
+        <image-grid-detail :item="currentItem" :close="closeImageGridDetailPopup"></image-grid-detail>
+      </popup>
+    </div>
+    <scroll :on-refresh="onRefresh" :on-infinite="onInfinite" class="scroll">
       <div v-for="item in list" class="item">
         <!--header-->
         <hav margin='3px 40px 3px 46px' center>
@@ -26,7 +38,7 @@
           {{item.content}}
         </div>
         <!--image-->
-        <div class="blog-content" @click="detail(item)">
+        <div class="blog-content" @click="showImageGridDetailPopup(item)">
           <image-grid :urls="item.images"></image-grid>
         </div>
         <hr>
@@ -46,12 +58,7 @@
       </div>
     </scroll>
     <add-btn @click="showAddMomentPopup = true"></add-btn>
-    <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
-      <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
-    </popup>
-    <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
-      <comment :item="currentItem"></comment>
-    </popup>
+
   </content>
 
 </template>
@@ -66,6 +73,7 @@
   import Popup from '../../components/popup'
   import AddMoment from '../fragment/add-moment'
   import Comment from '../fragment/comment'
+  import ImageGridDetail from '../fragment/image-grid-detail'
   import Avatar from '../components/avatar'
   import UserIcon from '../components/user-icon'
 
@@ -75,6 +83,7 @@
         list: [],
         showAddMomentPopup: false,
         showCommentPopup: false,
+        showImageGridDetail: false,
         currentItem: {}
       }
     },
@@ -93,7 +102,8 @@
       AddMoment,
       Comment,
       Avatar,
-      UserIcon
+      UserIcon,
+      ImageGridDetail
     },
     vuex: {
       getters: {
@@ -140,11 +150,20 @@
           ctx.showAddMomentPopup = false
         })
       },
-      detail(item) {
-        if (item.images && item.images.length > 0) {
-          this.$router.go({ path: 'image-grid-detail', query: { item: JSON.stringify(item) } })
-          return
-        }
+      showImageGridDetailPopup(item) {
+        this.currentItem = item
+        this.showImageGridDetail = true
+      },
+      closeImageGridDetailPopup() {
+        this.showImageGridDetail = false
+      },
+      setImageGridDetailPopupToFrontMost() {
+        if (this.showImageGridDetail)
+          return 'frontMost'
+        setTimeout(function () {
+          $('.popupParent').removeClass('frontMost')
+         }, 300)
+        return 'frontMost'
       },
       approve(item) {
         var ctx = this
@@ -173,6 +192,9 @@
   }
 </script>
 <style lang="less" scoped>
+  .scroll{
+    background-color:#F2F2F2
+  }
   .userIcon{
     margin-top: 4px;
   }
@@ -225,5 +247,15 @@
   }
   .operated>i{
     color: #61CDE7;
+  }
+  .popupParent{
+    position: fixed;
+    top:0;
+    bottom: 0;
+    left:0;
+    right:0;
+  }
+  .frontMost{
+    z-index: 9999
   }
 </style>
