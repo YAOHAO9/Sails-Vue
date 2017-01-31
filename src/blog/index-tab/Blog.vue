@@ -12,7 +12,7 @@
           <div class="content hiv">
             <div class="description">{{item.description}}…</div>
             <div class="icon" hidden>
-              <img src="/static/imgs/mm.jpg"><img>
+              <img src="/static/img/mm.jpg"><img>
             </div>
           </div>
           <div class="other">
