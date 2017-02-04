@@ -1,20 +1,28 @@
 <template>
   <simple-header title="Note"></simple-header>
   <content>
-   <ideal-image-slide></ideal-image-slide>
+    <tab>
+      <tab-item title="WeChat">
+        <h1 class="demos-title">Boys</h1>
+      </tab-item>
+      <tab-item title="YAOHAO">
+        <h1 class="demos-title">Girls</h1>
+      </tab-item>
+    </tab>
   </content>
 </template>
 
 <script>
-import { SimpleHeader } from '../../components/header'
-import Content from '../../components/content'
-import IdealImageSlide from '../../components/ideal-image-slide'
+  import { SimpleHeader } from '../../components/header'
+  import Content from '../../components/content'
+  import { Tab, TabItem } from '../../components/tab'
 
-export default {
-  components: {
-    SimpleHeader,
-    Content,
-    IdealImageSlide
+  export default {
+    components: {
+      SimpleHeader,
+      Content,
+      Tab,
+      TabItem
+    }
   }
-}
 </script>

@@ -9,11 +9,11 @@
       <div v-for="item in list">
         <div class="item" @click="detail(item)">
           <div class="title">{{item.title}}</div>
-          <div class="content hiv">
-            <div class="description">{{item.description}}…</div>
-            <div class="icon" hidden>
+          <div class="content">
+            <div class="icon">
               <img src="/static/img/mm.jpg"><img>
             </div>
+            {{item.description}}…
           </div>
           <div class="other">
             <div class="name">YAOHAO </div>
@@ -153,16 +153,17 @@
     font-size: 15px;
     color: black;
   }
-  .description{
+  .content{
     font-size: 13px;
     color: gray;
     width: 100%;
     overflow: hidden;
   }
   .icon{
-    width:150px;
-    max-height: 70px;
+    width:120px;
+    max-height: 80px;
     overflow: hidden;
+    float: right;
   }
   .other{
     font-size: 12px;

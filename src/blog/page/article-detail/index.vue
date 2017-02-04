@@ -20,7 +20,6 @@
             ctx.article = res.body
           })
       }
-      console.log("一切准备好了");
     },
     components: {
     },
