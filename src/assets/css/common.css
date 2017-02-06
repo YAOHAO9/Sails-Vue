@@ -74,6 +74,6 @@ hr{
 input,textarea{
 	 outline:none;
 }
-ul{
+ul,li,ol{
 	list-style: none;
 }
