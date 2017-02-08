@@ -1,23 +1,23 @@
 <template>
-    <div class="message" v-scroll-bottom>
+    <div class="message">
         <ul>
-            <li v-for="item in messages.messages">
+            <li v-for="item in dataAndOperater.list">
                 <p class="time">
-                    <span>{{ item.date | time }}</span>
+                    <span>{{ item.createdAt | time }}</span>
                 </p>
 
-                <div class="hiv" :class="{ self: item.self }">
-                    <div class="head" v-if="!item.self">
-                        <avator></avator>
+                <div class="hiv" :class="{ self: user.id == item.user.id }">
+                    <div class="head" v-if="user.id != item.user.id ">
+                        <avator :avator="item.user.avator"></avator>
                     </div>
                     <div class="content">
-                        <div class="name">刀郎</div>
+                        <div class="name">{{item.user.name}}</div>
                         <div class="text">
                             {{ item.content }}
                         </div>
                     </div>
-                    <div class="head" v-if="item.self">
-                        <avator></avator>
+                    <div class="head" v-if="user.id == item.user.id ">
+                        <avator :avator="item.user.avator"></avator>
                     </div>
                 </div>
             </li>
@@ -30,70 +30,30 @@
     export default {
         data() {
             return {
-                user: {
-                    name: 'coffce',
-                    img: '/static/img/mm.jpg'
-                },
-                messages:
-                {
-                    id: 1,
-                    messages: [
-                        {
-                            user: {
-                                name: '示例介绍',
-                                img: '/static/img/mm.jpg'
-                            },
-                            content: 'Hello，这是一个基于Vue + Vuex + Webpack构建的简单chat示例，聊天记录保存在localStorge, 有什么问题可以通过Github Issue问我。',
-                            date: new Date()
-                        }, {
-                            user: {
-                                name: '示例介绍',
-                                img: '/static/img/mm.jpg'
-                            },
-                            content: '项目地址: https://github.com/coffcer/vue-chat',
-                            date: new Date()
-                        },
-                        {
-                            user: {
-                                name: '示例介绍',
-                                img: '/static/img/mm.jpg'
-                            },
-                            content: 'Hello，这是一个基于Vue + Vuex + Webpack构建的简单chat示例，聊天记录保存在localStorge, 有什么问题可以通过Github Issue问我。',
-                            date: new Date(),
-                            self: true
-                        }, {
-                            user: {
-                                name: '示例介绍',
-                                img: '/static/img/mm.jpg'
-                            },
-                            content: '项目地址: https://github.com/coffcer/vue-chat',
-                            date: new Date(),
-                            self: true
-                        }
-                        , {
-                            user: {
-                                name: '示例介绍',
-                                img: '/static/img/mm.jpg'
-                            },
-                            content: '项目地址: https://github.com/coffcer/vue-chat',
-                            date: new Date(),
-                            self: true
-                        }
-                        , {
-                            user: {
-                                name: '示例介绍',
-                                img: '/static/img/mm.jpg'
-                            },
-                            content: '项目地址: https://github.com/coffcer/vue-chat',
-                            date: new Date(),
-                            self: true
-                        }
-                    ]
-                }
+                ul: {}
             }
         },
+        props: ['dataAndOperater'],
         components: {
             Avator
+        },
+        ready() {
+            this.dataAndOperater.scrollToButtom = function () {
+                var message = $('.message')[0]
+                message.scrollTop = 10000000000
+            }
+        },
+        vuex: {
+            getters: {
+                user: function (state) {
+                    return state.user
+                }
+            },
+            actions: {
+                saveUser: function (store, val) {
+                    store.dispatch('SAVEUSER', val);
+                }
+            }
         },
         filters: {
             // 将日期过滤为 hour:minutes
@@ -103,14 +63,6 @@
                 }
                 return date.getHours() + ':' + date.getMinutes();
             }
-        },
-        directives: {
-            // 发送消息后滚动到底部
-            'scroll-bottom'() {
-                this.vm.$nextTick(() => {
-                    this.el.scrollTop = this.el.scrollHeight - this.el.clientHeight;
-                });
-            }
         }
     }
 
@@ -118,7 +70,9 @@
 <style lang="less" scoped>
     .message {
         position: absolute;
-        top: 0;
+        top: 40px;
+        left: 0;
+        right: 0;
         bottom: 40px;
         overflow: auto;
         padding: 10px 5px;
