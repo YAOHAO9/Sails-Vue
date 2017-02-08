@@ -65,7 +65,7 @@ hr{
 	background:gray;
 }
 .btn:active{
-	background-color: #F08F99
+	background-color: #F08F99 !important;
 }
 .disabled{
 		cursor:not-allowed;
