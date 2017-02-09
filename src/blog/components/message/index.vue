@@ -1,7 +1,7 @@
 <template>
     <div class="message">
         <ul>
-            <li v-for="item in dataAndOperater.list">
+            <li v-for="item in list">
                 <p class="time">
                     <span>{{ item.createdAt | time }}</span>
                 </p>
@@ -33,15 +33,9 @@
                 ul: {}
             }
         },
-        props: ['dataAndOperater'],
+        props: ['list'],
         components: {
             Avator
-        },
-        ready() {
-            this.dataAndOperater.scrollToButtom = function () {
-                var message = $('.message')[0]
-                message.scrollTop = 10000000000
-            }
         },
         vuex: {
             getters: {
@@ -69,12 +63,6 @@
 </script>
 <style lang="less" scoped>
     .message {
-        position: absolute;
-        top: 40px;
-        left: 0;
-        right: 0;
-        bottom: 40px;
-        overflow: auto;
         padding: 10px 5px;
         li {
             margin-bottom: 15px;

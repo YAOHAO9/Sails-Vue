@@ -3,7 +3,9 @@
   <content>
     <tab>
       <tab-item title="WeChat">
-        <message :data-and-operater="dataAndOperater"></message>
+        <scroll :on-refresh="loadHistory" class="scroll">
+          <message :list="list"></message>
+        </scroll>
       </tab-item>
       <tab-item title="YAOHAO">
         <h1 class="demos-title">Girls</h1>
@@ -21,18 +23,16 @@
   import Content from '../../components/content'
   import { Tab, TabItem } from '../../components/tab'
   import Message from '../components/message'
+  import Scroll from '../../components/scroll'
 
   export default {
     data() {
       return {
         content: '',
-        dataAndOperater: {
-          list: [],
-          scrollToButtom: function () { }
-        }
+        list: []
       }
     },
-    ready: function () {
+    ready() {
       this.loadHistory()
     },
     components: {
@@ -40,7 +40,8 @@
       Content,
       Tab,
       TabItem,
-      Message
+      Message,
+      Scroll
     },
     methods: {
       sendMessage() {
@@ -50,7 +51,7 @@
         formData.append('session', '0-0')
         this.$http.post('/api/chat/create', formData)
           .then(function (res) {
-            ctx.dataAndOperater.list.push(res.body)
+            ctx.list.push(res.body)
             ctx.scrollToButtom()
           })
           .catch(function (e) {
@@ -59,11 +60,16 @@
       },
       loadHistory(done) {
         var ctx = this
-        this.$http.get('api/chat?sort=createdAt DESC&limit=10')
+        this.$http.get('api/chat?sort=createdAt DESC&limit=10&skip=' + ctx.list.length)
           .then(function (res) {
-            res.body.sort(function(){return true})
-            ctx.dataAndOperater.list = res.body
-            ctx.scrollToButtom()
+            res.body.sort(function () { return true })
+            if (ctx.list.length == 0)
+              ctx.list = res.body
+            else
+              ctx.list = res.body.concat(ctx.list)
+            if (ctx.list.length <= 10) {
+              ctx.scrollToButtom()
+            }
             done && done()
           }, function (err) {
             done && done()
@@ -72,7 +78,8 @@
       scrollToButtom() {
         var ctx = this
         setTimeout(function () {
-          ctx.dataAndOperater.scrollToButtom()
+          var message = $('.scroll')[0]
+          message.scrollTop = 10000000000
         }, 100);
       }
     }
@@ -80,6 +87,15 @@
 
 </script>
 <style lang="less" scoped>
+  .scroll {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    overflow: auto;
+  }
+  
   .inputParent {
     height: 40px;
     position: absolute;

@@ -192,9 +192,6 @@
   }
 </script>
 <style lang="less" scoped>
-  .scroll{
-    background-color:#F2F2F2
-  }
   .userIcon{
     margin-top: 4px;
   }
