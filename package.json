@@ -37,9 +37,11 @@
     "sails-disk": "~0.10.9",
     "sails-mongo": "^0.12.1",
     "sails-mysql": "^0.11.5",
+    "socket.io-redis": "^3.1.0",
     "underscore": "^1.8.3",
     "vue": "^1.0.21",
     "vue-resource": "^1.0.3",
+    "vue-socket.io": "^1.0.2",
     "vuex": "^1.0.0"
   },
   "devDependencies": {

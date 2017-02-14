@@ -39,13 +39,14 @@ import BlogIndex from './blog/Index'
 import ImageGridDetail from './blog/page/image-grid-detail'
 import PersonalCenter from './blog/page/personal-center'
 import ArticleDetail from './blog/page/article-detail'
-
+import VueSocketio from 'vue-socket.io';
 Vue.config.debug = true
 
 Vue.use(Router)
 Vue.use(VueResource)
 Vue.use(Vum)
 Vue.use(Filters)
+Vue.use(VueSocketio,'http://localhost:1337')
 
 let router = new Router()
 
