@@ -33,7 +33,22 @@
       }
     },
     ready() {
+      var ctx = this
       this.loadHistory()
+      this.$socket.on('update', function (chat) {
+        ctx.list.push(chat)
+        ctx.scrollToButtom()
+      })
+      this.$socket.on('send', function (chats) {
+        chats.sort(function () { return true })
+        if (ctx.list.length == 0)
+          ctx.list = chats
+        else
+          ctx.list = chats.concat(ctx.list)
+        if (ctx.list.length <= 10) {
+          ctx.scrollToButtom()
+        }
+      })
     },
     components: {
       SimpleHeader,
@@ -43,37 +58,34 @@
       Message,
       Scroll
     },
+    vuex: {
+      getters: {
+        user: function (state) {
+          return state.user
+        }
+      },
+      actions: {
+        saveUser: function (store, val) {
+          store.dispatch('SAVEUSER', val);
+        }
+      }
+    },
     methods: {
       sendMessage() {
         var ctx = this
-        var formData = new FormData()
-        formData.append('content', this.content)
-        formData.append('session', '0-0')
-        this.$http.post('/api/chat/create', formData)
-          .then(function (res) {
-            ctx.list.push(res.body)
-            ctx.scrollToButtom()
-          })
-          .catch(function (e) {
-            alert('Error' + e)
-          })
+        if (!this.content) {
+          alert('请说些什么吧！')
+          return
+        }
+        this.$socket.emit('submit', { content: this.content, session: '0-0', user: this.user.id })
+        this.content = ''
       },
       loadHistory(done) {
         var ctx = this
-        this.$http.get('api/chat?sort=createdAt DESC&limit=10&skip=' + ctx.list.length)
-          .then(function (res) {
-            res.body.sort(function () { return true })
-            if (ctx.list.length == 0)
-              ctx.list = res.body
-            else
-              ctx.list = res.body.concat(ctx.list)
-            if (ctx.list.length <= 10) {
-              ctx.scrollToButtom()
-            }
-            done && done()
-          }, function (err) {
-            done && done()
-          })
+        this.$socket.emit('find', { session: '0-0', skip: 0, limit: 10, sort: 'createdAt DESC' })
+        setTimeout(function () {
+          done && done()
+        }, 500);
       },
       scrollToButtom() {
         var ctx = this

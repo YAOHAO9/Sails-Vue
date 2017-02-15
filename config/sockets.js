@@ -139,6 +139,27 @@ module.exports.sockets = {
   // transports: ["polling", "websocket"]
   onConnect: function (session, socket) {
     console.log('---------------socket connect----------------------')
-    sails.models.chat.find().then(chats => { console.log(chats) })
+    let Chat = sails.models.chat
+    socket.on('find', (cond) => {
+      cond = cond || {}
+      let findCond = { session: cond.session }
+      let query = Chat.find(findCond)
+      cond.skip && query.skip(cond.skip)
+      cond.limit && query.limit(cond.limit)
+      cond.sort && query.sort(cond.sort)
+      query.populate('user')
+      query.then(chats => {
+        socket.emit('send', chats)
+      })
+    })
+    socket.on('submit', chat => {
+      Chat.create(chat)
+        .then(chat => {
+          return Chat.findOne(chat.id).populate('user')
+        })
+        .then(chat => {
+          sails.sockets.blast('update', chat)
+        })
+    })
   }
 };
