@@ -50,6 +50,10 @@
         }
       })
     },
+    destroyed() {
+      this.$socket.removeEventListener('update')
+      this.$socket.removeEventListener('send')
+    },
     components: {
       SimpleHeader,
       Content,
