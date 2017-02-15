@@ -46,7 +46,7 @@ Vue.use(Router)
 Vue.use(VueResource)
 Vue.use(Vum)
 Vue.use(Filters)
-Vue.use(VueSocketio,'http://192.168.3.8:1337')
+Vue.use(VueSocketio)
 
 let router = new Router()
 
