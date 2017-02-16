@@ -46,7 +46,7 @@ Vue.use(Router)
 Vue.use(VueResource)
 Vue.use(Vum)
 Vue.use(Filters)
-Vue.use(VueSocketio)
+Vue.use(VueSocketio,location.origin)
 
 let router = new Router()
 
