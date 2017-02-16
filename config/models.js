@@ -10,7 +10,7 @@
  */
 
 module.exports.models = {
-  migrate: 'safe',
+  migrate: 'alter',
   connection: 'someMysqlServer'
   
   /***************************************************************************
