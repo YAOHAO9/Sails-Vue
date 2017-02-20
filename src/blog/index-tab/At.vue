@@ -3,6 +3,7 @@
   <content>
     <tab :change-item='changeTabItem' :active="active">
       <tab-item :title="session.name" :index="$index" v-for="session in sessions">
+        index:{{$index}}
         <scroll :on-refresh="loadHistory" class="scroll">
           <message :list="session.list"></message>
         </scroll>
@@ -59,8 +60,15 @@
       this.defaultSession = this.sessions[0]
       this.loadHistory()
       this.getAllUser()
-      this.$socket.on('update', function (chat) {
-        ctx.defaultSession.list.push(chat)
+      this.$socket.on('update', (chat) => {
+
+        this.sessions.forEach((session) => {
+          if (session.session == chat.session)
+            session.list.push(chat)
+          else if (session.session.indexOf(chat.session.replace(/(\d+)-(\d+)/, "$2-$1")) >= 0)
+            session.list.push(chat)
+        })
+
         ctx.scrollToButtom()
       })
       this.$socket.on('send', function (chats) {
@@ -117,7 +125,9 @@
         if (this.sessions.length > 4)
           this.sessions.pop()
         this.showSelectUserPopup = false
-
+        setTimeout(() => {
+          this.$broadcast('changeItem', 1)
+        }, 100)
       },
       changeTabItem(index) {
         this.defaultSession = this.sessions[index]
@@ -141,10 +151,12 @@
         }, 500);
       },
       scrollToButtom() {
-        var ctx = this
-        setTimeout(function () {
-          var message = $('.scroll')[0]
-          message.scrollTop = 10000000000
+        setTimeout(() => {
+          var messages = document.getElementsByClassName('scroll')
+          for (var i = 0; i < messages.length; i++) {
+            var message = messages[i]
+            message.scrollTop = 10000000000
+          }
         }, 100);
       },
       clickTabItem() {

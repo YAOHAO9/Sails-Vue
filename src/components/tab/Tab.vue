@@ -49,6 +49,14 @@ export default {
       items: []
     }
   },
+  events: {
+    'changeItem': function (active) {
+      this.active = active
+      this.$children[active].show = true
+      this.$broadcast('change', active)
+      this.changeItem(active)
+    }
+  },
   methods: {
     onClick (active,item) {
       this.active = active

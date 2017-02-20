@@ -142,7 +142,7 @@ module.exports.sockets = {
     let Chat = sails.models.chat
     socket.on('find', (cond) => {
       cond = cond || {}
-      let findCond = { session: cond.session }
+      let findCond = { or: [{ session: cond.session }, { session: cond.session.replace(/(\d+)-(\d+)/, "$2-$1") }] }
       let query = Chat.find(findCond)
       cond.skip && query.skip(cond.skip)
       cond.limit && query.limit(cond.limit)

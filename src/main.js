@@ -48,6 +48,7 @@ Vue.use(Vum)
 Vue.use(Filters)
 Vue.use(VueSocketio,location.origin)
 
+console.log(JSON.stringify(Vue))
 let router = new Router()
 
 router.map({
