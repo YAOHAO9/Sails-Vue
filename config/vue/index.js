@@ -20,7 +20,7 @@ module.exports = {
     env: require('./dev.env'),
     port: 8088,
     proxyTable: {
-      '/':'http://localhost:1337'
+        '/':'http://localhost:1337'
     }
   }
 }

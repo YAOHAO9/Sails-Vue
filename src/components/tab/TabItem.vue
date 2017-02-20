@@ -11,6 +11,9 @@ export default {
       type: String,
       required: true
     },
+    index:{
+      type:Number
+    },
     onShow: {
       type: Function,
       required: false
@@ -18,12 +21,10 @@ export default {
   },
   data () {
     return {
-      index: 0,
       show: false
     }
   },
   created () {
-    this.index = this.$parent.items.length
     this.show = this.$parent.active === this.index
     this.$parent.items.push({
       title: this.title
@@ -32,6 +33,7 @@ export default {
   events: {
     'change': function (active) {
       this.show = this.$parent.active === this.index
+      this.$parent.items[this.index].title=this.title
     }
   },
   watch: {
@@ -39,6 +41,9 @@ export default {
       if (v === true && this.onShow) {
         this.onShow.call()
       }
+    },
+    title(v,ov){
+      this.$parent.items[this.index].title=this.title
     }
   },
   beforeDestroy () {

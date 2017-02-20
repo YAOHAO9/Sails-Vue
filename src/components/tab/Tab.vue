@@ -1,6 +1,6 @@
 <template>
   <div class="tab-container">
-    <div :class="{
+    <div class="hiv" :class="{
       'buttons-tab' : style === 'default',
       'buttons-group' : style === 'button' || style === 'button-bordered',
       'button-bordered' : style === 'button-bordered',
@@ -10,7 +10,7 @@
       <m-button 
          v-for="item in items" 
          :active="$index === active"
-         v-on:click="onClick($index)"
+         v-on:click="onClick($index,item)"
          >{{item.title}}</m-button>
     </div>
     <div class="tabs">
@@ -35,6 +35,10 @@ export default {
     size: {
       type: String,
       default: 'default'
+    },
+    changeItem:{
+      type:Function,
+      default:function(){}
     }
   },
   components: {
@@ -46,10 +50,11 @@ export default {
     }
   },
   methods: {
-    onClick (active) {
+    onClick (active,item) {
       this.active = active
       this.$children[active].show = true
       this.$broadcast('change', active)
+      this.changeItem(active)
     }
   }
 }

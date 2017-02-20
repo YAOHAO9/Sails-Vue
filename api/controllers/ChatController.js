@@ -6,19 +6,18 @@
  */
 
 module.exports = {
-  create: function (req, res) {
-    Chat.create({
-      session: req.body.session,
-      user: req.session.user,
-      content: req.body.content,
-      type: 'text'
-    })
-      .then(chat => {
-        return Chat.findOne(chat.id).populate('user')
+  find: function (req, res) {
+    // conds.skip = req.query.skip ? req.query.skip : '0'
+    // conds.limit = req.query.limit ? req.query.limit : '3'
+    // conds.sort = req.query.sort ? req.query.sort : 'createdAt DESC'
+    Chat.find()
+      .groupBy('session')
+      .max('createdAt')
+      .limit(3)
+      .sort('createdAt DESC')
+      .then(chatKind => {
+        res.ok(chatKind)
       })
-      .then(chat=>{
-        return res.json(chat)
-      })
-  }
+  },
 };
 

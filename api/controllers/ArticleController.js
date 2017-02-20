@@ -51,9 +51,9 @@ module.exports = {
       return
     }
     let conds = {}
-    req.query.skip ? (conds.skip = req.query.skip) : ''
-    req.query.limit ? (conds.limit = req.query.limit) : ''
-    req.query.sort ? (conds.sort = req.query.sort) : ''
+    conds.skip = req.query.skip ? req.query.skip : '0'
+    conds.limit = req.query.limit ? req.query.limit : '3'
+    conds.sort = req.query.sort ? req.query.sort : 'createdAt DESC'
     Article.find(conds)
       .populate('user')
       .then(articles => {

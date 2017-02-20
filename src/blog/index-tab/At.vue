@@ -1,20 +1,24 @@
 <template>
   <simple-header title="At"></simple-header>
   <content>
-    <tab>
-      <tab-item title="WeChat">
+    <tab :change-item='changeTabItem' :active="active">
+      <tab-item :title="session.name" :index="$index" v-for="session in sessions">
         <scroll :on-refresh="loadHistory" class="scroll">
-          <message :list="list"></message>
+          <message :list="session.list"></message>
         </scroll>
-      </tab-item>
-      <tab-item title="YAOHAO">
-        <h1 class="demos-title">Girls</h1>
       </tab-item>
     </tab>
     <div class="inputParent hiv">
       <input v-model="content" />
       <div class="btn" @click="sendMessage()">发送</div>
     </div>
+    <popup :show.sync="showSelectUserPopup" :full="true" :title="'选择你要私聊的用户'" :show-title-bar="true">
+      <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">
+        <avatar :avatar="user.avatar"></avatar>
+        <div>{{user.name}}</div>
+      </div>
+    </popup>
+    <add-btn class="addBtn" @click="showSelectUserPopup = true"></add-btn>
   </content>
 </template>
 
@@ -24,28 +28,48 @@
   import { Tab, TabItem } from '../../components/tab'
   import Message from '../components/message'
   import Scroll from '../../components/scroll'
+  import AddBtn from '../components/add-btn'
+  import Popup from '../../components/popup'
+  import Avatar from '../components/avatar'
 
   export default {
     data() {
       return {
         content: '',
-        list: []
+        userList: [],
+        showSelectUserPopup: false,
+        defaultSession: {},
+        active: 0,
+        sessions: [
+          {
+            session: "0-0",
+            name: 'WeChat',
+            list: []
+          },
+          {
+            session: '1-2',
+            name: 'YH',
+            list: []
+          }
+        ]
       }
     },
     ready() {
       var ctx = this
+      this.defaultSession = this.sessions[0]
       this.loadHistory()
+      this.getAllUser()
       this.$socket.on('update', function (chat) {
-        ctx.list.push(chat)
+        ctx.defaultSession.list.push(chat)
         ctx.scrollToButtom()
       })
       this.$socket.on('send', function (chats) {
         chats.sort(function () { return true })
-        if (ctx.list.length == 0)
-          ctx.list = chats
+        if (ctx.defaultSession.list.length == 0)
+          ctx.defaultSession.list = chats
         else
-          ctx.list = chats.concat(ctx.list)
-        if (ctx.list.length <= 10) {
+          ctx.defaultSession.list = chats.concat(ctx.defaultSession.list)
+        if (ctx.defaultSession.list.length <= 10) {
           ctx.scrollToButtom()
         }
       })
@@ -60,7 +84,10 @@
       Tab,
       TabItem,
       Message,
-      Scroll
+      Scroll,
+      AddBtn,
+      Popup,
+      Avatar
     },
     vuex: {
       getters: {
@@ -75,18 +102,40 @@
       }
     },
     methods: {
+      getAllUser() {
+        this.$http.get('/api/user').then(res => {
+          this.userList = res.body
+        })
+      },
+      addTabItem(user) {
+        var session = {
+          session: this.user.id + '-' + user.id,
+          name: user.name,
+          list: []
+        }
+        this.sessions.splice(1, 0, session)
+        if (this.sessions.length > 4)
+          this.sessions.pop()
+        this.showSelectUserPopup = false
+
+      },
+      changeTabItem(index) {
+        this.defaultSession = this.sessions[index]
+        if (this.defaultSession.list.length == 0)
+          this.loadHistory()
+      },
       sendMessage() {
         var ctx = this
         if (!this.content) {
           alert('请说些什么吧！')
           return
         }
-        this.$socket.emit('submit', { content: this.content, session: '0-0', user: this.user.id })
+        this.$socket.emit('submit', { content: this.content, session: this.defaultSession.session, user: this.user.id })
         this.content = ''
       },
       loadHistory(done) {
         var ctx = this
-        this.$socket.emit('find', { session: '0-0', skip: 0, limit: 10, sort: 'createdAt DESC' })
+        this.$socket.emit('find', { session: this.defaultSession.session, skip: this.defaultSession.list.length, limit: 10, sort: 'createdAt DESC' })
         setTimeout(function () {
           done && done()
         }, 500);
@@ -97,6 +146,9 @@
           var message = $('.scroll')[0]
           message.scrollTop = 10000000000
         }, 100);
+      },
+      clickTabItem() {
+
       }
     }
   }
@@ -132,5 +184,15 @@
       background-color: #61CDE7;
       font-size: 15px;
     }
+  }
+  
+  .addBtn {
+    margin-bottom: 40px;
+    margin-right: 40px;
+  }
+  
+  .userListPanent {
+    padding: 5px 15px;
+    line-height: 36px;
   }
 </style>
