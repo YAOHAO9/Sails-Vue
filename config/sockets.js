@@ -138,7 +138,7 @@ module.exports.sockets = {
   ***************************************************************************/
   // transports: ["polling", "websocket"]
   onConnect: function (session, socket) {
-    console.log('---------------socket connect----------------------')
+    sails.sockets.join(socket, '0-0')
     let Chat = sails.models.chat
     socket.on('find', (cond) => {
       cond = cond || {}
@@ -153,12 +153,13 @@ module.exports.sockets = {
       })
     })
     socket.on('submit', chat => {
+      sails.sockets.join(socket, chat.session)
       Chat.create(chat)
         .then(chat => {
           return Chat.findOne(chat.id).populate('user')
         })
         .then(chat => {
-          sails.sockets.blast('update', chat)
+          sails.sockets.broadcast(chat.session,'update', chat.toJSON());
         })
     })
   }

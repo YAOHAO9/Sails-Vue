@@ -3,7 +3,6 @@
   <content>
     <tab :change-item='changeTabItem' :active="active">
       <tab-item :title="session.name" :index="$index" v-for="session in sessions">
-        index:{{$index}}
         <scroll :on-refresh="loadHistory" class="scroll">
           <message :list="session.list"></message>
         </scroll>
@@ -45,11 +44,6 @@
           {
             session: "0-0",
             name: 'WeChat',
-            list: []
-          },
-          {
-            session: '1-2',
-            name: 'YH',
             list: []
           }
         ]
@@ -116,8 +110,9 @@
         })
       },
       addTabItem(user) {
+        var sessionStr = this.user.id < user.id ? (this.user.id + '-' + user.id) : (user.id + '-' + this.user.id)
         var session = {
-          session: this.user.id + '-' + user.id,
+          session: sessionStr,
           name: user.name,
           list: []
         }
