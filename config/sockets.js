@@ -138,8 +138,14 @@ module.exports.sockets = {
   ***************************************************************************/
   // transports: ["polling", "websocket"]
   onConnect: function (session, socket) {
+    console.log('session:' + JSON.stringify(session))
     sails.sockets.join(socket, '0-0')
     let Chat = sails.models.chat
+    let User = sails.models.user
+    socket.emit('who')
+    socket.on('who', (id) => {
+      User.update({ id: id }, { socketId: socket.id }, console.log)
+    })
     socket.on('find', (cond) => {
       cond = cond || {}
       let findCond = { or: [{ session: cond.session }, { session: cond.session.replace(/(\d+)-(\d+)/, "$2-$1") }] }
@@ -159,8 +165,12 @@ module.exports.sockets = {
           return Chat.findOne(chat.id).populate('user')
         })
         .then(chat => {
-          sails.sockets.broadcast(chat.session,'update', chat.toJSON());
+          sails.sockets.broadcast(chat.session, 'update', chat.toJSON());
         })
     })
+  },
+  onDisconnect: function (session, socket) {
+    User.update({ socketId: socket.id }, { socketId: null }, console.log)
   }
+
 };

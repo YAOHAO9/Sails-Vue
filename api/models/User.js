@@ -25,6 +25,9 @@ module.exports = {
         avatar: {
             type: 'string'
         },
+        socketId: {
+            type: 'string'
+        },
         toJSON: function () {
             var obj = this.toObject();
             delete obj.password;

@@ -75,6 +75,9 @@
           ctx.scrollToButtom()
         }
       })
+      this.$socket.on('who', () => {
+        this.$socket.emit('who', this.user.id)
+      })
     },
     destroyed() {
       this.$socket.removeEventListener('update')
