@@ -2,22 +2,24 @@
     <div class="message">
         <ul>
             <li v-for="item in list">
-                <p class="time">
-                    <span>{{ item.createdAt | time }}</span>
-                </p>
+                <div v-if="user && item.sender">
+                    <p class="time">
+                        <span>{{ item.createdAt | time }}</span>
+                    </p>
 
-                <div class="hiv" :class="{ self: user.id == item.user.id }">
-                    <div class="head" v-if="user.id != item.user.id ">
-                        <avator :avator="item.user.avator"></avator>
-                    </div>
-                    <div class="content">
-                        <div class="name">{{item.user.name}}</div>
-                        <div class="text">
-                            {{ item.content }}
+                    <div class="hiv" :class="{ self: user.id == item.sender.id }">
+                        <div class="head" v-if="user.id != item.sender.id ">
+                            <avator :avator="item.sender.avator"></avator>
                         </div>
-                    </div>
-                    <div class="head" v-if="user.id == item.user.id ">
-                        <avator :avator="item.user.avator"></avator>
+                        <div class="content">
+                            <div class="name">{{item.sender.name}}</div>
+                            <div class="text">
+                                {{ item.content }}
+                            </div>
+                        </div>
+                        <div class="head" v-if="user.id == item.sender.id ">
+                            <avator :avator="item.sender.avator"></avator>
+                        </div>
                     </div>
                 </div>
             </li>

@@ -13,8 +13,8 @@ module.exports = {
     Chat.find()
       .groupBy('session')
       .max('createdAt')
-      .limit(3)
-      .sort('createdAt DESC')
+      .sort('updatedAt DESC')
+      // .limit(10)
       .then(chatKind => {
         res.ok(chatKind)
       })

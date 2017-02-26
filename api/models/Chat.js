@@ -11,7 +11,10 @@ module.exports = {
     session: {
       type: 'string'
     },
-    user: {
+    sender: {
+      model: 'User'
+    },
+    receiver: {
       model: 'User'
     },
     type: {

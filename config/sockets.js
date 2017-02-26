@@ -142,35 +142,55 @@ module.exports.sockets = {
     sails.sockets.join(socket, '0-0')
     let Chat = sails.models.chat
     let User = sails.models.user
-    socket.emit('who')
+    /*Init sessions*/
+    Chat.find()
+      .groupBy('session')
+      .max('createdAt')
+      .limit(3)
+      .sort('createdAt DESC')
+      .then(chatKinds => {
+        socket.emit('initSessions', chatKinds)
+      })
+    /*listen*/
     socket.on('who', (id) => {
       User.update({ id: id }, { socketId: socket.id }, console.log)
     })
     socket.on('find', (cond) => {
       cond = cond || {}
-      let findCond = { or: [{ session: cond.session }, { session: cond.session.replace(/(\d+)-(\d+)/, "$2-$1") }] }
+      let findCond = { session: cond.session }
       let query = Chat.find(findCond)
       cond.skip && query.skip(cond.skip)
       cond.limit && query.limit(cond.limit)
       cond.sort && query.sort(cond.sort)
-      query.populate('user')
+      query.populate('sender').populate('receiver')
       query.then(chats => {
-        socket.emit('send', chats)
+        socket.emit('initSession', chats)
       })
     })
     socket.on('submit', chat => {
       sails.sockets.join(socket, chat.session)
       Chat.create(chat)
         .then(chat => {
-          return Chat.findOne(chat.id).populate('user')
+          return Chat.findOne(chat.id).populate('sender').populate('receiver')
         })
         .then(chat => {
-          sails.sockets.broadcast(chat.session, 'update', chat.toJSON());
+          if (chat.session == '0-0') {
+            sails.sockets.broadcast(chat.session, 'update', chat.toJSON());
+          } else {
+            User.findOne(chat.receiver.id)
+              .then(user => {
+                if (user.socketId) {
+                  sails.sockets.join(user.socketId, chat.session)
+                  socket
+                  sails.sockets.broadcast(chat.session, 'update', chat.toJSON());
+                }
+              })
+          }
         })
+
     })
   },
   onDisconnect: function (session, socket) {
     User.update({ socketId: socket.id }, { socketId: null }, console.log)
   }
-
 };

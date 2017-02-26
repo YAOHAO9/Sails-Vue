@@ -31,6 +31,7 @@
   import AddBtn from '../components/add-btn'
   import Popup from '../../components/popup'
   import Avatar from '../components/avatar'
+  import vuex from '../../vuex/vuex'
 
   export default {
     data() {
@@ -39,14 +40,7 @@
         userList: [],
         showSelectUserPopup: false,
         defaultSession: {},
-        active: 0,
-        sessions: [
-          {
-            session: "0-0",
-            name: 'WeChat',
-            list: []
-          }
-        ]
+        active: 0
       }
     },
     ready() {
@@ -54,34 +48,17 @@
       this.defaultSession = this.sessions[0]
       this.loadHistory()
       this.getAllUser()
-      this.$socket.on('update', (chat) => {
-
-        this.sessions.forEach((session) => {
-          if (session.session == chat.session)
-            session.list.push(chat)
-          else if (session.session.indexOf(chat.session.replace(/(\d+)-(\d+)/, "$2-$1")) >= 0)
-            session.list.push(chat)
-        })
-
-        ctx.scrollToButtom()
-      })
-      this.$socket.on('send', function (chats) {
-        chats.sort(function () { return true })
-        if (ctx.defaultSession.list.length == 0)
-          ctx.defaultSession.list = chats
-        else
-          ctx.defaultSession.list = chats.concat(ctx.defaultSession.list)
-        if (ctx.defaultSession.list.length <= 10) {
-          ctx.scrollToButtom()
-        }
-      })
-      this.$socket.on('who', () => {
-        this.$socket.emit('who', this.user.id)
-      })
     },
-    destroyed() {
-      this.$socket.removeEventListener('update')
-      this.$socket.removeEventListener('send')
+    events: {
+      scrollToButtom: function () {
+        this.$nextTick(() => {
+          var messages = document.getElementsByClassName('scroll')
+          for (var i = 0; i < messages.length; i++) {
+            var message = messages[i]
+            message.scrollTop = 10000000000
+          }
+        });
+      }
     },
     components: {
       SimpleHeader,
@@ -94,18 +71,7 @@
       Popup,
       Avatar
     },
-    vuex: {
-      getters: {
-        user: function (state) {
-          return state.user
-        }
-      },
-      actions: {
-        saveUser: function (store, val) {
-          store.dispatch('SAVEUSER', val);
-        }
-      }
-    },
+    vuex,
     methods: {
       getAllUser() {
         this.$http.get('/api/user').then(res => {
@@ -117,15 +83,16 @@
         var session = {
           session: sessionStr,
           name: user.name,
+          receiver: user.id,
           list: []
         }
         this.sessions.splice(1, 0, session)
         if (this.sessions.length > 4)
           this.sessions.pop()
         this.showSelectUserPopup = false
-        setTimeout(() => {
+        this.$nextTick(() => {
           this.$broadcast('changeItem', 1)
-        }, 100)
+        })
       },
       changeTabItem(index) {
         this.defaultSession = this.sessions[index]
@@ -138,24 +105,15 @@
           alert('请说些什么吧！')
           return
         }
-        this.$socket.emit('submit', { content: this.content, session: this.defaultSession.session, user: this.user.id })
+        this.$socket.emit('submit', { content: this.content, session: this.defaultSession.session, sender: this.user.id, receiver: this.defaultSession.receiver })
         this.content = ''
       },
       loadHistory(done) {
         var ctx = this
         this.$socket.emit('find', { session: this.defaultSession.session, skip: this.defaultSession.list.length, limit: 10, sort: 'createdAt DESC' })
-        setTimeout(function () {
+        this.$nextTick(function () {
           done && done()
-        }, 500);
-      },
-      scrollToButtom() {
-        setTimeout(() => {
-          var messages = document.getElementsByClassName('scroll')
-          for (var i = 0; i < messages.length; i++) {
-            var message = messages[i]
-            message.scrollTop = 10000000000
-          }
-        }, 100);
+        });
       },
       clickTabItem() {
 

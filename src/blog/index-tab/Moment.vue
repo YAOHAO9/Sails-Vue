@@ -160,9 +160,9 @@
       setImageGridDetailPopupToFrontMost() {
         if (this.showImageGridDetail)
           return 'frontMost'
-        setTimeout(function () {
+        this.$nextTick(function () {
           $('.popupParent').removeClass('frontMost')
-         }, 300)
+        })
         return 'frontMost'
       },
       approve(item) {
@@ -186,20 +186,26 @@
         this.showCommentPopup = true;
       },
       operated(arr) {
-        return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
+        if (this.user)
+          return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
+        else
+          return false
       }
     }
   }
+
 </script>
 <style lang="less" scoped>
-  .userIcon{
+  .userIcon {
     margin-top: 4px;
   }
-  .item{
+  
+  .item {
     margin-top: 8px;
-    padding-top: 2px; 
+    padding-top: 2px;
     background-color: white;
   }
+  
   .portrait {
     border-radius: 18px;
     background-color: gray;
@@ -212,6 +218,7 @@
   img {
     width: 100%;
   }
+  
   .blog-content {
     width: 70%;
     margin: 0 auto;
@@ -242,17 +249,20 @@
     border-radius: 5px;
     color: #929292;
   }
-  .operated>i{
+  
+  .operated>i {
     color: #61CDE7;
   }
-  .popupParent{
+  
+  .popupParent {
     position: fixed;
-    top:0;
+    top: 0;
     bottom: 0;
-    left:0;
-    right:0;
+    left: 0;
+    right: 0;
   }
-  .frontMost{
+  
+  .frontMost {
     z-index: 9999
   }
 </style>

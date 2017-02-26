@@ -6,7 +6,14 @@ Vue.use(Vuex)
 
 const state = {
   user: null,
-  indexView: 'moment'
+  indexView: 'moment',
+  sessions: [
+    {
+      session: "0-0",
+      name: 'WeChat',
+      list: []
+    }
+  ]
 }
 
 const mutations = {
@@ -15,6 +22,9 @@ const mutations = {
   },
   SAVECURRENTVIEW(state, val) {
     state.indexView = val;
+  },
+  SAVESESSIONS(state, val) {
+    state.indexView = val
   }
 }
 
@@ -22,3 +32,5 @@ export default new Vuex.Store({
   state,
   mutations
 })
+
+
