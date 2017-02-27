@@ -26,6 +26,10 @@ module.exports = {
     },
     img: {
       type: 'string'
+    },
+    read: {
+      type: 'boolean',
+      defaultsTo: false
     }
   }
 };

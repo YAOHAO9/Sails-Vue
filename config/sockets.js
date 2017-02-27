@@ -137,7 +137,7 @@ module.exports.sockets = {
   *                                                                          *
   ***************************************************************************/
   // transports: ["polling", "websocket"]
-  onConnect: function (session, socket) {
+  onConnect: function (requestSession, socket) {
     sails.sockets.join(socket, '0-0')
     let Chat = sails.models.chat
     let User = sails.models.user
@@ -145,7 +145,7 @@ module.exports.sockets = {
     socket.on('who', (id) => {
       User.update({ id: id }, { socketId: socket.id }, function () { })
       /*Init sessions*/
-      Chat.find({ session: { contains: id } })
+      Chat.find({ session: { contains: id, '!': '0-0' } })
         .groupBy('session')
         .max('createdAt')
         .limit(3)
@@ -159,7 +159,7 @@ module.exports.sockets = {
             return User.findOne(receiver)
               .then(receiver => {
                 session.name = receiver.name
-                session.receiver = receiver
+                session.receiver = receiver.id
                 session.list = []
                 return session
               })

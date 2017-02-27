@@ -27,7 +27,17 @@ module.exports = {
       .catch(e => {
         res.serverError(e)
       })
-
+  },
+  getOtherUser: function (req, res, next) {
+    if (req.body.exclude) {
+      req.body.exclude.push(req.session.user.id)
+      User.find({ id: { '!': req.body.exclude } })
+        .then(users => {
+          res.ok(users)
+        })
+    } else {
+      res.ok([])
+    }
   }
 };
 

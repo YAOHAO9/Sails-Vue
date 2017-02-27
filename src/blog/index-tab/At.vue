@@ -9,8 +9,8 @@
       </tab-item>
     </tab>
     <div class="inputParent hiv">
-      <input v-model="content" @keyup.enter="sendMessage()"/>
-      <div class="btn" @click="sendMessage()" >发送</div>
+      <input v-model="content" @keyup.enter="sendMessage()" />
+      <div class="btn" @click="sendMessage()">发送</div>
     </div>
     <popup :show.sync="showSelectUserPopup" :full="true" :title="'选择你要私聊的用户'" :show-title-bar="true">
       <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">
@@ -18,7 +18,7 @@
         <div>{{user.name}}</div>
       </div>
     </popup>
-    <add-btn class="addBtn" @click="showSelectUserPopup = true"></add-btn>
+    <add-btn class="addBtn" @click="showPopup('showSelectUserPopup')"></add-btn>
   </content>
 </template>
 
@@ -73,8 +73,18 @@
     },
     vuex,
     methods: {
+      showPopup(type) {
+        this[type] = true
+        this.getAllUser()
+      },
       getAllUser() {
-        this.$http.get('/api/user').then(res => {
+        let receivers = []
+        this.sessions.map(session => {
+          if (session.receiver) {
+            receivers.push(session.receiver)
+          }
+        })
+        this.$http.put('/api/user/getOtherUser?t=' + (new Date).getTime(), { exclude: receivers }).then(res => {
           this.userList = res.body
         })
       },
