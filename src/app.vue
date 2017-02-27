@@ -33,6 +33,7 @@
           var session = {
             session: chat.session,
             name: chat.sender.name,
+            receiver: chat.sender.id,
             list: []
           }
           this.sessions.splice(1, 0, session)

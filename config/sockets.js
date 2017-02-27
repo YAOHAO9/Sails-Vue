@@ -138,22 +138,37 @@ module.exports.sockets = {
   ***************************************************************************/
   // transports: ["polling", "websocket"]
   onConnect: function (session, socket) {
-    console.log('session:' + JSON.stringify(session))
     sails.sockets.join(socket, '0-0')
     let Chat = sails.models.chat
     let User = sails.models.user
-    /*Init sessions*/
-    Chat.find()
-      .groupBy('session')
-      .max('createdAt')
-      .limit(3)
-      .sort('createdAt DESC')
-      .then(chatKinds => {
-        socket.emit('initSessions', chatKinds)
-      })
     /*listen*/
     socket.on('who', (id) => {
-      User.update({ id: id }, { socketId: socket.id }, console.log)
+      User.update({ id: id }, { socketId: socket.id }, function () { })
+      /*Init sessions*/
+      Chat.find({ session: { contains: id } })
+        .groupBy('session')
+        .max('createdAt')
+        .limit(3)
+        .sort('createdAt DESC')
+        .then(sessions => {
+          let tasks = sessions.map(session => {
+            let users = session.session.split('-')
+            let receiver = users.find(user => {
+              return user != id
+            })
+            return User.findOne(receiver)
+              .then(receiver => {
+                session.name = receiver.name
+                session.receiver = receiver
+                session.list = []
+                return session
+              })
+          })
+          return Promise.all(tasks)
+        })
+        .then(sessions => {
+          socket.emit('initSessions', sessions)
+        })
     })
     socket.on('find', (cond) => {
       cond = cond || {}
@@ -181,9 +196,8 @@ module.exports.sockets = {
               .then(user => {
                 if (user.socketId) {
                   sails.sockets.join(user.socketId, chat.session)
-                  socket
-                  sails.sockets.broadcast(chat.session, 'update', chat.toJSON());
                 }
+                sails.sockets.broadcast(chat.session, 'update', chat.toJSON());
               })
           }
         })

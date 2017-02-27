@@ -9,8 +9,8 @@
       </tab-item>
     </tab>
     <div class="inputParent hiv">
-      <input v-model="content" />
-      <div class="btn" @click="sendMessage()">发送</div>
+      <input v-model="content" @keyup.enter="sendMessage()"/>
+      <div class="btn" @click="sendMessage()" >发送</div>
     </div>
     <popup :show.sync="showSelectUserPopup" :full="true" :title="'选择你要私聊的用户'" :show-title-bar="true">
       <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">

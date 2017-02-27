@@ -24,7 +24,7 @@ const mutations = {
     state.indexView = val;
   },
   SAVESESSIONS(state, val) {
-    state.indexView = val
+    state.sessions = val
   }
 }
 
