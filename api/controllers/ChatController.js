@@ -19,5 +19,27 @@ module.exports = {
         res.ok(chatKind)
       })
   },
+  read: function (req, res) {
+    Chat.update(req.body.chatId, { read: true })
+      .then((chat) => {
+        res.ok(chat)
+      })
+  },
+  getUnreadNum: function (req, res) {
+    if (req.body.users) {
+      let users = req.body.users
+      let session = users[0] < users[1] ? (users[0] + '-' + users[1]) : (users[1] + '-' + users[0])
+      Chat.find({ session: session, read: false, receiver: users[0] })
+        .then(chats => {
+          return { unreadNum: chats.length }
+        })
+        .catch((e) => {
+          res.notFound()
+        })
+    } else {
+      res.ok()
+    }
+
+  }
 };
 

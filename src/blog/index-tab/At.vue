@@ -127,6 +127,12 @@
       },
       clickTabItem() {
 
+      },
+      getUnreadNum(receiver, render) {
+        this.$http.put('/api/chat/getUnreadNum', { users: [receiver.id, render.id] })
+          .then(res => {
+            console.log(JSON.stringify(res))
+          })
       }
     }
   }

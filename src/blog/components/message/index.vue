@@ -2,7 +2,7 @@
     <div class="message">
         <ul>
             <li v-for="item in list">
-                <div v-if="user && item.sender">
+                <div v-if="user && item.sender" :read="read(item)">
                     <p class="time">
                         <span>{{ item.createdAt | time }}</span>
                     </p>
@@ -58,6 +58,14 @@
                     date = new Date(date);
                 }
                 return date.getHours() + ':' + date.getMinutes();
+            }
+        },
+        methods: {
+            read(item) {
+                if (item.session != '0-0' && item.sender.id != this.user.id && !item.read) {
+                    this.$http.put('/api/chat/read', { chatId: item.id })
+                        .then(chat => { })
+                }
             }
         }
     }

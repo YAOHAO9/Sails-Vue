@@ -205,6 +205,6 @@ module.exports.sockets = {
     })
   },
   onDisconnect: function (session, socket) {
-    User.update({ socketId: socket.id }, { socketId: null }, console.log)
+    User.update({ socketId: socket.id }, { socketId: null }, function(){})
   }
 };
