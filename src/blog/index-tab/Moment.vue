@@ -5,7 +5,12 @@
     </header-link>
   </simple-header>
   <content>
-
+    <actions :show.sync="showActions">
+      <action-group>
+        <action-button @click="edit()">Save</action-button>
+        <action-button class="color-danger" @click="del()">Delete</action-button>
+      </action-group>
+    </actions>
     <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
       <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
     </popup>
@@ -20,7 +25,7 @@
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite" class="scroll">
       <div v-for="item in list" class="item">
         <!--header-->
-        <hav margin='3px 40px 3px 46px' center>
+        <hav margin='3px 40px 3px 46px' :height="'36px'">
           <div>
             <avatar :avatar="item.user.avatar"></avatar>
           </div>
@@ -29,7 +34,7 @@
             <div class="date">{{ new Date(item.createdAt) | date}}</div>
           </div>
           <div class="edit">
-            <i class="fa fa-chevron-down"></i>
+            <i v-if="user.id == item.user.id" class="fa fa-chevron-down" @click="showActionsFn(item)"></i>
           </div>
         </hav>
         <hr>
@@ -76,11 +81,13 @@
   import ImageGridDetail from '../fragment/image-grid-detail'
   import Avatar from '../components/avatar'
   import UserIcon from '../components/user-icon'
+  import { Actions, ActionButton, ActionGroup } from '../../components/actions'
 
   export default {
     data() {
       return {
         list: [],
+        showActions: false,
         showAddMomentPopup: false,
         showCommentPopup: false,
         showImageGridDetail: false,
@@ -103,7 +110,10 @@
       Comment,
       Avatar,
       UserIcon,
-      ImageGridDetail
+      ImageGridDetail,
+      Actions,
+      ActionButton,
+      ActionGroup
     },
     vuex: {
       getters: {
@@ -150,6 +160,10 @@
           ctx.showAddMomentPopup = false
         })
       },
+      showActionsFn(item) {
+        this.currentItem = item
+        this.showActions = true
+      },
       showImageGridDetailPopup(item) {
         this.currentItem = item
         this.showImageGridDetail = true
@@ -190,6 +204,23 @@
           return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
         else
           return false
+      },
+      del() {
+        this.showActions = false
+        this.$http.delete('api/moment/delete/' + this.currentItem.id)
+          .then(res => {
+            let delMoment = res.body
+            let delMomentIndex = 0
+            let found = this.list.find((moment, index) => {
+              delMomentIndex = index
+              return moment.id == delMoment.id
+            })
+            if (found)
+              this.list.splice(delMomentIndex, 1)
+          })
+      },
+      edit() {
+        this.showActions = false
       }
     }
   }

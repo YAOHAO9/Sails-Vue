@@ -24,6 +24,9 @@ module.exports = {
     city: {
       type: 'string'
     },
+    ip: {
+      type: 'string'
+    },
     approves: {
       type: 'array'
     },

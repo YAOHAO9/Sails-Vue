@@ -9,11 +9,12 @@ var UploadService = require("../services/UploadService")
 
 var http = require('http');
 var util = require('util');
+var fs = require('fs')
 
 /**
  * 根据 ip 获取获取地址信息
  */
-var getIpInfo = function (ip, cb) {
+function getIpInfo(ip, cb) {
   var sina_server = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=';
   var url = sina_server + ip;
   http.get(url, function (res) {
@@ -50,23 +51,67 @@ function getUserCityInfo(req) {
     })
   })
 }
+
 module.exports = {
   create: function (req, res) {
     UploadService(req, "images")
       .then(uploadedFiles => {
-        return Promise.all([uploadedFiles, getUserCityInfo(req)])
+        return Promise.all([uploadedFiles, getClientIp(req)])
       })
-      .spread((uploadedFiles, cityInfo) => {
-        var city = cityInfo instanceof Object ? (cityInfo.province + ' ' + cityInfo.city) : undefined
+      .spread((uploadedFiles, ip) => {
+        // var city = cityInfo instanceof Object ? (cityInfo.province + ' ' + cityInfo.city) : undefined
         return Moment.create({
           user: req.session.user,
           content: req.body.content,
           images: uploadedFiles,
-          city: city,
+          ip: ip,
           approves: [],
           disapproves: []
         })
       })
+      .then(moment => {
+        res.ok(moment)
+      })
+  },
+  delete: function (req, res) {
+    let id = req.param('id')
+    if (!id)
+      return res.badRequest({ errMsg: '参数错误' })
+    Moment.findOne(id)
+      .then(moment => {
+        if (moment.user != req.session.user.id && req.session.user.email != '986403268@qq.com')
+          throw new Error('无权操作')
+        let tasks = moment.images.map(img => {
+          return File.findOne(img).then(file => {
+            fs.unlink(file.fd)
+            return file
+          }).then(file => {
+            return File.destroy({ id: file.id })
+          })
+        })
+        return Promise.all(tasks)
+      })
+      .then(() => {
+        return Moment.destroy({ id: id })
+      })
+      .then((moments) => {
+        if (moments && moments.length == 1)
+          res.json(moments[0])
+        else
+          res.serverError({ errMsg: '删除失败' })
+      })
+      .catch(e => {
+        res.forbidden({ errMsg: e.message })
+      })
+  },
+  edit: function (req, res) {
+    let content = req.body.content
+    let id = req.body.id
+    if (!id)
+      return res.badRequest({ errMsg: '参数错误' })
+    if (!content)
+      return res.badRequest({ errMsg: '请输入修改过的内容' })
+    Moment.update({ id: id }, { content: content })
       .then(moment => {
         res.ok(moment)
       })

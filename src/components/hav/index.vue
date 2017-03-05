@@ -72,5 +72,6 @@ export default {
   .hav-component {
     width: 100%;
     position: relative;
+    overflow: hidden;
   }
 </style>
