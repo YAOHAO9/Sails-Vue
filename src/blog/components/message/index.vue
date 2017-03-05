@@ -3,8 +3,8 @@
         <ul>
             <li v-for="item in list">
                 <div v-if="user && item.sender" :read="read(item)">
-                    <p class="time">
-                        <span>{{ item.createdAt | time }}</span>
+                    <p class="time" v-if="isShowTime($index)">
+                        <span>{{ item.createdAt | date }}</span>
                     </p>
 
                     <div class="hiv" :class="{ self: user.id == item.sender.id }">
@@ -51,21 +51,19 @@
                 }
             }
         },
-        filters: {
-            // 将日期过滤为 hour:minutes
-            time(date) {
-                if (typeof date === 'string') {
-                    date = new Date(date);
-                }
-                return date.getHours() + ':' + date.getMinutes();
-            }
-        },
         methods: {
             read(item) {
                 if (item.session != '0-0' && item.sender.id != this.user.id && !item.read) {
                     this.$http.put('/api/chat/read', { chatId: item.id })
                         .then(chat => { })
                 }
+            },
+            isShowTime(index) {
+                if (index == 0)
+                    return true
+                if (new Date(this.list[index].createdAt).getTime() - new Date(this.list[index - 1].createdAt).getTime() > 60 * 1000)
+                    return true
+                return false
             }
         }
     }

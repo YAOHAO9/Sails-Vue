@@ -22,9 +22,10 @@
         }
       },
       update: function (chat) {
-        let foundSession = this.sessions.find((session) => {
+        let foundSession = this.sessions.find((session, index) => {
           if (session.session == chat.session) {
             session.list.push(chat)
+            this.$broadcast('changeItem', index)
             return true
           }
           return false

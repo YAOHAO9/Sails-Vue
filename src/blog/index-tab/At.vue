@@ -14,8 +14,9 @@
     </div>
     <popup :show.sync="showSelectUserPopup" :full="true" :title="'选择你要私聊的用户'" :show-title-bar="true">
       <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">
-        <avatar :avatar="user.avatar"></avatar>
-        <div>{{user.name}}</div>
+        <avatar :avatar="user.avatar" class="avatar"></avatar>
+        <div class="name">{{user.name}}</div>
+        <div class="unreadNum"><span v-if="getUnreadNum(user)">{{user.unreadNum}}</span></div>
       </div>
     </popup>
     <add-btn class="addBtn" @click="showPopup('showSelectUserPopup')"></add-btn>
@@ -85,7 +86,10 @@
           }
         })
         this.$http.put('/api/user/getOtherUser?t=' + (new Date).getTime(), { exclude: receivers }).then(res => {
-          this.userList = res.body
+          this.userList = res.body.map(user => {
+            user.unreadNum = 0
+            return user
+          })
         })
       },
       addTabItem(user) {
@@ -128,11 +132,14 @@
       clickTabItem() {
 
       },
-      getUnreadNum(receiver, render) {
-        this.$http.put('/api/chat/getUnreadNum', { users: [receiver.id, render.id] })
+      getUnreadNum(sender) {
+        if (sender.unreadNum)
+          return true
+        this.$http.put('/api/chat/getUnreadNum', { sender: sender.id })
           .then(res => {
-            console.log(JSON.stringify(res))
+            sender.unreadNum = res.body.unreadNum
           })
+        return false
       }
     }
   }
@@ -172,11 +179,30 @@
   
   .addBtn {
     margin-bottom: 40px;
-    margin-right: 40px;
+    // margin-right: 40px;
   }
   
   .userListPanent {
-    padding: 5px 15px;
+    margin: 5px 15px;
     line-height: 36px;
   }
+  .avatar{
+    min-width: 36px;
+  }
+
+  .name{
+    width: 100%;
+  }
+
+  .unreadNum{
+    min-width: 40px;
+    float:right;
+    span{
+        font-size: 12px;
+        background-color: gray;
+        border-radius: 20px;
+        padding: 2px 5px;
+    }
+  }
+
 </style>

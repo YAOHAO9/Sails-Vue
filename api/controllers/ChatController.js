@@ -26,12 +26,11 @@ module.exports = {
       })
   },
   getUnreadNum: function (req, res) {
-    if (req.body.users) {
-      let users = req.body.users
-      let session = users[0] < users[1] ? (users[0] + '-' + users[1]) : (users[1] + '-' + users[0])
-      Chat.find({ session: session, read: false, receiver: users[0] })
+    if (req.body.sender) {
+      let sender = req.body.sender
+      Chat.find({ read: false, receiver: req.session.user.id, sender: sender })
         .then(chats => {
-          return { unreadNum: chats.length }
+          res.ok({ unreadNum: chats.length })
         })
         .catch((e) => {
           res.notFound()

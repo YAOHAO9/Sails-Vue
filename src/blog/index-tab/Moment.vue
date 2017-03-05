@@ -31,8 +31,8 @@
           <div class="edit">
             <i class="fa fa-chevron-down"></i>
           </div>
-          <hr>
         </hav>
+        <hr>
         <!--content-->
         <div class="text">
           {{item.content}}
