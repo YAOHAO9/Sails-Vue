@@ -34,7 +34,7 @@
             <div class="date">{{ new Date(item.createdAt) | date}}</div>
           </div>
           <div class="edit">
-            <i v-if="user && user.id == item.user.id || user.email == '986403268@qq.com'" class="fa fa-chevron-down" @click="showActionsFn(item)"></i>
+            <i v-if="user && (user.id == item.user.id || user.email == '986403268@qq.com')" class="fa fa-chevron-down" @click="showActionsFn(item)"></i>
           </div>
         </hav>
         <hr>
@@ -129,7 +129,7 @@
     },
     methods: {
       onRefresh(done) {
-        this.$http.get('api/moment?sort=createdAt DESC&limit=3')
+        this.$http.get('api/moment?sort=createdAt DESC&limit=10')
           .then(function (res) {
             this.list = res.body
             done && done()

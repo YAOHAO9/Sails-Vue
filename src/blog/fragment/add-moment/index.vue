@@ -113,15 +113,15 @@
             }
           })
         })
-        compressPictures.forEach(function (compressPicture) {
-          formData.append("images", compressPicture.file)
-        })
-        formData.append("content", this.content)
         if ((!this.content || this.content == '') && compressPictures.length == 0) {
           alert('留下点什么吧')
           this.submiting = false
           return
         }
+        formData.append("content", this.content)
+        compressPictures.forEach(function (compressPicture) {
+          formData.append("images", compressPicture.file)
+        })
         this.$http.post('api/moment/create', formData)
           .then((response) => {
             this.submitCb && this.submitCb()
