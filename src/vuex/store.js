@@ -13,7 +13,18 @@ const state = {
       name: 'WeChat',
       list: []
     }
-  ]
+  ],
+  global: {
+    toast: {
+      show: false,
+      text: '',
+      type: '',
+      delay: ''
+    },
+    preLoader: {
+      show: false
+    }
+  }
 }
 
 const mutations = {
@@ -25,6 +36,14 @@ const mutations = {
   },
   SAVESESSIONS(state, val) {
     state.sessions = val
+  },
+  SHOWTOAST(state, val) {
+    for (var prop in val) {
+      state.global.toast[prop] = val[prop]
+    }
+  },
+  SHOWPRELOADER(state, val) {
+    state.global.preLoader.show = val
   }
 }
 

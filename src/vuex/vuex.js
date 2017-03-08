@@ -8,6 +8,12 @@ export default {
     },
     sessions: function (state) {
       return state.sessions
+    },
+    toast: function (state) {
+      return state.global.toast
+    },
+    preLoader: function (state) {
+      return state.global.preLoader
     }
   },
   actions: {
@@ -17,8 +23,20 @@ export default {
     saveCurrentView: function (store, val) {
       store.dispatch('SAVECURRENTVIEW', val);
     },
-    saveSessions:function(store,val){
-      store.dispatch('SAVESESSIONS',val)
+    saveSessions: function (store, val) {
+      store.dispatch('SAVESESSIONS', val)
+    },
+    showToast: function (store, val) {
+      if (!val.show)
+        val.show = true
+      store.dispatch('SHOWTOAST', val)
+      setTimeout(() => {
+        val.show = false
+        store.dispatch('SHOWTOAST', val)
+      }, 1500)
+    },
+    showPreLoader: function (store, val) {
+      store.dispatch('SHOWPRELOADER', val)
     }
   }
 }

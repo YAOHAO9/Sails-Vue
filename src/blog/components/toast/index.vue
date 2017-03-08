@@ -1,5 +1,5 @@
 <template>
-  <span :class="type" v-if="show && showToast()" transition="fade">{{text}}</span>
+  <span :class="type" v-show="show" transition="fade">{{text}}</span>
 </template>
 
 <script>
@@ -19,14 +19,6 @@
       delay: {
         type: Number,
         default: 2000
-      }
-    },
-    methods: {
-      showToast() {
-        setTimeout(() => {
-          this.show = false
-        }, this.delay)
-        return true
       }
     }
   }

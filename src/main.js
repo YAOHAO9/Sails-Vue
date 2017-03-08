@@ -48,14 +48,6 @@ Vue.use(Vum)
 Vue.use(Filters)
 Vue.use(VueSocketio, location.origin)
 
-Vue.http.interceptors.push((request, next) => {
-  next((response) => {
-    if (!response.ok) {
-      alert(response.body.errMsg)
-    }
-    return response
-  });
-})
 let router = new Router()
 
 router.map({

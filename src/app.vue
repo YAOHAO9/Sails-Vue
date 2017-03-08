@@ -1,14 +1,37 @@
 <template>
   <div>
     <router-view transition="slide"></router-view>
+    <pre-loader :show="preLoader.show"></pre-loader>
+    <toast :show="toast.show" :text="toast.text"></toast>
   </div>
 </template>
 <script>
+
   import store from './vuex/store'
   import vuex from './vuex/vuex'
+  import Toast from './blog/components/toast'
+  import PreLoader from './blog/components/preloader'
+  import Vue from 'vue'
   export default {
     store,
     vuex,
+    components:{
+      Toast,
+      PreLoader
+    },
+    ready(){
+      Vue.http.interceptors.push((request, next) => {
+        this.showPreLoader(true)
+        this.showToast({show:true,text:'哈哈哈哈啊哈哈哈哈哈'})
+        next((res) => {
+          this.showPreLoader(false)
+          if (!res.ok) {
+           
+          }
+          return res
+        });
+      })
+    },
     sockets: {
       connect: function () {
         if (this.user) {

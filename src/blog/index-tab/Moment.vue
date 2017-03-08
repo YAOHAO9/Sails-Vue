@@ -206,6 +206,7 @@
           return false
       },
       del() {
+        debugger
         this.showActions = false
         this.$http.delete('api/moment/delete/' + this.currentItem.id)
           .then(res => {
