@@ -22,11 +22,10 @@
     ready(){
       Vue.http.interceptors.push((request, next) => {
         this.showPreLoader(true)
-        this.showToast({show:true,text:'哈哈哈哈啊哈哈哈哈哈'})
         next((res) => {
           this.showPreLoader(false)
           if (!res.ok) {
-           
+           this.showToast({show:true,text:res.body.errMsg})
           }
           return res
         });
