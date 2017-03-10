@@ -39,18 +39,6 @@
         components: {
             Avator
         },
-        vuex: {
-            getters: {
-                user: function (state) {
-                    return state.user
-                }
-            },
-            actions: {
-                saveUser: function (store, val) {
-                    store.dispatch('SAVEUSER', val);
-                }
-            }
-        },
         methods: {
             read(item) {
                 if (item.session != '0-0' && item.sender.id != this.user.id && !item.read) {

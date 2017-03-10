@@ -75,9 +75,9 @@
                   img.src = column.compressPicture.base64;
                   ctx.refresh()
                 })
-                .catch(function (err) {
+                .catch( (err)=> {
                   // 处理失败会执行
-                  alert("处理失败");
+                  this.showToast("处理失败");
                 })
                 .always(function () {
                   // 不管是成功失败，都会执行
@@ -95,7 +95,7 @@
     methods: {
       isLoadImging: function () {
         if (this.loadImging) {
-          alert('请稍等，正在加载上一张图片...')
+          this.showToast('请稍等，正在加载上一张图片...')
           return false
         }
         return true
@@ -114,7 +114,7 @@
           })
         })
         if ((!this.content || this.content == '') && compressPictures.length == 0) {
-          alert('留下点什么吧')
+          this.showToast('留下点什么吧')
           this.submiting = false
           return
         }

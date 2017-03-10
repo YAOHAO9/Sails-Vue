@@ -14,6 +14,9 @@ export default {
     },
     preLoader: function (state) {
       return state.global.preLoader
+    },
+    currentView: function (state) {
+      return state.indexView
     }
   },
   actions: {
@@ -27,13 +30,17 @@ export default {
       store.dispatch('SAVESESSIONS', val)
     },
     showToast: function (store, val) {
+      if (!(val instanceof Object)) {
+        val = { text: val }
+      }
       if (!val.show)
         val.show = true
+
       store.dispatch('SHOWTOAST', val)
       setTimeout(() => {
         val.show = false
         store.dispatch('SHOWTOAST', val)
-      }, 1500)
+      }, 2000)
     },
     showPreLoader: function (store, val) {
       store.dispatch('SHOWPRELOADER', val)

@@ -56,7 +56,7 @@
         var formData = new FormData()
         formData.append("content", this.content)
         if ((!this.content || this.content == '')) {
-          alert('留下点什么吧')
+          this.showToast('留下点什么吧')
           this.submiting = false
           return
         }

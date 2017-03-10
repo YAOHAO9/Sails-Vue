@@ -8,21 +8,23 @@
 <script>
 
   import store from './vuex/store'
-  import vuex from './vuex/vuex'
   import Toast from './blog/components/toast'
   import PreLoader from './blog/components/preloader'
   import Vue from 'vue'
   export default {
     store,
-    vuex,
     components:{
       Toast,
       PreLoader
     },
     ready(){
       Vue.http.interceptors.push((request, next) => {
-        this.showPreLoader(true)
+        let showPreLoader = setTimeout(()=>{
+              this.showPreLoader(true)
+            },500)
+        
         next((res) => {
+          clearTimeout(showPreLoader)
           this.showPreLoader(false)
           if (!res.ok) {
            this.showToast({show:true,text:res.body.errMsg})

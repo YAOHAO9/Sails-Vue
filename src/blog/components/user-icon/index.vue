@@ -12,13 +12,6 @@
         this.$router.go({ path: 'personal-center' })
       }
     },
-    vuex: {
-      getters: {
-        user: function (state) {
-          return state.user
-        }
-      }
-    },
     components: {
       Avatar
     }

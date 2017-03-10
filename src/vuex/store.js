@@ -18,8 +18,7 @@ const state = {
     toast: {
       show: false,
       text: '',
-      type: '',
-      delay: ''
+      type: ''
     },
     preLoader: {
       show: false

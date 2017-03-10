@@ -25,20 +25,7 @@
     },
     methods: {
 
-    },
-    vuex: {
-      getters: {
-        user: function (state) {
-          return state.user
-        }
-      },
-      actions: {
-        saveUser: function (store, val) {
-          store.dispatch('SAVEUSER', val);
-        }
-      }
-    },
-   
+    }
   }
 </script>
 <style scoped>

@@ -42,20 +42,7 @@
       changeView(view) {
         this.saveCurrentView(view)
       }
-    },
-    vuex: {
-      getters: {
-        currentView: function (state) {
-          return state.indexView
-        }
-      },
-      actions: {
-        saveCurrentView: function (store, val) {
-          store.dispatch('SAVECURRENTVIEW', val);
-        }
-      }
     }
- 
   }
 </script>
 

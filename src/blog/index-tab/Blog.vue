@@ -63,18 +63,6 @@
       Avatar,
       UserIcon
     },
-    vuex: {
-      getters: {
-        user: function (state) {
-          return state.user
-        }
-      },
-      actions: {
-        saveUser: function (store, val) {
-          store.dispatch('SAVEUSER', val);
-        }
-      }
-    },
     methods: {
       onRefresh(done) {
         this.$http.get('api/article?sort=createdAt DESC&limit=10')

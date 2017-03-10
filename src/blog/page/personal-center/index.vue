@@ -41,8 +41,8 @@
             var img = $('img[name=avatar]')[0]
             img.src = rst.base64;
           })
-          .catch(function (err) {
-            alert("处理失败");
+          .catch((err)=> {
+            this.showToast("处理失败");
           })
           .always(function () {
             ctx.loadImging = false
@@ -65,12 +65,12 @@
           })
       },
       showUser: function () {
-        alert(JSON.stringify(this.user))
+        this.showToast(JSON.stringify(this.user))
       },
       submit: function () {
         var ctx = this
         if (!ctx.form.name)
-          alert('请输入你的名字!')
+          this.showToast('请输入你的名字!')
         var formData = new FormData()
         formData.append('name', ctx.form.name)
         if (ctx.form.file)
@@ -78,20 +78,8 @@
         this.$http.post('api/user/update/' + ctx.user.id, formData)
           .then((res) => {
             ctx.saveUser(res.body)
-            alert('保存成功！')
+            this.showToast('保存成功！')
           })
-      }
-    },
-    vuex: {
-      getters: {
-        user: function (state) {
-          return state.user
-        }
-      },
-      actions: {
-        saveUser: function (store, val) {
-          store.dispatch('SAVEUSER', val);
-        }
       }
     }
   }

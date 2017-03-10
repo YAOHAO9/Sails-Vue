@@ -32,7 +32,6 @@
   import AddBtn from '../components/add-btn'
   import Popup from '../../components/popup'
   import Avatar from '../components/avatar'
-  import vuex from '../../vuex/vuex'
 
   export default {
     data() {
@@ -72,7 +71,6 @@
       Popup,
       Avatar
     },
-    vuex,
     methods: {
       showPopup(type) {
         this[type] = true
@@ -116,7 +114,7 @@
       sendMessage() {
         var ctx = this
         if (!this.content) {
-          alert('请说些什么吧！')
+          this.showToast('请说些什么吧！')
           return
         }
         this.$socket.emit('submit', { content: this.content, session: this.defaultSession.session, sender: this.user.id, receiver: this.defaultSession.receiver })
