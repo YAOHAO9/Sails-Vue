@@ -62,7 +62,7 @@
         <hr>
       </div>
     </scroll>
-    <add-btn @click="showAddMomentPopup = true"></add-btn>
+    <add-btn class="addBtn" @click="showAddMomentPopup = true"></add-btn>
 
   </content>
 
@@ -284,5 +284,8 @@
   
   .frontMost {
     z-index: 9999
+  }
+  .addBtn{
+    margin-bottom: 50px;
   }
 </style>

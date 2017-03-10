@@ -1,5 +1,5 @@
 <template>
-  <a id="AddLost" v-link="{ path:link}">
+  <a id="AddBtn" v-link="{ path:link}">
     <div>
       <div></div>
     </div>
@@ -15,9 +15,9 @@
   }
 </script>
 <style>
-  #AddLost {
+  #AddBtn {
     position: fixed;
-    bottom: 70px;
+    bottom: 20px;
     right: 20px;
     background: #BBE9FF;
     border-radius: 30px;
@@ -27,7 +27,7 @@
     z-index: 1;
   }
   
-  #AddLost>div {
+  #AddBtn>div {
     width: 50px;
     padding: 10px;
     border-radius: 25px;
@@ -35,13 +35,13 @@
     background: #61CDE7;
   }
   
-  #AddLost>div>div {
+  #AddBtn>div>div {
     width: 30px;
     height: 30px;
     position: relative;
   }
   
-  #AddLost>div>div::before {
+  #AddBtn>div>div::before {
     content: '';
     width: 100%;
     height: 4px;
@@ -52,7 +52,7 @@
     margin: -2px 0 0 0;
   }
   
-  #AddLost>div>div::after {
+  #AddBtn>div>div::after {
     content: '';
     width: 4px;
     height: 100%;

@@ -44,10 +44,10 @@ export default {
       top: 50%;
       left: 50%;
       display: block;
-      margin-top: -0.5rem;
-      margin-left: -0.5rem;
-      width: 1rem;
-      height: 1rem;
+      margin-top: -14px;
+      margin-left: -14px;
+      width: 28px;
+      height: 28px;
   }
 }
 
