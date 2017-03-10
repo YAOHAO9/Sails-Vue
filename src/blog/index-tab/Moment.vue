@@ -163,7 +163,9 @@
         if (this.showImageGridDetail)
           return 'frontMost'
         this.$nextTick(function () {
-          $('.popupParent').removeClass('frontMost')
+          setTimeout(function(){
+            $('.popupParent').removeClass('frontMost')
+          },300)
         })
         return 'frontMost'
       },
