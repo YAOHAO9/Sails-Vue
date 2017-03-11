@@ -7,7 +7,6 @@
   <content>
     <actions :show.sync="showActions">
       <action-group>
-        <action-button @click="edit()">Save</action-button>
         <action-button class="color-danger" @click="del()">Delete</action-button>
       </action-group>
     </actions>
@@ -165,7 +164,7 @@
         this.$nextTick(function () {
           setTimeout(function(){
             $('.popupParent').removeClass('frontMost')
-          },300)
+          },400)
         })
         return 'frontMost'
       },
