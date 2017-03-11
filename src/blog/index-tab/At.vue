@@ -1,5 +1,9 @@
 <template>
-  <simple-header title="At"></simple-header>
+  <simple-header title="At">
+    <header-link>
+      <user-icon class="userIcon"></user-icon>
+    </header-link>
+  </simple-header>
   <content>
     <tab :change-item='changeTabItem' :active="active">
       <tab-item :title="session.name" :index="$index" v-for="session in sessions">
@@ -24,7 +28,7 @@
 </template>
 
 <script>
-  import { SimpleHeader } from '../../components/header'
+  import { SimpleHeader, HeaderLink } from '../../components/header'
   import Content from '../../components/content'
   import { Tab, TabItem } from '../../components/tab'
   import Message from '../components/message'
@@ -32,6 +36,7 @@
   import AddBtn from '../components/add-btn'
   import Popup from '../../components/popup'
   import Avatar from '../components/avatar'
+  import UserIcon from '../components/user-icon'
 
   export default {
     data() {
@@ -62,6 +67,8 @@
     },
     components: {
       SimpleHeader,
+      HeaderLink,
+      UserIcon,
       Content,
       Tab,
       TabItem,
@@ -144,6 +151,9 @@
 
 </script>
 <style lang="less" scoped>
+  .userIcon {
+    margin-top: 4px;
+  }
   .scroll {
     position: absolute;
     top: 40px;

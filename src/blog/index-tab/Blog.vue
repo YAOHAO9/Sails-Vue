@@ -5,6 +5,12 @@
     </header-link>
   </simple-header>
   <content>
+    <div class="popupParent" :class="setArticalDetailPopupToFrontMost()">
+      <popup :show.sync="showArticalDetail" :full="true" :show-title-bar="false">
+        {{{currentItem.contentDetail}}}
+        <back-btn class="backBtn" @click="showArticalDetail = false"></back-btn>
+      </popup>
+    </div>
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
       <div v-for="item in list">
         <div class="item" @click="detail(item)">
@@ -31,18 +37,18 @@
 <script>
   import { SimpleHeader, HeaderLink } from '../../components/header'
   import Content from '../../components/content'
-  import Hav from '../../components/hav'
-  import ImageGrid from '../components/image-grid'
   import Scroll from '../../components/scroll'
   import Popup from '../../components/popup'
   import Comment from '../fragment/comment'
   import Avatar from '../components/avatar'
   import UserIcon from '../components/user-icon'
+  import BackBtn from '../components/back-btn'
 
   export default {
     data() {
       return {
         list: [],
+        showArticalDetail:false,
         showAddArticlePopup: false,
         showCommentPopup: false,
         currentItem: {}
@@ -55,13 +61,12 @@
       HeaderLink,
       SimpleHeader,
       Content,
-      Hav,
-      ImageGrid,
       Scroll,
       Popup,
       Comment,
       Avatar,
-      UserIcon
+      UserIcon,
+      BackBtn
     },
     methods: {
       onRefresh(done) {
@@ -97,7 +102,23 @@
         })
       },
       detail(item) {
-        this.$router.go({ path: 'article-detail', query: { id: item.id } })
+        // this.$router.go({ path: 'article-detail', query: { id: item.id } })
+        this.currentItem = item
+        this.$http.get('/api/article/find/' + item.id)
+          .then(res => {
+            this.currentItem.contentDetail = res.body.content
+            this.showArticalDetail = true
+        })
+      },
+      setArticalDetailPopupToFrontMost() {
+        if (this.showArticalDetail)
+          return 'frontMost'
+        this.$nextTick(function () {
+          setTimeout(function(){
+            $('.popupParent').removeClass('frontMost')
+          },400)
+        })
+        return 'frontMost'
       },
       approve(item) {
         var ctx = this
@@ -133,6 +154,9 @@
   }
 </script>
 <style scoped>
+  .userIcon {
+    margin-top: 4px;
+  }
   .item{
     padding: 5px 5px;
     background-color: white;  
@@ -163,5 +187,18 @@
   }
   .date{
     float: right;
+  }
+  .popupParent {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .frontMost {
+    z-index: 9999
+  }
+  .backBtn{
+    margin-bottom: 40px;
   }
 </style>
