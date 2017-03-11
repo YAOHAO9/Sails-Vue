@@ -24,7 +24,6 @@
     width: 60px;
     height: 60px;
     padding: 5px;
-    z-index: 1;
   }
   
   #BackBtn>div {

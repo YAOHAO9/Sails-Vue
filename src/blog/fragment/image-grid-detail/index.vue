@@ -34,7 +34,6 @@
 </script>
 <style>
   .backBtn{
-    z-index: 999;
     margin-bottom: 20px;
     margin-right: 20px;
   }
