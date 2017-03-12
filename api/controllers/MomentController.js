@@ -77,7 +77,7 @@ module.exports = {
   delete: function (req, res) {
     let id = req.param('id')
     if (!id)
-      return res.badRequest({ errMsg: '参数错误' })
+      return res.badRequest('参数错误')
     Moment.findOne(id)
       .then(moment => {
         if (moment.user != req.session.user.id && req.session.user.email != '986403268@qq.com')
@@ -99,19 +99,19 @@ module.exports = {
         if (moments && moments.length == 1)
           res.json(moments[0])
         else
-          res.serverError({ errMsg: '删除失败' })
+          res.serverError('删除失败')
       })
       .catch(e => {
-        res.forbidden({ errMsg: e.message })
+        res.forbidden(e.message)
       })
   },
   edit: function (req, res) {
     let content = req.body.content
     let id = req.body.id
     if (!id)
-      return res.badRequest({ errMsg: '参数错误' })
+      return res.badRequest('参数错误')
     if (!content)
-      return res.badRequest({ errMsg: '请输入修改过的内容' })
+      return res.badRequest('请输入修改过的内容')
     Moment.update({ id: id }, { content: content })
       .then(moment => {
         res.ok(moment)

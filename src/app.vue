@@ -31,7 +31,7 @@
           clearTimeout(showPreLoader)
           this.showPreLoader(false)
           if (!res.ok) {
-           this.showToast({show:true,text:res.body.errMsg})
+            this.showToast({text:res.body})
           }
           return res
         });
