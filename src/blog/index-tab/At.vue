@@ -23,7 +23,7 @@
         <div class="unreadNum"><span v-if="getUnreadNum(user)">{{user.unreadNum}}</span></div>
       </div>
     </popup>
-    <add-btn class="addBtn" @click="showPopup('showSelectUserPopup')"></add-btn>
+    <add-btn class="addBtn" @click="getAllUser()"></add-btn>
   </content>
 </template>
 
@@ -81,7 +81,6 @@
     methods: {
       showPopup(type) {
         this[type] = true
-        this.getAllUser()
       },
       getAllUser() {
         let receivers = []
@@ -95,6 +94,7 @@
             user.unreadNum = 0
             return user
           })
+         this.showSelectUserPopup=true
         })
       },
       addTabItem(user) {

@@ -16,8 +16,8 @@
         <div class="item" @click="detail(item)">
           <div class="title">{{item.title}}</div>
           <div class="content">
-            <div class="icon">
-              <img src="/static/img/mm.jpg"><img>
+            <div class="icon" v-if="item.icon">
+              <img :src="item.icon"><img>
             </div>
             {{item.description}}…
           </div>
