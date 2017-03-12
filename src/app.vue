@@ -24,7 +24,7 @@
               if(stopShowPreLoader)
                 return
               this.showPreLoader(true)
-            },500)
+            },300)
         
         next((res) => {
           stopShowPreLoader = true
