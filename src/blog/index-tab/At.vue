@@ -93,7 +93,10 @@
             user.unreadNum = 0
             return user
           })
-         this.showSelectUserPopup=true
+          this.$nextTick(()=>{
+            this.showSelectUserPopup=true
+          })
+         
         })
       },
       addTabItem(user) {
