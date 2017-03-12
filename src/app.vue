@@ -19,17 +19,16 @@
     },
     ready(){
       Vue.http.interceptors.push((request, next) => {
-        let stopShowPreLoader=false
         let showPreLoader = setTimeout(()=>{
-              if(stopShowPreLoader)
-                return
               this.showPreLoader(true)
             },300)
         
         next((res) => {
-          stopShowPreLoader = true
-          clearTimeout(showPreLoader)
-          this.showPreLoader(false)
+          this.$nextTick(function(){
+            clearTimeout(showPreLoader)
+            this.showPreLoader(false)
+          })
+         
           if (!res.ok) {
             this.showToast({text:res.body})
           }
