@@ -52,7 +52,6 @@
       var ctx = this
       this.defaultSession = this.sessions[0]
       this.loadHistory()
-      this.getAllUser()
     },
     events: {
       scrollToButtom: function () {
