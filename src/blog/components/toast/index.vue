@@ -27,6 +27,7 @@
     left: 50%;
     transform: translate(-50%, 0);
     background-color: gray;
+    max-height: 100px;
     line-height: 20px;
     font-size: 14px;
     padding: 0 5px;
