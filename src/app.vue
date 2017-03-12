@@ -27,8 +27,8 @@
             },500)
         
         next((res) => {
+          stopShowPreLoader = true
           clearTimeout(showPreLoader)
-          stopShowPreLoader = false
           this.showPreLoader(false)
           if (!res.ok) {
            this.showToast({show:true,text:res.body.errMsg})
