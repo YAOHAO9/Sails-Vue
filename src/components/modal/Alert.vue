@@ -1,7 +1,7 @@
 <template>
   <modal :show.sync='show'>
     <div slot="title">{{title}}</div>
-    <div slot="content">{{content}}</div>
+    <div slot="content" class="content">{{content}}</div>
     <div slot="buttons" class="modal-buttons">
       <span class="modal-button" v-on:click="onClick()">{{okText}}</span>
     </div>
@@ -51,3 +51,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.content{
+  font-size: 15px;
+}
+</style>

@@ -24,6 +24,7 @@
       </div>
     </popup>
     <add-btn class="addBtn" @click="getAllUser()"></add-btn>
+    <alert :show.sync="!ls.hideAtTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
   </content>
 </template>
 
@@ -37,6 +38,7 @@
   import Popup from '../../components/popup'
   import Avatar from '../components/avatar'
   import UserIcon from '../components/user-icon'
+  import { Alert } from '../../components/modal'
 
   export default {
     data() {
@@ -45,7 +47,11 @@
         userList: [],
         showSelectUserPopup: false,
         defaultSession: {},
-        active: 0
+        active: 0,
+        alertContent:`
+        最后一个是聊天板块，wechat是群聊，如果你想和我私聊可以选择添加按钮选中想要聊天的人即可。
+        （目前系统采用的是匿名模式，默认会分配一个明星的名字。如果你觉得当前名字跟你性格、甚至性别不和，您可以点击头像修改你想要的名字，和头像）
+        `
       }
     },
     ready() {
@@ -75,7 +81,8 @@
       Scroll,
       AddBtn,
       Popup,
-      Avatar
+      Avatar,
+      Alert
     },
     methods: {
       showPopup(type) {
@@ -96,7 +103,6 @@
           this.$nextTick(()=>{
             this.showSelectUserPopup=true
           })
-         
         })
       },
       addTabItem(user) {
@@ -147,6 +153,10 @@
             sender.unreadNum = res.body.unreadNum
           })
         return false
+      },
+      onOk(){
+        this.ls.hideAtTip=true
+        this.saveLs(this.ls)
       }
     }
   }

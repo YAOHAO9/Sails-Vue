@@ -18,6 +18,16 @@
       PreLoader
     },
     ready(){
+      if(!this.ls){
+        let ls ={}
+          for(var prop in localStorage){
+            try{
+              ls[prop]=JSON.parse(localStorage[prop])
+            }catch(e){
+            }
+          }
+        this.saveLs(ls)
+      }
       Vue.http.interceptors.push((request, next) => {
         let showPreLoader = setTimeout(()=>{
               this.showPreLoader(true)

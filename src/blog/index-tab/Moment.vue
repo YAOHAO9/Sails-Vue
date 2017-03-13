@@ -61,6 +61,7 @@
         <hr>
       </div>
     </scroll>
+    <alert :show.sync="!ls.hideMomentTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
     <add-btn class="addBtn" @click="showAddMomentPopup = true"></add-btn>
 
   </content>
@@ -81,6 +82,7 @@
   import Avatar from '../components/avatar'
   import UserIcon from '../components/user-icon'
   import { Actions, ActionButton, ActionGroup } from '../../components/actions'
+  import { Alert } from '../../components/modal'
 
   export default {
     data() {
@@ -90,7 +92,11 @@
         showAddMomentPopup: false,
         showCommentPopup: false,
         showImageGridDetail: false,
-        currentItem: {}
+        currentItem: {},
+        alertContent:`
+        您好！欢迎来到YAOHAO的秘密花园，我会这这里发布一些个人动态。
+        如果你有什么好玩的、有趣的也可以在这里给我分享
+        `
       }
     },
     ready: function () {
@@ -112,7 +118,8 @@
       ImageGridDetail,
       Actions,
       ActionButton,
-      ActionGroup
+      ActionGroup,
+      Alert
     },
     methods: {
       onRefresh(done) {
@@ -211,6 +218,10 @@
       },
       edit() {
         this.showActions = false
+      },
+      onOk(){
+        this.ls.hideMomentTip=true
+        this.saveLs(this.ls)
       }
     }
   }

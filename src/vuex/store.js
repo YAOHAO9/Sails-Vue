@@ -23,7 +23,8 @@ const state = {
     preLoader: {
       show: false
     }
-  }
+  },
+  localStoage: false
 }
 
 const mutations = {
@@ -43,6 +44,13 @@ const mutations = {
   },
   SHOWPRELOADER(state, val) {
     state.global.preLoader.show = val
+  },
+  SAVELOCALSTORAGE(state, val) {
+    state.localStoage = val
+    for(var prop in val){
+      localStorage[prop]=JSON.stringify(val[prop])
+    }
+    localStorage.clear()
   }
 }
 

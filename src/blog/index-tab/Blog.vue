@@ -29,7 +29,7 @@
         <hr>
       </div>
     </scroll>
-
+    <alert :show.sync="!ls.hideBlogTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
   </content>
 
 </template>
@@ -43,6 +43,7 @@
   import Avatar from '../components/avatar'
   import UserIcon from '../components/user-icon'
   import BackBtn from '../components/back-btn'
+  import {Alert} from '../../components/modal'
 
   export default {
     data() {
@@ -51,7 +52,10 @@
         showArticalDetail:false,
         showAddArticlePopup: false,
         showCommentPopup: false,
-        currentItem: {}
+        currentItem: {},
+        alertContent:`
+        这个是我的个人博客板块，我会在这发布一些关于Nodejs全栈相关的文章，欢迎常来学习，探讨。
+        `
       }
     },
     ready: function () {
@@ -66,7 +70,8 @@
       Comment,
       Avatar,
       UserIcon,
-      BackBtn
+      BackBtn,
+      Alert
     },
     methods: {
       onRefresh(done) {
@@ -149,6 +154,10 @@
       },
       operated(arr) {
         return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
+      },
+      onOk(){
+        this.ls.hideBlogTip=true
+        this.saveLs(this.ls)
       }
     }
   }

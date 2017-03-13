@@ -17,6 +17,9 @@ export default {
     },
     currentView: function (state) {
       return state.indexView
+    },
+    ls:function(state){
+      return state.localStoage
     }
   },
   actions: {
@@ -44,6 +47,9 @@ export default {
     },
     showPreLoader: function (store, val) {
       store.dispatch('SHOWPRELOADER', val)
+    },
+    saveLs:function(store,val){
+      store.dispatch('SAVELOCALSTORAGE',val)
     }
   }
 }
