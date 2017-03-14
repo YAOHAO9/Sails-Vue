@@ -12,6 +12,9 @@ module.exports = {
             type: 'string',
             defaultsTo: require("../services/RandomNameService")
         },
+        memoName: {
+            type: 'string'
+        },
         email: {
             type: 'email',
             // required: true,

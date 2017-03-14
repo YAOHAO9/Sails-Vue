@@ -11,6 +11,7 @@
   <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
   <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
   <script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+  <script type="text/javascript" charset="utf-8" src="./lrz.bundle.js"></script>
   <link href="/static/css/common.css" rel="stylesheet" type="text/css" />
   <style type="text/css">
     * {
@@ -48,6 +49,22 @@
       margin: 10px;
     }
     
+    #iconParent {
+      margin: 20px auto;
+      text-align: center;
+      line-height: 60px;
+      font-size: 14px;
+    }
+    
+    #icon {
+      width: 100px;
+      height: 60px;
+    }
+    
+    #selectIcon {
+      display: none;
+    }
+    
     .submit {
       line-height: 35px;
       text-align: center;
@@ -67,7 +84,8 @@
       <h3 class="title">标题</h3>
       <form>
         <textarea id="title" placeholder="标题"></textarea>
-        <input name="icon" type="file" multiple="multiple" accept="image/*" />
+        <div id="iconParent"><img id="icon" alt="选择图片" /></div>
+        <input name="icon" type="file" id="selectIcon" multiple="multiple" accept="image/*" />
       </form>
       <div class="submit" class="btn" onclick="submit()"> 提交</div>
     </div>
@@ -193,9 +211,23 @@
       UE.getEditor('editor').execCommand("clearlocaldata");
       alert("已清空草稿箱")
     }
-
   </script>
   <script>
+    var file
+    $('#icon').on('click', function () {
+      $('#selectIcon').click()
+    })
+    $('#selectIcon').on('change', function () {
+      lrz(this.files[0])
+        .then(function (rst) {
+          var icon = $('#icon')[0]
+          icon.src = rst.base64
+          file = rst.file
+        })
+        .catch(function (err) {
+          alert('选择图片失败')
+        })
+    })
     function submit() {
       if ($('.submit').hasClass('disabled')) {
         return
@@ -219,7 +251,9 @@
       formData.append('description', description)
       formData.append('title', $('#title').val())
       formData.append('content', UE.getEditor('editor').getContent())
-
+      debugger
+      if (file)
+        formData.append('icon', file)
       $('.submit').addClass('disabled')
       $.ajax({
         url: '/api/article/create',
@@ -239,7 +273,6 @@
         });
 
     }
-
   </script>
 </body>
 

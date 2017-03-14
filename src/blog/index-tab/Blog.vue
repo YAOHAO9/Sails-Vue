@@ -17,7 +17,7 @@
           <div class="title">{{item.title}}</div>
           <div class="content">
             <div class="icon" v-if="item.icon">
-              <img :src="item.icon"><img>
+              <img :src="'/api/file/find/'+item.icon"><img>
             </div>
             {{item.description}}…
           </div>

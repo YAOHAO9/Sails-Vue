@@ -5,6 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 'use strict'
+var UploadService = require("../services/UploadService")
 let fs = require('fs')
 let path = require('path')
 let uuid = require('node-uuid');
@@ -20,15 +21,22 @@ module.exports = {
     }
     if (!req.body.content)
       return res.forbidden('内容不能为空')
-
-    ArticleContent.create({ content: req.body.content })
-      .then((content) => {
-        return Article.create({
-          user: 1,
-          title: req.body.title,
-          description: req.body.description,
-          content: content
-        })
+    UploadService(req, "icon")
+      .then(icon => {
+        if (icon && icon.length > 0)
+          icon = icon[0]
+        else
+          icon = undefined
+        return ArticleContent.create({ content: req.body.content })
+          .then((content) => {
+            return Article.create({
+              user: 1,
+              title: req.body.title,
+              description: req.body.description,
+              content: content,
+              icon: icon
+            })
+          })
       })
       .then(article => {
         res.json(article)
