@@ -45,6 +45,10 @@
           return res
         });
       })
+      this.$http.get('api/chat/allUnreadMsgNum')
+      .then(res=>{
+        this.updateUnreadMsgNum(res.body.unreadMsgNum)
+      })
     },
     sockets: {
       connect: function () {
@@ -65,6 +69,8 @@
             if(session.session == '0-0')
               return true
             this.$broadcast('changeItem', index)
+            if(chat.sender.id != this.user.id)
+            this.updateUnreadMsgNum(this.unreadMsgNum+1)
             return true
           }
           return false

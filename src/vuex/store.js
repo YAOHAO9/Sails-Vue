@@ -7,6 +7,7 @@ Vue.use(Vuex)
 const state = {
   user: null,
   indexView: 'moment',
+  unreadMsgNum: 0,
   sessions: [
     {
       session: "0-0",
@@ -47,10 +48,13 @@ const mutations = {
   },
   SAVELOCALSTORAGE(state, val) {
     state.localStoage = val
-    for(var prop in val){
-      localStorage[prop]=JSON.stringify(val[prop])
+    for (var prop in val) {
+      localStorage[prop] = JSON.stringify(val[prop])
     }
     // localStorage.clear()
+  },
+  SAVEUNREADMSGNUM(state, val) {
+    state.unreadMsgNum = val
   }
 }
 

@@ -207,12 +207,12 @@
           .then(res => {
             let delMoment = res.body
             let delMomentIndex = 0
-            let found = this.list.some((moment, index) => {
-              delMomentIndex = index
+            let found = this.list.some((moment) => {
+              delMomentIndex++
               return moment.id == delMoment.id
             })
             if (found)
-              this.list.splice(delMomentIndex, 1)
+              this.list.splice(delMomentIndex-1, 1)
           })
       },
       edit() {

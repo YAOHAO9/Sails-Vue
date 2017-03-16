@@ -8,7 +8,7 @@
     <tab :change-item='changeTabItem' :active="active">
       <tab-item :title="session.name" :index="$index" v-for="session in sessions">
         <scroll :on-refresh="loadHistory" class="scroll">
-          <message :list="session.list"></message>
+          <message :list="session.list" :index="$index"></message>
         </scroll>
       </tab-item>
     </tab>

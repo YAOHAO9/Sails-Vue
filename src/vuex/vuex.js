@@ -18,8 +18,11 @@ export default {
     currentView: function (state) {
       return state.indexView
     },
-    ls:function(state){
+    ls: function (state) {
       return state.localStoage
+    },
+    unreadMsgNum: function (state) {
+      return state.unreadMsgNum
     }
   },
   actions: {
@@ -48,8 +51,11 @@ export default {
     showPreLoader: function (store, val) {
       store.dispatch('SHOWPRELOADER', val)
     },
-    saveLs:function(store,val){
-      store.dispatch('SAVELOCALSTORAGE',val)
+    saveLs: function (store, val) {
+      store.dispatch('SAVELOCALSTORAGE', val)
+    },
+    updateUnreadMsgNum: function (store, val) {
+      store.dispatch('SAVEUNREADMSGNUM', val)
     }
   }
 }

@@ -21,8 +21,10 @@ module.exports = {
   },
   read: function (req, res) {
     Chat.update(req.body.chatId, { read: true })
-      .then((chat) => {
-        res.ok(chat)
+      .then((chats) => {
+        if (chats && chats.length == 1)
+          return res.ok(chats[0])
+        res.ok({})
       })
   },
   getUnreadNum: function (req, res) {
@@ -38,7 +40,15 @@ module.exports = {
     } else {
       res.ok()
     }
-
+  },
+  allUnreadMsgNum: function (req, res) {
+    Chat.find({ read: false, receiver: req.session.user.id })
+      .then(chats => {
+        res.ok({ unreadMsgNum: chats.length })
+      })
+      .catch((e) => {
+        res.notFound()
+      })
   }
 };
 

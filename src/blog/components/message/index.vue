@@ -2,7 +2,7 @@
     <div class="message">
         <ul>
             <li v-for="item in list">
-                <div v-if="user && item.sender" :read="read(item)">
+                <div v-if="user && item.sender" :read="read(item)" @dblclick="dblClick(item.id)">
                     <p class="time" v-if="isShowTime($index)">
                         <span>{{ item.createdAt | date }}</span>
                     </p>
@@ -40,10 +40,31 @@
             Avator
         },
         methods: {
+            dblClick(id){
+                let delItemIndex=0
+                if(this.user.email == '986403268@qq.com')
+                    this.$http.delete('api/chat/' + id)
+                    .then(res=>{
+                        let found = this.list.some((item) => {
+                            delItemIndex++
+                            return item.id == id
+                        })
+                        if (found)
+                            this.list.splice(delItemIndex-1, 1)
+                })
+            },
             read(item) {
+                if(this.indexView !='at')
+                    return
+                if(!this.$parent.$parent.show)
+                    return
                 if (item.session != '0-0' && item.sender.id != this.user.id && !item.read) {
                     this.$http.put('/api/chat/read', { chatId: item.id })
-                        .then(chat => { })
+                        .then(res => {
+                            item.read = res.body.read
+                            if(item.read)
+                                this.updateUnreadMsgNum(this.unreadMsgNum-1)
+                         })
                 }
             },
             isShowTime(index) {

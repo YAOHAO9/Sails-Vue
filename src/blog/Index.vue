@@ -11,6 +11,7 @@
       </footer-item>
       <footer-item v-bind:class="{ 'active sky-bule' : currentView === 'at' }" v-on:click="changeView('at')">
         <i class="fa fa-at"></i>
+        <span class="badge" v-show="unreadMsgNum">{{unreadMsgNum}}</span>
         <label>聊天</label>
       </footer-item>
     </page-footer>
