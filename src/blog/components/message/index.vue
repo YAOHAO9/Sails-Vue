@@ -62,8 +62,13 @@
                     this.$http.put('/api/chat/read', { chatId: item.id })
                         .then(res => {
                             item.read = res.body.read
-                            if(item.read)
-                                this.updateUnreadMsgNum(this.unreadMsgNum-1)
+                            if(item.read){
+                                let unreadMsgNum = this.unreadMsgNum-1
+                                if(unreadMsgNum < 0)
+                                    unreadMsgNum=0
+                                this.updateUnreadMsgNum(unreadMsgNum)
+                            }
+                                
                          })
                 }
             },
