@@ -20,24 +20,24 @@
     bottom: 20px;
     right: 20px;
     background: #BBE9FF;
-    border-radius: 30px;
-    width: 60px;
-    height: 60px;
+    border-radius: 22px;
+    width: 44px;
+    height: 44px;
     padding: 5px;
     z-index: 1;
   }
   
   #AddBtn>div {
-    width: 50px;
-    padding: 10px;
-    border-radius: 25px;
-    height: 50px;
+    width: 34px;
+    padding: 7px;
+    border-radius: 17px;
+    height: 34px;
     background: #61CDE7;
   }
   
   #AddBtn>div>div {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     position: relative;
   }
   

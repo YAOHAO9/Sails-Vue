@@ -10,7 +10,7 @@ const state = {
   sessions: [
     {
       session: "0-0",
-      name: 'WeChat',
+      name: '群聊',
       list: []
     }
   ],

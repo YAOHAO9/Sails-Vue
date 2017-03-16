@@ -1,5 +1,5 @@
 <template>
-  <simple-header title="At">
+  <simple-header title="聊天">
     <header-link>
       <user-icon class="userIcon"></user-icon>
     </header-link>
@@ -136,7 +136,10 @@
       },
       loadHistory(done) {
         var ctx = this
-        this.$socket.emit('find', { session: this.defaultSession.session, skip: this.defaultSession.list.length, limit: 10, sort: 'createdAt DESC' })
+        let skip=0
+        if(this.defaultSession.list.length>=10)
+         skip=this.defaultSession.list.length
+        this.$socket.emit('find', { session: this.defaultSession.session, skip: skip, limit: 10, sort: 'createdAt DESC' })
         this.$nextTick(function () {
           done && done()
         });

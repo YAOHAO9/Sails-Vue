@@ -59,9 +59,11 @@
         }
       },
       update: function (chat) {
-        let foundSession = this.sessions.find((session, index) => {
+        let foundSession = this.sessions.some((session, index) => {
           if (session.session == chat.session) {
             session.list.push(chat)
+            if(session.session == '0-0')
+              return true
             this.$broadcast('changeItem', index)
             return true
           }
@@ -91,7 +93,7 @@
         chats.sort(function () { return true })
         this.sessions.forEach((session) => {
           if (chats && chats.length > 0 && session.session == chats[0].session) {
-            if (session.list.length == 0)
+            if (session.list.length < 10)
               session.list = chats
             else
               session.list = chats.concat(session.list)

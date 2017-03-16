@@ -1,5 +1,5 @@
 <template>
-  <simple-header title="Moment">
+  <simple-header title="树洞">
     <header-link>
       <user-icon class="userIcon"></user-icon>
     </header-link>
@@ -207,7 +207,7 @@
           .then(res => {
             let delMoment = res.body
             let delMomentIndex = 0
-            let found = this.list.find((moment, index) => {
+            let found = this.list.some((moment, index) => {
               delMomentIndex = index
               return moment.id == delMoment.id
             })

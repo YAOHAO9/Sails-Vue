@@ -1,5 +1,5 @@
 <template>
-  <simple-header title="Article">
+  <simple-header title="文章">
     <header-link>
       <user-icon class="userIcon"></user-icon>
     </header-link>
