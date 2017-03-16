@@ -15,10 +15,10 @@ module.exports = {
       return res.badRequest('Name is required')
     if (!req.param('id'))
       return res.badRequest('Id is required')
-    UploadService(req, 'avatar')
-      .then(avatars => {
-        if (avatars && avatars.length > 0)
-          return User.update({ id: req.param('id') }, { name: req.body.name, avatar: avatars[0] })
+    UploadService(req, 'avator')
+      .then(avators => {
+        if (avators && avators.length > 0)
+          return User.update({ id: req.param('id') }, { name: req.body.name, avator: avators[0] })
         return User.update({ id: req.param('id') }, { name: req.body.name })
       })
       .then(users => {

@@ -25,7 +25,7 @@ module.exports = {
             // minLength: 6,
             // required: true
         },
-        avatar: {
+        avator: {
             type: 'string'
         },
         socketId: {

@@ -251,7 +251,6 @@
       formData.append('description', description)
       formData.append('title', $('#title').val())
       formData.append('content', UE.getEditor('editor').getContent())
-      debugger
       if (file)
         formData.append('icon', file)
       $('.submit').addClass('disabled')

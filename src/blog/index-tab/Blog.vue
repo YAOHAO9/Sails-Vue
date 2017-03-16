@@ -40,7 +40,7 @@
   import Scroll from '../../components/scroll'
   import Popup from '../../components/popup'
   import Comment from '../fragment/comment'
-  import Avatar from '../components/avatar'
+  import Avator from '../components/avator'
   import UserIcon from '../components/user-icon'
   import BackBtn from '../components/back-btn'
   import {Alert} from '../../components/modal'
@@ -68,7 +68,7 @@
       Scroll,
       Popup,
       Comment,
-      Avatar,
+      Avator,
       UserIcon,
       BackBtn,
       Alert

@@ -29,7 +29,7 @@
   }
 </script>
 <style scoped>
- .avatar{
+ .avator{
    width: 100px;
    height: 100px;
    margin: 70px auto;

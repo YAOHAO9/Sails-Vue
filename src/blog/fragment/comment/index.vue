@@ -6,7 +6,7 @@
     <div class="scroll">
       <div class="item hiv" v-for="comment in item.comments">
         <div class="portraitParent">
-          <avatar :avatar="comment.user.avatar"></avatar>
+          <avator :avator="comment.user.avator"></avator>
         </div>
         <div class="commentInfo">
           <div class="info">
@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-  import Avatar from '../../components/avatar'
+  import Avator from '../../components/avator'
   export default {
     data() {
       return {
@@ -47,7 +47,7 @@
 
     },
     components: {
-      Avatar
+      Avator
     },
     methods: {
       submit: function () {

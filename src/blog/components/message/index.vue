@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="head" v-if="user.id == item.sender.id ">
-                            <avator :avator="item.sender.avator"></avator>
+                            <avator :avator="'/api/file/find/' + item.sender.avator"></avator>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
     </div>
 </template>
 <script>
-    import Avator from '../avatar'
+    import Avator from '../avator'
 
     export default {
         data() {

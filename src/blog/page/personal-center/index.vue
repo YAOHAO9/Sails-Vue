@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="avatar" @click="selectHeder('avatar')">
-      <img v-if="(user || getUser()) && !user.avatar" name="avatar" src="../../../assets/images/blog/widget_dface.png" />
-      <img v-if="user && user.avatar" name="avatar" :src="'api/file/find/'+user.avatar" />
+    <div class="avator" @click="selectHeder('avator')">
+      <img v-if="(user || getUser()) && !user.avator" name="avator" src="../../../assets/images/blog/widget_dface.png" />
+      <img v-if="user && user.avator" name="avator" :src="'api/file/find/'+user.avator" />
     </div>
-    <input name="avatar" hidden type="file" multiple="multiple" accept="image/*" />
+    <input name="avator" hidden type="file" multiple="multiple" accept="image/*" />
     <div class="hiv">
       <span>name:</span> <input v-model="form.name" :value="user && user.name" placeholder="请输入你的名字" />
     </div>
@@ -33,12 +33,12 @@
     },
     ready: function () {
       var ctx = this
-      $('input[name=avatar]')[0].addEventListener('change', function () {
+      $('input[name=avator]')[0].addEventListener('change', function () {
         ctx.loadImging = true
         lrz(this.files[0], { width: 1000 })
           .then(function (rst) {
             ctx.form.file = rst.file;
-            var img = $('img[name=avatar]')[0]
+            var img = $('img[name=avator]')[0]
             img.src = rst.base64;
           })
           .catch((err)=> {
@@ -74,7 +74,7 @@
         var formData = new FormData()
         formData.append('name', ctx.form.name)
         if (ctx.form.file)
-          formData.append("avatar", ctx.form.file)
+          formData.append("avator", ctx.form.file)
         this.$http.post('api/user/update/' + ctx.user.id, formData)
           .then((res) => {
             ctx.saveUser(res.body)
@@ -85,7 +85,7 @@
   }
 </script>
 <style scoped>
- .avatar{
+ .avator{
    width: 100px;
    height: 100px;
    margin: 70px auto;

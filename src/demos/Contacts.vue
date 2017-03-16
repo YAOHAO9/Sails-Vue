@@ -9,7 +9,7 @@
         <template v-for="p in filtedList">
           <li class="list-group-title" v-if="p.title">{{p.name}}</li>
           <list-item v-if="!p.title">
-            <div class="item-media"><img src="../assets/images/avatar/1.png" width="30"></div>
+            <div class="item-media"><img src="../assets/images/avator/1.png" width="30"></div>
             <div class="item-content">
               <div class="item-title">{{p.name}}</div>
             </div>
@@ -40,28 +40,28 @@ export default {
       input: '',
       list: [
         { title: true, name: 'A' },
-        { name: 'Albert Bernard', avatar: '1.png' },
-        { name: 'Amy Richard', avatar: '2.png' },
-        { name: 'Andrew Schmidt', avatar: '3.png' },
+        { name: 'Albert Bernard', avator: '1.png' },
+        { name: 'Amy Richard', avator: '2.png' },
+        { name: 'Andrew Schmidt', avator: '3.png' },
         { title: true, name: 'B' },
-        { name: 'Bob Jackson', avatar: '4.png' },
-        { name: 'Bom', avatar: '5.png' },
-        { name: 'BaBa', avatar: '6.png' },
-        { name: 'Bilibili', avatar: '7.png' },
+        { name: 'Bob Jackson', avator: '4.png' },
+        { name: 'Bom', avator: '5.png' },
+        { name: 'BaBa', avator: '6.png' },
+        { name: 'Bilibili', avator: '7.png' },
         { title: true, name: 'L' },
-        { name: 'Linus Torvalds', avatar: 'torvalds.png' },
+        { name: 'Linus Torvalds', avator: 'torvalds.png' },
         { title: true, name: 'T' },
-        { name: 'Tom Clinton', avatar: '4.png' },
-        { name: 'Tim Cook', avatar: '5.png' },
-        { name: 'Ted', avatar: '6.png' },
-        { name: 'Tomato', avatar: '7.png' },
+        { name: 'Tom Clinton', avator: '4.png' },
+        { name: 'Tim Cook', avator: '5.png' },
+        { name: 'Ted', avator: '6.png' },
+        { name: 'Tomato', avator: '7.png' },
         { title: true, name: 'X' },
-        { name: 'Xie', avatar: '4.png' },
-        { name: 'Xing', avatar: '5.png' },
-        { name: 'Xia ran', avatar: '6.png' },
-        { name: 'Xue dinge', avatar: '7.png' },
+        { name: 'Xie', avator: '4.png' },
+        { name: 'Xing', avator: '5.png' },
+        { name: 'Xia ran', avator: '6.png' },
+        { name: 'Xue dinge', avator: '7.png' },
         { title: true, name: 'Z' },
-        { name: 'Zhang xiaoqi', avatar: 'gf.png' }
+        { name: 'Zhang xiaoqi', avator: 'gf.png' }
       ]
     }
   },

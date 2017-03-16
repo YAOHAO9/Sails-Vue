@@ -1,13 +1,13 @@
 <template>
   <div class="portrait">
-    <img v-if="!avatar" src="../../../assets/images/blog/widget_dface.png" />
-    <img v-if="avatar" :src="'api/file/find/'+avatar" />
+    <img v-if="!avator" src="../../../assets/images/blog/widget_dface.png" />
+    <img v-if="avator" :src="'api/file/find/'+avator" />
   </div>
 </template>
 <script>
   export default {
     props: {
-      avatar: {
+      avator: {
         type: String,
         default: null
       }

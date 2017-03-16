@@ -26,7 +26,7 @@
         <!--header-->
         <hav margin='3px 40px 3px 46px' :height="'36px'">
           <div>
-            <avatar :avatar="item.user.avatar"></avatar>
+            <avator :avator="item.user.avator"></avator>
           </div>
           <div class="title-parent">
             <div class="title">{{item.user.name}}</div>
@@ -79,7 +79,7 @@
   import AddMoment from '../fragment/add-moment'
   import Comment from '../fragment/comment'
   import ImageGridDetail from '../fragment/image-grid-detail'
-  import Avatar from '../components/avatar'
+  import Avator from '../components/avator'
   import UserIcon from '../components/user-icon'
   import { Actions, ActionButton, ActionGroup } from '../../components/actions'
   import { Alert } from '../../components/modal'
@@ -113,7 +113,7 @@
       Popup,
       AddMoment,
       Comment,
-      Avatar,
+      Avator,
       UserIcon,
       ImageGridDetail,
       Actions,
@@ -202,7 +202,6 @@
           return false
       },
       del() {
-        debugger
         this.showActions = false
         this.$http.delete('api/moment/delete/' + this.currentItem.id)
           .then(res => {

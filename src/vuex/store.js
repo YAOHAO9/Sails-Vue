@@ -50,7 +50,7 @@ const mutations = {
     for(var prop in val){
       localStorage[prop]=JSON.stringify(val[prop])
     }
-    localStorage.clear()
+    // localStorage.clear()
   }
 }
 

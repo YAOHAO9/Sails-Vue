@@ -1,10 +1,10 @@
 <template>
   <div @click="goPersonalCenter()">
-    <avatar :avatar="user && user.avatar "></avatar>
+    <avator :avator="user && user.avator "></avator>
   </div>
 </template>
 <script>
-  import Avatar from '../avatar'
+  import Avator from '../avator'
 
   export default {
     methods: {
@@ -13,7 +13,7 @@
       }
     },
     components: {
-      Avatar
+      Avator
     }
   }
 </script>

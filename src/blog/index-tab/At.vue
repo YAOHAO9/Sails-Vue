@@ -18,7 +18,7 @@
     </div>
     <popup :show.sync="showSelectUserPopup" :full="true" :title="'选择你要私聊的用户'" :show-title-bar="true">
       <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">
-        <avatar :avatar="user.avatar" class="avatar"></avatar>
+        <avator :avator="user.avator" class="avator"></avator>
         <div class="name">{{user.name}}</div>
         <div class="unreadNum"><span v-if="getUnreadNum(user)">{{user.unreadNum}}</span></div>
       </div>
@@ -36,7 +36,7 @@
   import Scroll from '../../components/scroll'
   import AddBtn from '../components/add-btn'
   import Popup from '../../components/popup'
-  import Avatar from '../components/avatar'
+  import Avator from '../components/avator'
   import UserIcon from '../components/user-icon'
   import { Alert } from '../../components/modal'
 
@@ -80,7 +80,7 @@
       Scroll,
       AddBtn,
       Popup,
-      Avatar,
+      Avator,
       Alert
     },
     methods: {
@@ -205,7 +205,7 @@
     margin: 5px 15px;
     line-height: 36px;
   }
-  .avatar{
+  .avator{
     min-width: 36px;
   }
 
