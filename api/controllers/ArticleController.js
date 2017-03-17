@@ -9,6 +9,60 @@ var UploadService = require("../services/UploadService")
 let fs = require('fs')
 let path = require('path')
 let uuid = require('node-uuid');
+let cheerio = require('cheerio')
+let request = require('request')
+let md5 = require('md5')
+
+let imgSrc = (content) => {
+  let $ = cheerio.load(content)
+  let imgs = $('img')
+  let tasks = []
+  for (let i = 0; i < imgs.length; i++) {
+    let img = imgs[i]
+    let src = img.attribs.src
+    if (src.indexOf('http') < 0)
+      continue
+    let fileFd = path.join('.tmp', 'uploads', md5(src))
+    request(src).pipe(fs.createWriteStream(fileFd))
+    let task = File.create({
+      fd: fileFd,
+      type: 'image/jpeg',
+      filename: src,
+      size: 0
+    }).then(file => {
+      $(img).attr('src', 'api/file/find/' + file.id)
+    })
+    tasks.push(task)
+  }
+  return Promise.all(tasks)
+    .then(() => {
+      return $.html()
+    })
+}
+let bgImgUrl = (content) => {
+  let urls = content.match(/url\([^\)]*\)/g)
+    .map(url => {
+      return url.replace('url(', '').replace(')', '')
+    })
+  let tasks = urls.map((url) => {
+    if (url.indexOf('http') < 0)
+      return
+    let fileFd = path.join('.tmp', 'uploads', md5(url))
+    request(url).pipe(fs.createWriteStream(fileFd))
+    return File.create({
+      fd: fileFd,
+      type: 'image/jpeg',
+      filename: url,
+      size: 0
+    }).then(file => {
+      content = content.replace(url, 'api/file/find/' + file.id)
+    })
+  })
+  return Promise.all(tasks)
+    .then(() => {
+      return content
+    })
+}
 
 module.exports = {
 
@@ -27,7 +81,13 @@ module.exports = {
           icon = icon[0]
         else
           icon = undefined
-        return ArticleContent.create({ content: req.body.content })
+        return imgSrc(req.body.content)
+          .then(content => {
+            return bgImgUrl(content)
+          })
+          .then(content => {
+            return ArticleContent.create({ content: content })
+          })
           .then((content) => {
             return Article.create({
               user: 1,
@@ -82,4 +142,5 @@ module.exports = {
       })
 
   }
+
 }
