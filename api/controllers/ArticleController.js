@@ -44,7 +44,7 @@ let bgImgUrl = (content) => {
   if (!urls)
     urls = []
   urls.map(url => {
-    return url.replace('url(', '').replace(')', '')
+    return url.replace('url(', '').replace(')', '').replace(/&quot;/g,'')
   })
   let tasks = urls.map((url) => {
     if (url.indexOf('http') < 0)
