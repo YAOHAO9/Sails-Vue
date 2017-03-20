@@ -6,10 +6,11 @@
 import './js/mditor.js'
 export default {
   props: {
+    // ["bold", "italic", "underline", "strikethrough", "header", "quote", "code", "list-ol", "list-ul", "link", "table", "line", "image", "help", "toggleFullScreen", "togglePreview", "toggleSplit"]
     removeItems: {
       type: Array,
       default: function () {
-        return ['help', 'toggleSplit']
+        return ['help', 'toggleSplit', 'togglePreview']
       }
     }
   },

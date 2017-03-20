@@ -10,12 +10,16 @@
       <popup :show.sync="showArticalDetail"
              :full="true"
              :show-title-bar="false">
-        {{{currentItem.contentDetail}}}
-        <meditor></meditor>
-        <span class="btn"
-              @click="previewFn()">{{preview ? '编辑':'预览'}}</span><span class="btn">提交</span>
-        <back-btn class="backBtn"
-                  @click="showArticalDetail = false"></back-btn>
+        <div class="articleContent">
+          {{{currentItem.contentDetail}}}
+          <meditor></meditor>
+          <div class="hiv">
+            <div class="btn"
+                 @click="previewFn()">{{preview ? '编辑':'预览'}}</div>
+            <div class="btn">提交</div>
+            <div class="btn"  @click="showArticalDetail = false">返回</div>
+          </div>
+        </div>
       </popup>
     </div>
     <scroll :on-refresh="onRefresh"
@@ -230,6 +234,26 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.articleContent {
+  padding: 5px;
+}
+
+.articleContent .hiv {
+  margin: 0 auto;
+  width: 250px;
+}
+
+.articleContent .btn {
+  width: 80px;
+  height: 40px;
+  margin: 7px;
+  border-radius: 5px;
+  border: 2px solid #61CDE7;
+  text-align: center;
+  line-height: 40px;
+  color: #61CDE7
 }
 
 .frontMost {
