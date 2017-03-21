@@ -20,7 +20,6 @@ class RouterConfig {
   config() {
     const router = this.router
     this.router.beforeEach(function (t) {
-     debugger
       try {
         const to = t.to.path
         const from = t.from.path
