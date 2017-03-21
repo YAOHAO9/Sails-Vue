@@ -56,6 +56,9 @@ router.map({
   '/': {
     component: BlogIndex
   },
+  '/blog': {
+    component: BlogIndex
+  },
   '/image-grid-detail': {
     name: 'Detail',
     component: ImageGridDetail

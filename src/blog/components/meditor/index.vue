@@ -25,7 +25,7 @@ export default {
           })
         })
       })
-    }, 500)
+    }, 350)
   }
 }
 </script>
