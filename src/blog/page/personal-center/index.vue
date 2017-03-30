@@ -79,6 +79,7 @@
           .then((res) => {
             ctx.saveUser(res.body)
             this.showToast('保存成功！')
+            history.go(-1)
           })
       }
     }
