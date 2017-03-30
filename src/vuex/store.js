@@ -49,7 +49,7 @@ const mutations = {
   SAVELOCALSTORAGE(state, val) {
     state.localStoage = val
     for (var prop in val) {
-      localStorage[prop] = JSON.stringify(val[prop])
+      localStorage.setItem(prop, JSON.stringify(val[prop]))
     }
     // localStorage.clear()
   },
