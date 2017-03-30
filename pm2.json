@@ -1,0 +1,23 @@
+{
+    /**
+    * Application configuration section
+    * http://pm2.keymetrics.io/docs/usage/application-declaration/
+    * 多个服务，依次放到apps对应的数组里
+    */
+    "apps": [
+        // First application
+        {
+            "name": "Sails-Vue",
+            "max_memory_restart": "500M",
+            "script": "app.js",
+            "merge_logs": true,
+            "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
+            "log_type": "json",
+            "instances": 2,
+            "exec_mode": "cluster",
+            "env": {
+                "NODE_ENV": "production"
+            }
+        }
+    ]
+}
