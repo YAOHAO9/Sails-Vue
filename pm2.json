@@ -7,16 +7,27 @@
     "apps": [
         // First application
         {
-            "name": "Sails-Vue",
-            "max_memory_restart": "500M",
+            "name": "Sails-Vue1",
+            "max_memory_restart": "300M",
             "script": "app.js",
             "merge_logs": true,
             "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
             "log_type": "json",
-            "instances": 2,
-            "exec_mode": "cluster",
             "env": {
-                "NODE_ENV": "production"
+                "NODE_ENV": "production",
+                "PORT":1337
+            }
+        },
+        {
+            "name": "Sails-Vue2",
+            "max_memory_restart": "300M",
+            "script": "app.js",
+            "merge_logs": true,
+            "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
+            "log_type": "json",
+            "env": {
+                "NODE_ENV": "production",
+                "PORT":1338
             }
         }
     ]
