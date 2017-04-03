@@ -42,7 +42,7 @@
         methods: {
             dblClick(id){
                 let delItemIndex=0
-                if(this.user.email == '986403268@qq.com')
+                if(this.user.isAdmin)
                     this.$http.delete('api/chat/' + id)
                     .then(res=>{
                         let found = this.list.some((item) => {

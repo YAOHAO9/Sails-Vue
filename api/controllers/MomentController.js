@@ -80,7 +80,7 @@ module.exports = {
       return res.badRequest('参数错误')
     Moment.findOne(id)
       .then(moment => {
-        if (moment.user != req.session.user.id && req.session.user.email != '986403268@qq.com')
+        if (moment.user != req.session.user.id && !req.session.user.isAdmin)
           throw new Error('无权操作')
         let tasks = moment.images.map(img => {
           return File.findOne(img).then(file => {

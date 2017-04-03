@@ -15,6 +15,10 @@ module.exports = {
         memoName: {
             type: 'string'
         },
+        isAdmin: {
+            type: 'boolean',
+            defaultsTo: false
+        },
         email: {
             type: 'email',
             // required: true,
