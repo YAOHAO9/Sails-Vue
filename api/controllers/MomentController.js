@@ -54,7 +54,6 @@ function getUserCityInfo(req) {
 
 module.exports = {
   create: function (req, res) {
-    console.log('req.body.content:\t' + req.body.content)
     UploadService(req, "images")
       .then(uploadedFiles => {
         return Promise.all([uploadedFiles, getClientIp(req)])

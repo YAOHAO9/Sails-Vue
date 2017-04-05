@@ -60,7 +60,7 @@
           this.submiting = false
           return
         }
-        this.$http.post('api/comment/create/' + this.item.id, formData)
+        this.$http.post('api/comment/moment/' + this.item.id, formData)
           .then((res) => {
             ctx.submitCb && ctx.submitCb()
             ctx.submiting = false

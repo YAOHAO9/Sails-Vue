@@ -6,13 +6,26 @@
  */
 'use strict'
 module.exports = {
-  create: function (req, res) {
+  moment: function (req, res) {
     Moment.findOne(req.param('id'))
       .then((moment) => {
         return Comment.create({
           user: req.session.user,
           content: req.body.content,
           moment: moment
+        })
+      })
+      .then(comment => {
+        res.ok(comment)
+      })
+  },
+  article: function (req, res) {
+    Article.findOne(req.param('id'))
+      .then((article) => {
+        return Comment.create({
+          user: req.session.user,
+          content: req.body.content,
+          article: article
         })
       })
       .then(comment => {

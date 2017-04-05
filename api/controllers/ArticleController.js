@@ -109,23 +109,25 @@ module.exports = {
   },
   find: function (req, res) {
     if (req.param('id')) {
-      Article.findOne(req.param('id'))
+      return Article.findOne(req.param('id'))
         .populate('user')
         .populate('content')
+        .populate('comments')
         .then(article => {
           if (!article)
             return res.notFound('Article not found')
           article.content = article.content.content
           res.json(article)
         })
-      return
     }
     let conds = {}
     conds.skip = req.query.skip ? req.query.skip : '0'
-    conds.limit = req.query.limit ? req.query.limit : '3'
+    conds.limit = req.query.limit ? req.query.limit : '10'
     conds.sort = req.query.sort ? req.query.sort : 'createdAt DESC'
     Article.find(conds)
       .populate('user')
+      .populate('content')
+      .populate('comments')
       .then(articles => {
         res.ok(articles)
       })
@@ -134,6 +136,7 @@ module.exports = {
     Article.findOne(req.param('id'))
       .populate('user')
       .populate('content')
+      .populate('comments')
       .then(article => {
         if (!article) {
           return res.notFound()
