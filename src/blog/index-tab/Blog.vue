@@ -1,5 +1,5 @@
 <template>
-  <simple-header title="文章">
+  <simple-header title="Blog">
     <header-link>
       <user-icon class="userIcon"></user-icon>
     </header-link>

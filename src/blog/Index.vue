@@ -3,16 +3,16 @@
     <page-footer>
       <footer-item v-bind:class="{ 'active sky-bule' : currentView === 'moment' }" v-on:click="changeView('moment')">
         <i class="fa  fa-star-o"></i>
-        <label>树洞</label>
+        <label>Moment</label>
       </footer-item>
       <footer-item v-bind:class="{ 'active sky-bule' : currentView === 'blog' }" v-on:click="changeView('blog')">
         <i class="fa fa-sticky-note-o"></i>
-        <label>文章</label>
+        <label>Blog</label>
       </footer-item>
       <footer-item v-bind:class="{ 'active sky-bule' : currentView === 'at' }" v-on:click="changeView('at')">
         <i class="fa fa-at"></i>
         <span class="badge" v-show="unreadMsgNum">{{unreadMsgNum}}</span>
-        <label>聊天</label>
+        <label>Chat</label>
       </footer-item>
     </page-footer>
     <component :is="currentView" keep-alive></component>

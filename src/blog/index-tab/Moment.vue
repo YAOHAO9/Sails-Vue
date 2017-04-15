@@ -1,5 +1,5 @@
 <template>
-  <simple-header title="树洞">
+  <simple-header title="Moment">
     <header-link>
       <user-icon class="userIcon"></user-icon>
     </header-link>

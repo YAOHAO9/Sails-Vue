@@ -1,5 +1,5 @@
 <template>
-  <simple-header title="聊天">
+  <simple-header title="Chat">
     <header-link>
       <user-icon class="userIcon"></user-icon>
     </header-link>
