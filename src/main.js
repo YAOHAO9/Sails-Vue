@@ -32,7 +32,6 @@ import CircleProgress from './demos/CircleProgress'
 
 // filter
 import Filters from './filter'
-import $ from 'jquery'
 
 // blog
 import BlogIndex from './blog/Index'

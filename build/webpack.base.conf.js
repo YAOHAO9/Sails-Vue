@@ -2,6 +2,7 @@ var path = require('path')
 var config = require('../config/vue')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
+var webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -22,10 +23,17 @@ module.exports = {
     alias: {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components'),
-      'jquery': 'jquery'
+      'components': path.resolve(__dirname, '../src/components')
     }
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery"
+    }),
+    new webpack.ProvidePlugin({
+      _: "underscore"
+    })
+  ],
   resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
   },
