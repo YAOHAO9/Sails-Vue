@@ -22,16 +22,28 @@ let imgSrc = (content) => {
     let src = img.attribs.src
     if (src.indexOf('http') < 0)
       continue
-    let fileFd = path.join('.tmp', 'uploads', md5(src))
-    request(src).pipe(fs.createWriteStream(fileFd))
-    let task = File.create({
-      fd: fileFd,
-      type: 'image/jpeg',
-      filename: src,
-      size: 0
-    }).then(file => {
-      $(img).attr('src', 'api/file/find/' + file.id)
+    let task = new Promise((resolve, reject) => {
+      let fileFd = path.join('.tmp', 'uploads', md5(src))
+      let writeStream = fs.createWriteStream(fileFd)
+      request(src).pipe(writeStream)
+      writeStream.on('finish', function () {
+        resolve(fileFd)
+      })
+      writeStream.on('error', function (err) {
+        reject(err)
+      })
     })
+      .then(fileFd => {
+        return File.create({
+          fd: fileFd,
+          type: 'image/jpeg',
+          filename: src,
+          size: 0
+        })
+      })
+      .then(file => {
+        $(img).attr('src', 'api/file/find/' + file.id)
+      })
     tasks.push(task)
   }
   return Promise.all(tasks)
@@ -49,16 +61,28 @@ let bgImgUrl = (content) => {
   let tasks = urls.map((url) => {
     if (url.indexOf('http') < 0)
       return
-    let fileFd = path.join('.tmp', 'uploads', md5(url))
-    request(url).pipe(fs.createWriteStream(fileFd))
-    return File.create({
-      fd: fileFd,
-      type: 'image/jpeg',
-      filename: url,
-      size: 0
-    }).then(file => {
-      content = content.replace(url, 'api/file/find/' + file.id)
+    return new Promise((resolve, reject) => {
+      let fileFd = path.join('.tmp', 'uploads', md5(url))
+      let writeStream = fs.createWriteStream(fileFd)
+      request(url).pipe(writeStream)
+      writeStream.on('finish', function () {
+        resolve(fileFd)
+      })
+      writeStream.on('error', function (err) {
+        reject(err)
+      })
     })
+      .then((fileFd) => {
+        return File.create({
+          fd: fileFd,
+          type: 'image/jpeg',
+          filename: url,
+          size: 0
+        })
+      })
+      .then(file => {
+        content = content.replace(url, 'api/file/find/' + file.id)
+      })
   })
   return Promise.all(tasks)
     .then(() => {
@@ -77,31 +101,35 @@ module.exports = {
     }
     if (!req.body.content)
       return res.forbidden('内容不能为空')
-    UploadService(req, "icon")
-      .then(icon => {
-        if (icon && icon.length > 0)
-          icon = icon[0]
-        else
-          icon = undefined
-        return imgSrc(req.body.content)
-          .then(content => {
-            return bgImgUrl(content)
-          })
-          .then(content => {
-            return ArticleContent.create({ content: content })
-          })
-          .then((content) => {
-            return Article.create({
-              user: 1,
-              title: req.body.title,
-              description: req.body.description,
-              content: content,
-              icon: icon
-            })
-          })
+    return imgSrc(req.body.content)
+      .then(content => {
+        return bgImgUrl(content)
+      })
+      .then(content => {
+        return Promise.all([ArticleContent.create({ content: content }),
+        UploadService(req, "icon")
+          .then(icon => {
+            if (icon && icon.length > 0)
+              icon = icon[0]
+            else
+              icon = undefined
+            return icon
+          })])
+      })
+      .spread((content, icon) => {
+        return Article.create({
+          user: 1,
+          title: req.body.title,
+          description: req.body.description,
+          content: content,
+          icon: icon
+        })
       })
       .then(article => {
         res.json(article)
+      })
+      .catch(e => {
+        res.serverError(e.message)
       })
   },
   update: function () {
@@ -119,6 +147,9 @@ module.exports = {
           article.content = article.content.content
           res.json(article)
         })
+        .catch(e => {
+          res.serverError(e.message)
+        })
     }
     let conds = {}
     conds.skip = req.query.skip ? req.query.skip : '0'
@@ -130,6 +161,9 @@ module.exports = {
       .populate('comments')
       .then(articles => {
         res.ok(articles)
+      })
+      .catch(e => {
+        res.serverError(e.message)
       })
   },
   findOne: function (req, res) {
@@ -144,6 +178,9 @@ module.exports = {
         return res.view('article', {
           content: article.content.content
         })
+      })
+      .catch(e => {
+        res.serverError(e.message)
       })
 
   }

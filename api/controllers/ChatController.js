@@ -18,6 +18,9 @@ module.exports = {
       .then(chatKind => {
         res.ok(chatKind)
       })
+      .catch(e => {
+        res.serverError(e.message)
+      })
   },
   read: function (req, res) {
     Chat.update(req.body.chatId, { read: true })
@@ -25,6 +28,9 @@ module.exports = {
         if (chats && chats.length == 1)
           return res.ok(chats[0])
         res.ok({})
+      })
+      .catch(e => {
+        res.serverError(e.message)
       })
   },
   getUnreadNum: function (req, res) {

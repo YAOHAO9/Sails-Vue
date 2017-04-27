@@ -34,6 +34,10 @@ function getIpInfo(ip, cb) {
 };
 
 function getClientIp(req) {
+  console.log("req.headers['x-forwarded-for']:" + req.headers && req.headers['x-forwarded-for'])
+  console.log("req.connection.remoteAddress:" + req.connection && req.connection.remoteAddress)
+  console.log("req.socket.remoteAddress:" + req.socket && req.socket.remoteAddress)
+  console.log("req.connection.socket.remoteAddress:" + req.connection && req.connection.socket && req.connection.socket.remoteAddress)
   let ip = (req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
@@ -71,6 +75,9 @@ module.exports = {
       })
       .then(moment => {
         res.ok(moment)
+      })
+      .catch(e => {
+        res.serverError(e.message)
       })
   },
   delete: function (req, res) {
@@ -115,6 +122,9 @@ module.exports = {
       .then(moment => {
         res.ok(moment)
       })
+      .catch(e => {
+        res.serverError(e.message)
+      })
   },
   approve: function (req, res) {
     Moment.findOne(req.param('id'))
@@ -139,6 +149,9 @@ module.exports = {
       .then(moment => {
         res.ok(moment)
       })
+      .catch(e => {
+        res.serverError(e.message)
+      })
   },
   disapprove: function (req, res) {
     Moment.findOne(req.param('id'))
@@ -162,6 +175,9 @@ module.exports = {
       })
       .then(moment => {
         res.ok(moment)
+      })
+      .catch(e => {
+        res.serverError(e.message)
       })
   }
 };
