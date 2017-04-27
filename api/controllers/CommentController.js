@@ -18,6 +18,9 @@ module.exports = {
       .then(comment => {
         res.ok(comment)
       })
+      .catch(e => {
+        res.serverError(e.message)
+      })
   },
   article: function (req, res) {
     Article.findOne(req.param('id'))
@@ -30,6 +33,9 @@ module.exports = {
       })
       .then(comment => {
         res.ok(comment)
+      })
+      .catch(e => {
+        res.serverError(e.message)
       })
   }
 };

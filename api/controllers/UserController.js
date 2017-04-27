@@ -35,6 +35,9 @@ module.exports = {
         .then(users => {
           res.ok(users)
         })
+        .catch(e => {
+          res.serverError(e.message)
+        })
     } else {
       res.ok([])
     }
