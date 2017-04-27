@@ -129,7 +129,8 @@ module.exports = {
         res.json(article)
       })
       .catch(e => {
-        res.serverError(e)
+        console.error(e)
+        res.serverError()
       })
   },
   update: function () {
