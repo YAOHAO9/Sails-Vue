@@ -6,7 +6,7 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../../.tmp/public/index.html'),
     assetsRoot: path.resolve(__dirname, '../../.tmp/public'),
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: '',
     assetsPublicPath: '/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
@@ -20,7 +20,8 @@ module.exports = {
     env: require('./dev.env'),
     port: 8088,
     proxyTable: {
-        '/':'http://localhost:1337'
+        '/api':'http://127.0.0.1:1337',
+        '/socket.io':'http://127.0.0.1:1337'
     }
   }
 }
