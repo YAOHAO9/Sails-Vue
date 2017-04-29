@@ -5,36 +5,41 @@
     </header-link>
   </simple-header>
   <content>
-    <div class="popupParent"
-         :class="setArticalDetailPopupToFrontMost()">
-      <popup :show.sync="showArticalDetail"
-             :full="true"
-             :show-title-bar="false">
-        {{{currentItem.contentDetail}}}
-        <div v-for="comment in currentItem.comments">
-          {{comment.content}}
+    <div class="popupParent" :class="setArticalDetailPopupToFrontMost()">
+      <popup :show.sync="showArticalDetail" :full="true" :show-title-bar="false">
+        <div class="detail">
+          {{{currentItem.contentDetail}}}
         </div>
-        <textarea placeholder="这一刻的想法..."
-                  v-model="content"></textarea>
-        <div class="submit"
-             @click="!submiting && submit()"
-             :class="{'disabled':submiting}">
+        <div class="replyNum">{{currentItem.comments.length}}&nbsp;回复</div>
+        <div v-for="comment in currentItem.comments">
+          <div class="comment head hiv">
+            <div class="avator">
+              <avator :avator="comment.user.avator"></avator>
+            </div>
+            <div>
+              <div class="hiv">
+                <div class="name">{{getUser(comment)}}</div>
+                <div class="date">{{'&nbsp;&nbsp;'+($index + 1)+'楼&nbsp;'}}{{comment.createdAt | date}}</div>
+              </div>
+              <div class="content">{{comment.content}}</div>
+            </div>
+          </div>
+          <hr>
+        </div>
+        <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
+        <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
           确认
         </div>
-        <back-btn class="backBtn"
-                  @click="showArticalDetail = false"></back-btn>
+        <back-btn class="backBtn" @click="showArticalDetail = false"></back-btn>
       </popup>
   
     </div>
-    <scroll :on-refresh="onRefresh"
-            :on-infinite="onInfinite">
+    <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
       <div v-for="item in list">
-        <div class="item"
-             @click="detail(item)">
+        <div class="item" @click="detail(item)">
           <div class="title">{{item.title}}</div>
           <div class="content">
-            <div class="icon"
-                 v-if="item.icon">
+            <div class="icon" v-if="item.icon">
               <img :src="'/api/file/find/'+item.icon"><img>
             </div>
             {{item.description}}…
@@ -47,10 +52,7 @@
         <hr>
       </div>
     </scroll>
-    <alert :show.sync="!ls.hideBlogTip"
-           :title="'温馨提示'"
-           :content="alertContent"
-           :on-ok="onOk"></alert>
+    <alert :show.sync="!ls.hideBlogTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
   </content>
 </template>
 
@@ -198,6 +200,16 @@ export default {
     onOk() {
       this.ls.hideBlogTip = true
       this.saveLs(this.ls)
+    },
+    getUser(comment) {
+      if (isNaN(comment.user))
+        return comment.user.name
+      else {
+        this.$http.get('/api/user/find/' + comment.user)
+          .then(res => {
+            comment.user = res.body
+          })
+      }
     }
   }
 }
@@ -255,6 +267,45 @@ export default {
 
 .frontMost {
   z-index: 9999
+}
+.detail{
+  padding: 5px 
+}
+.replyNum {
+  padding:20px 15px 5px;
+  font-size: 14px;
+  color: #444444;
+  background-color: #f6f6f6;
+}
+
+.comment {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.comment .avator {
+  width: 46px;
+}
+
+.comment .name {
+  color: #666;
+  font-size: 12px;
+}
+
+.comment .date {
+  color: #0088cc;
+  font-size: 12px;
+}
+
+.comment .content {
+  padding-top: 5px;
+  font-size: 13px;
+  padding-right: 5px;
+}
+
+hr {
+  width: 80%;
+  margin: 0 auto;
 }
 
 .backBtn {
