@@ -35,7 +35,7 @@ export default {
     List,
     ListItem
   },
-  data () {
+  data() {
     return {
       input: '',
       list: [
@@ -66,8 +66,8 @@ export default {
     }
   },
   computed: {
-    filtedList () {
-      return this.list.filter((d) => {
+    filtedList() {
+      return _.filter(this.list, (d) => {
         if (!this.input) return true
         if (d.title) return false
         return d.name.toUpperCase().indexOf(this.input.toUpperCase()) !== -1

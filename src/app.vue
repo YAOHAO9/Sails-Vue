@@ -2,8 +2,7 @@
   <div>
     <router-view transition="slide"></router-view>
     <pre-loader :show="preLoader.show"></pre-loader>
-    <toast :show="toast.show"
-           :text="toast.text"></toast>
+    <toast :show="toast.show" :text="toast.text"></toast>
   </div>
 </template>
 <script>
@@ -64,7 +63,7 @@ export default {
       }
     },
     update: function (chat) {
-      let foundSession = this.sessions.some((session, index) => {
+      let foundSession = _.some(this.sessions, (session, index) => {
         if (session.session == chat.session) {
           session.list.push(chat)
           if (session.session == '0-0')
@@ -97,8 +96,8 @@ export default {
       this.saveSessions([this.sessions[0], ...sessions])
     },
     initSession: function (chats) {
-      chats.sort(function () { return true })
-      this.sessions.forEach((session) => {
+      chats = _.sortBy(chats, function (chat, index) { return -index })
+      _.each(this.sessions, (session) => {
         if (chats && chats.length > 0 && session.session == chats[0].session) {
           if (session.list.length < 10)
             session.list = chats

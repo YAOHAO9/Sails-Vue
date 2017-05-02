@@ -7,39 +7,24 @@
   <content>
     <actions :show.sync="showActions">
       <action-group>
-        <action-button class="color-danger"
-                       @click="del()">Delete</action-button>
+        <action-button class="color-danger" @click="del()">Delete</action-button>
       </action-group>
     </actions>
-    <popup :show.sync="showAddMomentPopup"
-           :full="true"
-           :title="''"
-           :show-title-bar="true">
+    <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
       <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
     </popup>
-    <popup :show.sync="showCommentPopup"
-           :full="true"
-           :title="''"
-           :show-title-bar="true">
+    <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
       <comment :item="currentItem"></comment>
     </popup>
-    <div class="popupParent"
-         :class="setImageGridDetailPopupToFrontMost()">
-      <popup :show.sync="showImageGridDetail"
-             :full="true"
-             :show-title-bar="false">
-        <image-grid-detail :item="currentItem"
-                           :close="closeImageGridDetailPopup"></image-grid-detail>
+    <div class="popupParent" :class="setImageGridDetailPopupToFrontMost()">
+      <popup :show.sync="showImageGridDetail" :full="true" :show-title-bar="false">
+        <image-grid-detail :item="currentItem" :close="closeImageGridDetailPopup"></image-grid-detail>
       </popup>
     </div>
-    <scroll :on-refresh="onRefresh"
-            :on-infinite="onInfinite"
-            class="scroll">
-      <div v-for="item in list"
-           class="item">
+    <scroll :on-refresh="onRefresh" :on-infinite="onInfinite" class="scroll">
+      <div v-for="item in list" class="item">
         <!--header-->
-        <hav margin='3px 40px 3px 46px'
-             :height="'36px'">
+        <hav margin='3px 40px 3px 46px' :height="'36px'">
           <div>
             <avator :avator="item.user.avator"></avator>
           </div>
@@ -48,9 +33,7 @@
             <div class="date">{{ new Date(item.createdAt) | date}}</div>
           </div>
           <div class="edit">
-            <i v-if="user && (user.id == item.user.id || user.isAdmin)"
-               class="fa fa-chevron-down"
-               @click="showActionsFn(item)"></i>
+            <i v-if="user && (user.id == item.user.id || user.isAdmin)" class="fa fa-chevron-down" @click="showActionsFn(item)"></i>
           </div>
         </hav>
         <hr>
@@ -59,37 +42,27 @@
           {{item.content}}
         </div>
         <!--image-->
-        <div class="blog-content"
-             @click="showImageGridDetailPopup(item)">
+        <div class="blog-content" @click="showImageGridDetailPopup(item)">
           <image-grid :urls="item.images"></image-grid>
         </div>
         <hr>
         <!--footer-->
         <hev center>
-          <div class="btn"
-               :class="operated(item.disapproves)"
-               @click="disapprove(item)">
+          <div class="btn" :class="operated(item.disapproves)" @click="disapprove(item)">
             <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
           </div>
-          <div class="btn"
-               @click="comment(item)">
+          <div class="btn" @click="comment(item)">
             <i class="fa fa-commenting">{{item.comments && item.comments.length}}</i>
           </div>
-          <div class="btn"
-               :class="operated(item.approves)"
-               @click="approve(item)">
+          <div class="btn" :class="operated(item.approves)" @click="approve(item)">
             <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
           </div>
         </hev>
         <hr>
       </div>
     </scroll>
-    <alert :show.sync="!ls.hideMomentTip"
-           :title="'温馨提示'"
-           :content="alertContent"
-           :on-ok="onOk"></alert>
-    <add-btn class="addBtn"
-             @click="showAddMomentPopup = true"></add-btn>
+    <alert :show.sync="!ls.hideMomentTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
+    <add-btn class="addBtn" @click="showAddMomentPopup = true"></add-btn>
   
   </content>
 </template>
@@ -233,7 +206,7 @@ export default {
         .then(res => {
           let delMoment = res.body
           let delMomentIndex = 0
-          let found = this.list.some((moment) => {
+          let found = _.some(this.list, (moment) => {
             delMomentIndex++
             return moment.id == delMoment.id
           })
