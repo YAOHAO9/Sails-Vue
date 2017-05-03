@@ -21,7 +21,7 @@
                 <div class="name">{{getUser(comment)}}</div>
                 <div class="date">{{'&nbsp;&nbsp;'+($index + 1)+'楼&nbsp;'}}{{comment.createdAt | date}}</div>
               </div>
-              <div class="content">{{comment.content}}</div>
+              <div class="content">{{{comment.content}}}</div>
             </div>
           </div>
           <hr>
