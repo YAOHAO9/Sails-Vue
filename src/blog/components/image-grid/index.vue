@@ -2,7 +2,7 @@
   <hev v-for="row in rows" :child-width="childWidth" class="image-grid">
     <div v-for="column in row">
       <div v-square="{padding:'2%'}">
-        <div><img :src="'api/file/find/' + column" @click="column.click && column.click()"/></div>
+        <div><img :src="'api/file/find/' + column"/></div>
       </div>
     </div>
   </hev>

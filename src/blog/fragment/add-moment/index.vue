@@ -12,7 +12,7 @@
       <hev v-for="row in rows" class="image-grid">
         <div v-for="column in row">
           <div v-square="{padding:'2%'}">
-            <div><img src="../../../assets/images/add.png" :style="'display:'+column.display" @click="isLoadImging && column.click && column.click()" :name="column.name" /></div>
+            <div><img src="../../../assets/images/add.png" :style="'display:'+column.display" @click="isLoadImging && column.triggerClick && column.triggerClick()" :name="column.name" /></div>
           </div>
         </div>
       </hev>
@@ -37,7 +37,7 @@ export default {
           var row = []
           for (var j = 0; j < 3; j++) {
             (function (name) {
-              row.push({ display: 'none', name: name, click: function () { $('input[name=' + name + ']').click() } })
+              row.push({ display: 'none', name: name, triggerClick: function () { $('input[name=' + name + ']').trigger("click") } })
             })("image" + nameIndex++)
           }
           rows.push(row)
