@@ -13,7 +13,7 @@
             <span class="name">{{(comment.user.name || getCommentDetails(comment))}}</span><span class="date">{{ new Date(comment.createdAt) | date}}</span>
           </div>
           <div class="content">
-            {{comment.content}}
+            {{{comment.content}}}
           </div>
         </div>
       </div>
@@ -99,7 +99,8 @@
     max-width: 100%;
     min-width: 100%;
     padding: 0 5px;
-    text-indent: 2em;
+    padding-left: 10px;
+    padding-right: 10px;
     height: 80px;
   }
   .item{

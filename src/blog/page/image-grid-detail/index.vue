@@ -45,8 +45,7 @@ textarea {
   margin-top: 15px;
   max-width: 100%;
   min-width: 100%;
-  padding: 0 5px;
-  text-indent: 2em;
+  padding: 0 15px;
   height: 100px;
 }
 

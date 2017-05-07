@@ -11,7 +11,7 @@ module.exports = {
       .then((moment) => {
         return Comment.create({
           user: req.session.user,
-          content: req.body.content,
+          content: '<p>' + req.body.content.replace(/\r\n/g, '<br\/>').replace(/\n/g, '<br\/>') + '<\/p>',
           moment: moment
         })
       })
@@ -27,7 +27,7 @@ module.exports = {
       .then((article) => {
         return Comment.create({
           user: req.session.user,
-          content: req.body.content,
+          content: '<p>' + req.body.content.replace(/\r\n/g, '<br\/>').replace(/\n/g, '<br\/>') + '<\/p>',
           article: article
         })
       })
