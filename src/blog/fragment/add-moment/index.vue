@@ -161,10 +161,11 @@ body {
 
 textarea {
   margin-top: 10px;
+  padding-left:10px;
+  padding-right: 10px; 
   max-width: 100%;
   min-width: 100%;
   padding: 0 5px;
-  text-indent: 2em;
   height: 80px;
 }
 

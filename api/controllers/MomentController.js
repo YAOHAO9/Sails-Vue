@@ -34,10 +34,10 @@ function getIpInfo(ip, cb) {
 };
 
 function getClientIp(req) {
-  console.log("req.headers['x-forwarded-for']:" + req.headers && req.headers['x-forwarded-for'])
-  console.log("req.connection.remoteAddress:" + req.connection && req.connection.remoteAddress)
-  console.log("req.socket.remoteAddress:" + req.socket && req.socket.remoteAddress)
-  console.log("req.connection.socket.remoteAddress:" + req.connection && req.connection.socket && req.connection.socket.remoteAddress)
+  // console.log("req.headers['x-forwarded-for']:" + req.headers && req.headers['x-forwarded-for'])
+  // console.log("req.connection.remoteAddress:" + req.connection && req.connection.remoteAddress)
+  // console.log("req.socket.remoteAddress:" + req.socket && req.socket.remoteAddress)
+  // console.log("req.connection.socket.remoteAddress:" + req.connection && req.connection.socket && req.connection.socket.remoteAddress)
   let ip = (req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
@@ -66,7 +66,7 @@ module.exports = {
         // var city = cityInfo instanceof Object ? (cityInfo.province + ' ' + cityInfo.city) : undefined
         return Moment.create({
           user: req.session.user,
-          content: req.body.content,
+          content: '<p>' + req.body.content.replace(/\r\n/g, '<br\/>').replace(/\n/g, '<br\/>') + '<\/p>',
           images: uploadedFiles,
           ip: ip,
           approves: [],

@@ -39,7 +39,7 @@
         <hr>
         <!--content-->
         <div class="text">
-          {{item.content}}
+          {{{item.content}}}
         </div>
         <!--image-->
         <div class="blog-content" @click="showImageGridDetailPopup(item)">
@@ -266,10 +266,9 @@ img {
 }
 
 .text {
-  text-indent: 2em;
   font-size: 13px;
   color: #333333;
-  margin: 3px 0px;
+  margin: 3px 10px;
 }
 
 i {
