@@ -13,7 +13,10 @@
                         </div>
                         <div class="content">
                             <div class="name">{{item.sender.name}}</div>
-                            <div class="text">
+                            <div class="text" v-if="item.type == 'image'">
+                                <img @load="loadImage($index)" :src="'api/file/find/'+item.img" />
+                            </div>
+                            <div class="text" v-else>
                                 {{ item.content }}
                             </div>
                         </div>
@@ -40,6 +43,15 @@ export default {
         Avator
     },
     methods: {
+        loadImage(index){
+            if(this.list.length < index+5){
+                var messages = document.getElementsByClassName('scroll')
+                for (var i = 0; i < messages.length; i++) {
+                    var message = messages[i]
+                    message.scrollTop = 10000000000
+                }
+            }
+        },
         dblClick(id) {
             let delItemIndex = 0
             if (this.user.isAdmin)
@@ -120,15 +132,18 @@ export default {
             font-size: 12px;
             text-align: left;
             word-break: break-all;
-            background-color: #fafafa;
+            background-color: #BBE9FF;
             border-radius: 4px;
+            img {
+                padding-top: 10px;
+            }
             &:before {
                 content: " ";
                 position: absolute;
                 top: 9px;
                 right: 100%;
                 border: 6px solid transparent;
-                border-right-color: #fafafa;
+                border-right-color: #BBE9FF;
             }
         }
     }

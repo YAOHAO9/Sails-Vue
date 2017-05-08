@@ -13,6 +13,10 @@
       </tab-item>
     </tab>
     <div class="inputParent hiv">
+      <div class="sendImg">
+        <i class="fa fa-picture-o" aria-hidden="true" @click="selectImg"></i>
+        <input name="image" hidden id="selectChatImg" type="file" multiple="multiple" accept="image/*" />
+      </div>
       <input v-model="content" @keyup.enter="sendMessage()" />
       <div class="btn" @click="sendMessage()">发送</div>
     </div>
@@ -20,7 +24,9 @@
       <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">
         <avator :avator="user.avator" class="avator"></avator>
         <div class="name">{{user.name}}</div>
-        <div class="unreadNum"><span v-if="getUnreadNum(user)">{{user.unreadNum}}</span></div>
+        <div class="unreadNum">
+          <span v-if="getUnreadNum(user)">{{user.unreadNum}}</span>
+        </div>
       </div>
     </popup>
     <add-btn class="addBtn" @click="getAllUser()"></add-btn>
@@ -57,6 +63,28 @@ export default {
     var ctx = this
     this.defaultSession = this.sessions[0]
     this.loadHistory()
+    $('#selectChatImg')[0].addEventListener('change', function () {
+        lrz(this.files[0], { width: 1000 })
+          .then(function (rst) {
+            var formData = new FormData()
+            formData.append('content',ctx.content)
+            formData.append('session',ctx.defaultSession.session)
+            formData.append('sender',ctx.user.id)
+            formData.append('receiver',ctx.defaultSession.receiver)
+            formData.append('image',rst.file)
+            
+            ctx.$http.post('api/chat/sendImage', formData)
+            .then((res) => {
+              if(res.body.session != '0-0'){
+                ctx.defaultSession.list.push(res.body)
+              }
+                
+           })
+          })
+          .catch((err)=> {
+            this.showToast("处理失败");
+          })
+      });
   },
   events: {
     scrollToButtom: function () {
@@ -84,6 +112,9 @@ export default {
     Alert
   },
   methods: {
+    selectImg(){
+      $('#selectChatImg').trigger("click")
+    },
     showPopup(type) {
       this[type] = true
     },
@@ -183,6 +214,14 @@ export default {
   position: absolute;
   bottom: 0;
   width: 100%;
+  .sendImg {
+    padding: 5px;
+  }
+  .fa-picture-o {
+    line-height: 30px;
+    text-align: center;
+    color: #61CDE7;
+  }
   input {
     width: 100%;
     margin: 3px;

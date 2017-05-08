@@ -19,7 +19,8 @@ module.exports = {
     },
     type: {
       type: 'string',
-      enum: ['text', 'image']
+      enum: ['text', 'image'],
+      defaultsTo: 'text'
     },
     content: {
       type: 'longtext'
