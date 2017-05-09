@@ -55,7 +55,9 @@
     },
     methods: {
       selectHeder: function (name) {
-        $('input[name=' + name + ']').trigger("click")
+        alert('name');
+        alert($('input[name=' + name + ']'));
+        $('input[name=' + name + ']').trigger("click");
       },
       getUser: function () {
         var ctx = this
