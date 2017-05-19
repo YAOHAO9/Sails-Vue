@@ -3,8 +3,8 @@
     <div class="avator" @click="selectHeder('avator')">
       <img v-if="(user || getUser()) && !user.avator" name="avator" src="../../../assets/images/blog/widget_dface.png" />
       <img v-if="user && user.avator" name="avator" :src="'api/file/find/'+user.avator" />
+      <input class="avatorInput" name="avator" hidden type="file" multiple="multiple" accept="image/*" />
     </div>
-    <input name="avator" hidden type="file" multiple="multiple" accept="image/*" />
     <div class="hiv">
       <span>name:</span> <input v-model="form.name" :value="user && user.name" placeholder="请输入你的名字" />
     </div>
@@ -93,6 +93,16 @@
    margin: 70px auto;
    overflow: hidden;
    border-radius: 50px;
+ }
+ .avatorInput{
+  width:100%;
+  height:100%;
+  opacity:0;
+  position:absolute;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
  }
  span{
    height: 35px;
