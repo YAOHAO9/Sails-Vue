@@ -14,8 +14,8 @@
     </tab>
     <div class="inputParent hiv">
       <div class="sendImg">
-        <i class="fa fa-picture-o" aria-hidden="true" @click="selectImg"></i>
-        <input name="image" hidden id="selectChatImg" type="file" multiple="multiple" accept="image/*" />
+        <i class="fa fa-picture-o" aria-hidden="true" ></i>
+        <input name="image" id="selectChatImg" type="file" multiple="multiple" accept="image/*" />
       </div>
       <input v-model="content" @keyup.enter="sendMessage()" />
       <div class="btn" @click="sendMessage()">发送</div>
@@ -112,9 +112,6 @@ export default {
     Alert
   },
   methods: {
-    selectImg(){
-      $('#selectChatImg').trigger("click")
-    },
     showPopup(type) {
       this[type] = true
     },
@@ -216,6 +213,21 @@ export default {
   width: 100%;
   .sendImg {
     padding: 5px;
+    position: relative;
+    width: 42px;
+    input{
+      position: absolute;
+      overflow: hidden;
+      opacity: 0;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      width:32px;
+      height:40px;
+    }
   }
   .fa-picture-o {
     line-height: 30px;

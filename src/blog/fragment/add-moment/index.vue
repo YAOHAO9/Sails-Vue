@@ -3,16 +3,14 @@
     <form>
       <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
     </form>
-    <div v-for="row in rows" class="image-grid">
-      <div v-for="column in row">
-        <input :name="column.name" hidden type="file" multiple="multiple" accept="image/*" />
-      </div>
-    </div>
     <div class="image-grid-parent">
       <hev v-for="row in rows" class="image-grid">
         <div v-for="column in row">
-          <div v-square="{padding:'2%'}">
-            <div><img src="../../../assets/images/add.png" :style="'display:'+column.display" @click="isLoadImging && column.triggerClick && column.triggerClick()" :name="column.name" /></div>
+          <div v-square="{padding:'2%'}" class="selectImageParent">
+            <div>
+              <img :style="'display:'+column.display" src="../../../assets/images/add.png" :name="column.name" />
+              <input :style="'display:'+column.display" :name="column.name" type="file" multiple="multiple" accept="image/*" />
+            </div>
           </div>
         </div>
       </hev>
@@ -37,7 +35,7 @@ export default {
           var row = []
           for (var j = 0; j < 3; j++) {
             (function (name) {
-              row.push({ display: 'none', name: name, triggerClick: function () { $('input[name=' + name + ']').trigger("click") } })
+              row.push({ display: 'none', name: name })
             })("image" + nameIndex++)
           }
           rows.push(row)
@@ -161,8 +159,8 @@ body {
 
 textarea {
   margin-top: 10px;
-  padding-left:10px;
-  padding-right: 10px; 
+  padding-left: 10px;
+  padding-right: 10px;
   max-width: 100%;
   min-width: 100%;
   padding: 0 5px;
@@ -172,6 +170,21 @@ textarea {
 .image-grid-parent {
   width: 55%;
   margin: 5px 20px;
+}
+
+.selectImageParent {
+  position: relative;
+}
+
+.selectImageParent input {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .submit {
