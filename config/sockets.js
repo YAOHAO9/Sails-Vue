@@ -145,7 +145,7 @@ module.exports.sockets = {
     socket.on('who', (id) => {
       User.update({ id: id }, { socketId: socket.id }, function () { })
       /*Init sessions*/
-      Chat.find({ session: { '!': '0-0' }, or: [{ sender: id }, { receiver: id }] })
+      Chat.find({ or: [{ sender: id, session: { '!': '0-0' } }, { receiver: id, session: { '!': '0-0' } }] })
         .groupBy('session')
         .max('createdAt')
         .limit(3)
