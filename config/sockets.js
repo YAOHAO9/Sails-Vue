@@ -145,7 +145,7 @@ module.exports.sockets = {
     socket.on('who', (id) => {
       User.update({ id: id }, { socketId: socket.id }, function () { })
       /*Init sessions*/
-      Chat.find({ session: { contains: id, '!': '0-0' } })
+      Chat.find({ session: { '!': '0-0' }, or: [{ sender: id }, { receiver: id }] })
         .groupBy('session')
         .max('createdAt')
         .limit(3)
@@ -205,6 +205,6 @@ module.exports.sockets = {
     })
   },
   onDisconnect: function (session, socket) {
-    User.update({ socketId: socket.id }, { socketId: null }, function(){})
+    User.update({ socketId: socket.id }, { socketId: null }, function () { })
   }
 };

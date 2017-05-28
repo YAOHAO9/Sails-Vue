@@ -123,7 +123,7 @@ export default {
             receivers.push(session.receiver)
           }
         })
-      this.$http.put('/api/user/getOtherUser?limit=10&skip=0&t=' + (new Date).getTime(), { exclude: receivers }).then(res => {
+      this.$http.put('/api/user/getOtherUser?limit=20&skip=0&t=' + (new Date).getTime(), { exclude: receivers }).then(res => {
        this.userList = _.map(res.body,user => {
           user.unreadNum = 0
           return user
@@ -143,7 +143,7 @@ export default {
             receivers.push(session.receiver)
           }
       })
-      this.$http.put('/api/user/getOtherUser?limit=10&skip=' + this.userList.length+'&t=' + (new Date).getTime(), { exclude: receivers })
+      this.$http.put('/api/user/getOtherUser?limit=20&skip=' + this.userList.length+'&t=' + (new Date).getTime(), { exclude: receivers })
           .then((res)=> {
             let infiniteUsers = _.map(res.body,user => {
               user.unreadNum = 0
