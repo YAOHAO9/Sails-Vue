@@ -29,10 +29,10 @@ module.exports = {
       })
   },
   getOtherUser: function (req, res, next) {
-    let conds = { sort: 'updatedAt DESC' }
+    let conds = {}
     conds.skip = req.query.skip ? req.query.skip : '0'
     conds.limit = req.query.limit ? req.query.limit : '20'
-    conds.sort = req.query.sort ? req.query.sort : 'createdAt DESC'
+    conds.sort = req.query.sort ? req.query.sort : 'updatedAt DESC'
     if (req.body.exclude) {
       req.body.exclude.push(req.session.user.id)
       conds.id = { '!': req.body.exclude }
