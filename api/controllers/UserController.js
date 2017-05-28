@@ -29,14 +29,32 @@ module.exports = {
       })
   },
   getOtherUser: function (req, res, next) {
+    let conds = { sort: 'updatedAt DESC' }
+    conds.skip = req.query.skip ? req.query.skip : '0'
+    conds.limit = req.query.limit ? req.query.limit : '10'
+    conds.sort = req.query.sort ? req.query.sort : 'createdAt DESC'
     if (req.body.exclude) {
       req.body.exclude.push(req.session.user.id)
-      User.find({ id: { '!': req.body.exclude } })
-        .then(users => {
-          res.ok(users)
-        })
-        .catch(e => {
-          res.serverError(e.message)
+      conds.id = { '!': req.body.exclude }
+      let avatorConds = Object.assign({}, conds, { avator: { '!': null } })
+      let avatorQuery = User.find(avatorConds)
+      avatorQuery
+        .then(avatorUsers => {
+          if (avatorUsers.length == conds.limit)
+            return res.ok(users)
+          User.count({ avator: { '!': null }, id: { '!': req.body.exclude } })
+            .then(count => {
+              let commonConds = Object.assign({}, conds, {
+                avator: null,
+                skip: conds.skip - count,
+                limit: conds.limit - avatorUsers.length
+              })
+              return User.find(commonConds)
+            })
+            .then(commonUsers => {
+              let users = [...avatorUsers, ...commonUsers]
+              res.ok(users)
+            })
         })
     } else {
       res.ok([])

@@ -7,27 +7,30 @@
   <content>
     <tab :change-item='changeTabItem' :active="active">
       <tab-item :title="session.name" :index="$index" v-for="session in sessions">
-        <scroll :on-refresh="loadHistory" class="scroll">
+        <scroll :on-refresh="loadHistory" class="massageScroll">
           <message :list="session.list" :index="$index"></message>
         </scroll>
       </tab-item>
     </tab>
     <div class="inputParent hiv">
       <div class="sendImg">
-        <i class="fa fa-picture-o" aria-hidden="true" ></i>
+        <i class="fa fa-picture-o" aria-hidden="true"></i>
         <input name="image" id="selectChatImg" type="file" multiple="multiple" accept="image/*" />
       </div>
       <input v-model="content" @keyup.enter="sendMessage()" />
       <div class="btn" @click="sendMessage()">发送</div>
     </div>
     <popup :show.sync="showSelectUserPopup" :full="true" :title="'选择你要私聊的用户'" :show-title-bar="true">
-      <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">
-        <avator :avator="user.avator" class="avator"></avator>
-        <div class="name">{{user.name}}</div>
-        <div class="unreadNum">
-          <span v-if="getUnreadNum(user)">{{user.unreadNum}}</span>
+      <scroll :on-refresh="getAllUser" :on-infinite="onInfinite" class="userScroll">
+        <div class="hiv userListPanent" v-for="user in userList" @click="addTabItem(user)">
+          <avator :avator="user.avator" class="avator"></avator>
+          <div class="name">{{user.name}}</div>
+          <div class="unreadNum">
+            <span v-if="getUnreadNum(user)">{{user.unreadNum}}</span>
+          </div>
         </div>
-      </div>
+      </scroll>
+  
     </popup>
     <add-btn class="addBtn" @click="getAllUser()"></add-btn>
     <alert :show.sync="!ls.hideAtTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
@@ -54,9 +57,7 @@ export default {
       showSelectUserPopup: false,
       defaultSession: {},
       active: 0,
-      alertContent: `
-        最后一个是聊天板块，wechat是群聊，点击添加按钮，可以和你想要的人私聊。
-        `
+      alertContent: `这是一个聊天板块，只要没有暴露你的身份，没人知道你是谁，来自哪里，该去往何处。`
     }
   },
   ready() {
@@ -89,7 +90,7 @@ export default {
   events: {
     scrollToButtom: function () {
       this.$nextTick(() => {
-        var messages = document.getElementsByClassName('scroll')
+        var messages = document.getElementsByClassName('massageScroll')
         for (var i = 0; i < messages.length; i++) {
           var message = messages[i]
           message.scrollTop = 10000000000
@@ -115,22 +116,44 @@ export default {
     showPopup(type) {
       this[type] = true
     },
-    getAllUser() {
+    getAllUser(done) {
       let receivers = []
       _.map(this.sessions, session => {
           if (session.receiver) {
             receivers.push(session.receiver)
           }
         })
-      this.$http.put('/api/user/getOtherUser?t=' + (new Date).getTime(), { exclude: receivers }).then(res => {
+      this.$http.put('/api/user/getOtherUser?limit=10&skip=0&t=' + (new Date).getTime(), { exclude: receivers }).then(res => {
        this.userList = _.map(res.body,user => {
           user.unreadNum = 0
           return user
         })
+        if(done)
+          done()
+        
         this.$nextTick(() => {
           this.showSelectUserPopup = true
         })
       })
+    },
+    onInfinite(done){
+      let receivers = []
+      _.map(this.sessions, session => {
+          if (session.receiver) {
+            receivers.push(session.receiver)
+          }
+      })
+      this.$http.put('/api/user/getOtherUser?limit=10&skip=' + this.userList.length+'&t=' + (new Date).getTime(), { exclude: receivers })
+          .then((res)=> {
+            let infiniteUsers = _.map(res.body,user => {
+              user.unreadNum = 0
+              return user
+            })
+            this.userList = [...this.userList,...infiniteUsers]
+            done()
+          },(err)=> {
+            done()
+          })
     },
     addTabItem(user) {
       var sessionStr = this.user.id < user.id ? (this.user.id + '-' + user.id) : (user.id + '-' + this.user.id)
@@ -197,12 +220,20 @@ export default {
   margin-top: 4px;
 }
 
-.scroll {
+.massageScroll {
   position: absolute;
   top: 40px;
   left: 0;
   right: 0;
   bottom: 40px;
+  overflow: auto;
+}
+.userScroll{
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow: auto;
 }
 
@@ -215,7 +246,7 @@ export default {
     padding: 5px;
     position: relative;
     width: 42px;
-    input{
+    input {
       position: absolute;
       overflow: hidden;
       opacity: 0;
@@ -225,8 +256,8 @@ export default {
       right: 0;
       margin: 0;
       padding: 0;
-      width:32px;
-      height:40px;
+      width: 32px;
+      height: 40px;
     }
   }
   .fa-picture-o {

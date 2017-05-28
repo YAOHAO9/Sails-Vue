@@ -40,7 +40,7 @@ export default {
         })
 
         if (!res.ok) {
-          this.showToast({ text: res.body })
+          this.showToast({ text: JSON.stringify(res.body) })
         }
         return res
       });
