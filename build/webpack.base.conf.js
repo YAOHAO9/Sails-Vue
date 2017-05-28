@@ -8,7 +8,7 @@ module.exports = {
   entry: {
     app: [
       './src/main.js',
-      './node_modules/font-awesome/css/font-awesome.css',
+      './node_modules/font-awesome/css/font-awesome.min.css',
       './src/assets/css/common.css'
     ]
   },
