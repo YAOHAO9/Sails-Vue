@@ -61,7 +61,7 @@
         <hr>
       </div>
     </scroll>
-    <alert :show.sync="!ls.hideMomentTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
+    <alert :show.sync="isShowMomentTip('2017/05/30')" :title="'温馨提示'" :content="alertContent" :on-ok="onOk('2017/05/30')"></alert>
     <add-btn class="addBtn" @click="showAddMomentPopup = true"></add-btn>
   
   </content>
@@ -93,8 +93,9 @@ export default {
       showImageGridDetail: false,
       currentItem: {},
       alertContent: `
-        您好！欢迎来到YAOHAO的秘密花园，我会这这里发布一些个人动态。
-        如果你有什么好玩的、有趣的也可以在这里给我分享
+        你好！欢迎来到YAOHAO的毕业设计。这是第一的模块：Moment（美好时光），主要是为了有一个可以记录生活中的点点滴滴地方，
+        朋友圈也许是个不错的选择，但是发多了，容易让人厌烦，我就想我是一个程序员，我为什么不能开发一个自己的网站
+        来记录自己的生活呢，于是它就诞生了，我会这这里发布一些个人动态。如果你有什么好玩的、有趣的也可以在这里给我分享
         `
     }
   },
@@ -217,9 +218,18 @@ export default {
     edit() {
       this.showActions = false
     },
-    onOk() {
-      this.ls.hideMomentTip = true
-      this.saveLs(this.ls)
+    isShowMomentTip(date){
+      if (!this.ls.hideMomentTip)
+         return true
+      if (new Date(date).getTime() > new Date(this.ls.hideMomentTip).getTime())
+         return true
+      return false
+    },
+    onOk(date) {
+      return function(){
+        this.ls.hideMomentTip = new Date(date)
+        this.saveLs(this.ls)
+      }
     }
   }
 }

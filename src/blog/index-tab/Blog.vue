@@ -40,7 +40,8 @@
           <div class="title">{{item.title}}</div>
           <div class="content">
             <div class="icon" v-if="item.icon">
-              <img :src="'/api/file/find/'+item.icon"><img>
+              <img :src="'/api/file/find/'+item.icon">
+              <img>
             </div>
             {{item.description}}…
           </div>
@@ -52,7 +53,7 @@
         <hr>
       </div>
     </scroll>
-    <alert :show.sync="!ls.hideBlogTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
+    <alert :show.sync="isShowBlogTip('2017/05/29')" :title="'温馨提示'" :content="alertContent" :on-ok="onOk('2017/05/29')"></alert>
   </content>
 </template>
 
@@ -78,7 +79,8 @@ export default {
       showCommentPopup: false,
       currentItem: {},
       alertContent: `
-        这个是我的个人博客板块，我会在这发布一些关于Nodejs全栈相关的文章，欢迎常来学习，探讨。
+        这个是我的个人博客板块，我会在这里发布一些技术类的博客，欢迎前来交流学习。
+        （PS：因为个人懒等等各种原因还没有一篇真正意义上的技术类博客诞生，下面的几篇是我测试程序是否可用的测试文章，请自觉忽略。。。）
         `
     }
   },
@@ -197,9 +199,18 @@ export default {
     operated(arr) {
       return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
     },
-    onOk() {
-      this.ls.hideBlogTip = true
-      this.saveLs(this.ls)
+    isShowBlogTip(date){
+      if (!this.ls.hideBlogTip)
+         return true
+      if (new Date(date).getTime() > new Date(this.ls.hideBlogTip).getTime())
+         return true
+      return false
+    },
+    onOk(date) {
+      return function(){
+        this.ls.hideBlogTip = new Date(date)
+        this.saveLs(this.ls)
+      }
     },
     getUser(comment) {
       if (isNaN(comment.user))
@@ -268,11 +279,13 @@ export default {
 .frontMost {
   z-index: 9999
 }
-.detail{
-  padding: 5px 
+
+.detail {
+  padding: 5px
 }
+
 .replyNum {
-  padding:20px 15px 5px;
+  padding: 20px 15px 5px;
   font-size: 14px;
   color: #444444;
   background-color: #f6f6f6;

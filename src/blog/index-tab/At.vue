@@ -33,7 +33,7 @@
   
     </popup>
     <add-btn class="addBtn" @click="getAllUser()"></add-btn>
-    <alert :show.sync="!ls.hideAtTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk"></alert>
+    <alert :show.sync="isShowAtTip('2017/05/29')" :title="'温馨提示'" :content="alertContent" :on-ok="onOk('2017/05/29')"></alert>
   </content>
 </template>
 
@@ -57,7 +57,8 @@ export default {
       showSelectUserPopup: false,
       defaultSession: {},
       active: 0,
-      alertContent: `这是一个聊天板块，只要没有暴露你的身份，没人知道你是谁，来自哪里，该去往何处。`
+      alertContent: `这是一个聊天板块，在这里没人知道你是谁，来自哪里，该去往何处。
+      如果你有一些技术上的、心理上的甚至是情感方面的问题，我想我是一个不错的免费陪聊机。`
     }
   },
   ready() {
@@ -207,10 +208,19 @@ export default {
         })
       return false
     },
-    onOk() {
-      this.ls.hideAtTip = true
-      this.saveLs(this.ls)
-    }
+    isShowAtTip(date){
+      if (!this.ls.hideAtTip)
+         return true
+      if (new Date(date).getTime() > new Date(this.ls.hideAtTip).getTime())
+         return true
+      return false
+    },
+    onOk(date) {
+      return function(){
+        this.ls.hideAtTip = new Date(date)
+        this.saveLs(this.ls)
+      }
+    },
   }
 }
 
