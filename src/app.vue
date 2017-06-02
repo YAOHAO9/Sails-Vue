@@ -29,6 +29,23 @@ export default {
       this.saveLs(ls)
     }
     Vue.http.interceptors.push((request, next) => {
+      if (!~request.url.indexOf('api/accessrecord')) {
+        let formData = new FormData()
+        formData.append('url', request.url)
+        formData.append('method', request.method)
+        if (request.params)
+          formData.append('params', JSON.stringify(request.params))
+        if (request.body) {
+          let body = {}
+          request.body.forEach(function (value, key) {
+            body[key] = JSON.stringify(value)
+          })
+          formData.append('body', JSON.stringify(body))
+        }
+        this.$http.post('api/accessrecord/create', formData)
+          .then((res) => {
+          })
+      }
       let showPreLoader = setTimeout(() => {
         this.showPreLoader(true)
       }, 300)
