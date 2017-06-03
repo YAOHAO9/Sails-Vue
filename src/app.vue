@@ -37,9 +37,14 @@ export default {
           formData.append('params', JSON.stringify(request.params))
         if (request.body) {
           let body = {}
-          request.body.forEach(function (value, key) {
-            body[key] = JSON.stringify(value)
-          })
+          if (request.body.forEach) {
+            request.body.forEach(function (value, key) {
+              body[key] = JSON.stringify(value)
+            })
+          }
+          else {
+            body = request.body
+          }
           formData.append('body', JSON.stringify(body))
         }
         this.$http.post('api/accessrecord/create', formData)
