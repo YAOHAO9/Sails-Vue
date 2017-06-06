@@ -29,7 +29,7 @@ export default {
       this.saveLs(ls)
     }
     Vue.http.interceptors.push((request, next) => {
-      if (!~request.url.indexOf('api/accessrecord')) {
+      if (!~request.url.indexOf('api/accessrecord') && this.user && !this.user.isAdmin) {
         let formData = new FormData()
         formData.append('url', request.url)
         formData.append('method', request.method)
