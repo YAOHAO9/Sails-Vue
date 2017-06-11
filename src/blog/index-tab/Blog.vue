@@ -53,7 +53,7 @@
         <hr>
       </div>
     </scroll>
-    <alert :show.sync="isShowBlogTip('2017/05/29')" :title="'温馨提示'" :content="alertContent" :on-ok="onOk('2017/05/29')"></alert>
+    <alert :show.sync="isShowBlogTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
   </content>
 </template>
 
@@ -78,9 +78,10 @@ export default {
       showAddArticlePopup: false,
       showCommentPopup: false,
       currentItem: {},
+      alertDate: '2017/05/31',
       alertContent: `
-        这个是我的个人博客板块，我会在这里发布一些技术类的博客，欢迎前来交流学习。
-        （PS：因为个人懒等等各种原因还没有一篇真正意义上的技术类博客诞生，下面的几篇是我测试程序是否可用的测试文章，请自觉忽略。。。）
+        这是我的个人博客板块，我会在这里发布一些技术类的博客，欢迎前来交流学习。
+        （PS：因为各种原因还没有一篇真正意义上的技术类博客诞生，下面的几篇是我测试程序是否可用的测试文章，请自觉忽略。。。）
         `
     }
   },
@@ -199,15 +200,15 @@ export default {
     operated(arr) {
       return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
     },
-    isShowBlogTip(date){
+    isShowBlogTip(date) {
       if (!this.ls.hideBlogTip)
-         return true
+        return true
       if (new Date(date).getTime() > new Date(this.ls.hideBlogTip).getTime())
-         return true
+        return true
       return false
     },
     onOk(date) {
-      return function(){
+      return function () {
         this.ls.hideBlogTip = new Date(date)
         this.saveLs(this.ls)
       }

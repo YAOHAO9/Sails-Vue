@@ -33,7 +33,7 @@
   
     </popup>
     <add-btn class="addBtn" @click="getAllUser()"></add-btn>
-    <alert :show.sync="isShowAtTip('2017/05/29')" :title="'温馨提示'" :content="alertContent" :on-ok="onOk('2017/05/29')"></alert>
+    <alert :show.sync="isShowAtTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
   </content>
 </template>
 
@@ -57,8 +57,9 @@ export default {
       showSelectUserPopup: false,
       defaultSession: {},
       active: 0,
+      alertDate: '2017/05/31',
       alertContent: `这是一个聊天板块，在这里没人知道你是谁，来自哪里，该去往何处。
-      如果你有一些技术上的、心理上的甚至是情感方面的问题，我想我是一个不错的免费陪聊机。`
+      如果你有一些技术上的、心理上的伤心或者难过的事情，我想我是一个不错的免费陪聊机器人。`
     }
   },
   ready() {
@@ -66,27 +67,27 @@ export default {
     this.defaultSession = this.sessions[0]
     this.loadHistory()
     $('#selectChatImg')[0].addEventListener('change', function () {
-        lrz(this.files[0], { width: 1000 })
-          .then(function (rst) {
-            var formData = new FormData()
-            formData.append('content',ctx.content)
-            formData.append('session',ctx.defaultSession.session)
-            formData.append('sender',ctx.user.id)
-            formData.append('receiver',ctx.defaultSession.receiver)
-            formData.append('image',rst.file)
-            
-            ctx.$http.post('api/chat/sendImage', formData)
+      lrz(this.files[0], { width: 1000 })
+        .then(function (rst) {
+          var formData = new FormData()
+          formData.append('content', ctx.content)
+          formData.append('session', ctx.defaultSession.session)
+          formData.append('sender', ctx.user.id)
+          formData.append('receiver', ctx.defaultSession.receiver)
+          formData.append('image', rst.file)
+
+          ctx.$http.post('api/chat/sendImage', formData)
             .then((res) => {
-              if(res.body.session != '0-0'){
+              if (res.body.session != '0-0') {
                 ctx.defaultSession.list.push(res.body)
               }
-                
-           })
-          })
-          .catch((err)=> {
-            this.showToast("处理失败");
-          })
-      });
+
+            })
+        })
+        .catch((err) => {
+          this.showToast("处理失败");
+        })
+    });
   },
   events: {
     scrollToButtom: function () {
@@ -120,41 +121,41 @@ export default {
     getAllUser(done) {
       let receivers = []
       _.map(this.sessions, session => {
-          if (session.receiver) {
-            receivers.push(session.receiver)
-          }
-        })
+        if (session.receiver) {
+          receivers.push(session.receiver)
+        }
+      })
       this.$http.put('/api/user/getOtherUser?limit=20&skip=0&t=' + (new Date).getTime(), { exclude: receivers }).then(res => {
-       this.userList = _.map(res.body,user => {
+        this.userList = _.map(res.body, user => {
           user.unreadNum = 0
           return user
         })
-        if(done)
+        if (done)
           done()
-        
+
         this.$nextTick(() => {
           this.showSelectUserPopup = true
         })
       })
     },
-    onInfinite(done){
+    onInfinite(done) {
       let receivers = []
       _.map(this.sessions, session => {
-          if (session.receiver) {
-            receivers.push(session.receiver)
-          }
+        if (session.receiver) {
+          receivers.push(session.receiver)
+        }
       })
-      this.$http.put('/api/user/getOtherUser?limit=20&skip=' + this.userList.length+'&t=' + (new Date).getTime(), { exclude: receivers })
-          .then((res)=> {
-            let infiniteUsers = _.map(res.body,user => {
-              user.unreadNum = 0
-              return user
-            })
-            this.userList = [...this.userList,...infiniteUsers]
-            done()
-          },(err)=> {
-            done()
+      this.$http.put('/api/user/getOtherUser?limit=20&skip=' + this.userList.length + '&t=' + (new Date).getTime(), { exclude: receivers })
+        .then((res) => {
+          let infiniteUsers = _.map(res.body, user => {
+            user.unreadNum = 0
+            return user
           })
+          this.userList = [...this.userList, ...infiniteUsers]
+          done()
+        }, (err) => {
+          done()
+        })
     },
     addTabItem(user) {
       var sessionStr = this.user.id < user.id ? (this.user.id + '-' + user.id) : (user.id + '-' + this.user.id)
@@ -208,15 +209,15 @@ export default {
         })
       return false
     },
-    isShowAtTip(date){
+    isShowAtTip(date) {
       if (!this.ls.hideAtTip)
-         return true
+        return true
       if (new Date(date).getTime() > new Date(this.ls.hideAtTip).getTime())
-         return true
+        return true
       return false
     },
     onOk(date) {
-      return function(){
+      return function () {
         this.ls.hideAtTip = new Date(date)
         this.saveLs(this.ls)
       }
@@ -238,7 +239,8 @@ export default {
   bottom: 40px;
   overflow: auto;
 }
-.userScroll{
+
+.userScroll {
   position: absolute;
   top: 40px;
   left: 0;
