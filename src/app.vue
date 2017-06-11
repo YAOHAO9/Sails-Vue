@@ -17,7 +17,7 @@ export default {
     Toast,
     PreLoader
   },
-  ready() {
+  created() {
     if (!this.ls) {
       let ls = {}
       for (var prop in localStorage) {
@@ -29,7 +29,7 @@ export default {
       this.saveLs(ls)
     }
     Vue.http.interceptors.push((request, next) => {
-      if (!~request.url.indexOf('api/accessrecord') && this.user && !this.user.isAdmin) {
+      if (!~request.url.indexOf('api/accessrecord')) {
         let formData = new FormData()
         formData.append('url', request.url)
         formData.append('method', request.method)
@@ -67,6 +67,8 @@ export default {
         return res
       });
     })
+  },
+  ready() {
     this.$http.get('api/chat/allUnreadMsgNum')
       .then(res => {
         this.updateUnreadMsgNum(res.body.unreadMsgNum)
