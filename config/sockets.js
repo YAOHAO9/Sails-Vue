@@ -9,6 +9,9 @@
  * For more information on sockets configuration, including advanced config options, see:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.sockets.html
  */
+let nodemailer = require('nodemailer')
+let emailConfig = require('./Email')
+let transporter = nodemailer.createTransport(emailConfig.SMTP_SETTINGS);
 
 module.exports.sockets = {
 
@@ -138,12 +141,35 @@ module.exports.sockets = {
   ***************************************************************************/
   // transports: ["polling", "websocket"]
   onConnect: function (requestSession, socket) {
+
     sails.sockets.join(socket, '0-0')
     let Chat = sails.models.chat
     let User = sails.models.user
     /*listen*/
     socket.on('who', (id) => {
-      User.update({ id: id }, { socketId: socket.id }, function () { })
+      Promise.all([User.update({ id: id }, { socketId: socket.id }), User.findOne({ isAdmin: true })])
+        .spread((results, admin) => {
+          if (!results || results.length == 0 || !admin )
+            return
+          let user = results[0]
+          if (user.isAdmin || !admin.email)
+            return
+          // setup e-mail data with unicode symbols
+          let mailOptions = {
+            from: emailConfig.SMTP_SETTINGS.sendmailFrom, // sender address
+            to: admin.email, // list of receivers
+            subject: "YaoHao's Mibile Blog",
+          };
+          mailOptions.html = `${user.name}，上线了！</br>
+            ${JSON.stringify(user)}`
+          // send mail with defined transport object
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              return console.log(error);
+            }
+            console.log('Message sent: ' + info.response);
+          });
+        })
       /*Init sessions*/
       Chat.find({ or: [{ sender: id, session: { '!': '0-0' } }, { receiver: id, session: { '!': '0-0' } }] })
         .groupBy('session')
@@ -205,6 +231,28 @@ module.exports.sockets = {
     })
   },
   onDisconnect: function (session, socket) {
-    User.update({ socketId: socket.id }, { socketId: null }, function () { })
+    Promise.all([User.update({ socketId: socket.id }, { socketId: null }), User.findOne({ isAdmin: true })])
+        .spread((results, admin) => {
+          if (!results || results.length == 0 || !admin )
+            return
+          let user = results[0]
+          if (user.isAdmin || !admin.email)
+            return
+          // setup e-mail data with unicode symbols
+          let mailOptions = {
+            from: emailConfig.SMTP_SETTINGS.sendmailFrom, // sender address
+            to: admin.email, // list of receivers
+            subject: "YaoHao's Mibile Blog",
+          };
+          mailOptions.html = `${user.name}，下线了！</br>
+            ${JSON.stringify(user)}`
+          // send mail with defined transport object
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              return console.log(error);
+            }
+            console.log('Message sent: ' + info.response);
+          });
+        })
   }
 };
