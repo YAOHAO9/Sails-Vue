@@ -147,9 +147,9 @@ module.exports.sockets = {
     let User = sails.models.user
     /*listen*/
     socket.on('who', (id) => {
-      Promise.all([User.update({ id: id }, { socketId: socket.id }), User.findOne({ isAdmin: true ,email:{'!':null}})])
+      Promise.all([User.update({ id: id }, { socketId: socket.id }), User.findOne({ isAdmin: true, email: { '!': null } })])
         .spread((results, admin) => {
-          if (!results || results.length == 0 || !admin )
+          if (!results || results.length == 0 || !admin)
             return
           let user = results[0]
           if (user.isAdmin || !admin.email)
@@ -231,28 +231,28 @@ module.exports.sockets = {
     })
   },
   onDisconnect: function (session, socket) {
-    Promise.all([User.update({ socketId: socket.id }, { socketId: null }), User.findOne({ isAdmin: true })])
-        .spread((results, admin) => {
-          if (!results || results.length == 0 || !admin )
-            return
-          let user = results[0]
-          if (user.isAdmin || !admin.email)
-            return
-          // setup e-mail data with unicode symbols
-          let mailOptions = {
-            from: emailConfig.SMTP_SETTINGS.sendmailFrom, // sender address
-            to: admin.email, // list of receivers
-            subject: "YaoHao's Mibile Blog",
-          };
-          mailOptions.html = `${user.name}，下线了！</br>
+    Promise.all([User.update({ socketId: socket.id }, { socketId: null }), User.findOne({ isAdmin: true, email: { '!': null } })])
+      .spread((results, admin) => {
+        if (!results || results.length == 0 || !admin)
+          return
+        let user = results[0]
+        if (user.isAdmin || !admin.email)
+          return
+        // setup e-mail data with unicode symbols
+        let mailOptions = {
+          from: emailConfig.SMTP_SETTINGS.sendmailFrom, // sender address
+          to: admin.email, // list of receivers
+          subject: "YaoHao's Mibile Blog",
+        };
+        mailOptions.html = `${user.name}，下线了！</br>
             ${JSON.stringify(user)}`
-          // send mail with defined transport object
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              return console.log(error);
-            }
-            console.log('Message sent: ' + info.response);
-          });
-        })
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            return console.log(error);
+          }
+          console.log('Message sent: ' + info.response);
+        });
+      })
   }
 };
