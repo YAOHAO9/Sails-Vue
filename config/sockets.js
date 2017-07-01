@@ -147,7 +147,7 @@ module.exports.sockets = {
     let User = sails.models.user
     /*listen*/
     socket.on('who', (id) => {
-      Promise.all([User.update({ id: id }, { socketId: socket.id }), User.findOne({ isAdmin: true })])
+      Promise.all([User.update({ id: id }, { socketId: socket.id }), User.findOne({ isAdmin: true ,email:{'!':null}})])
         .spread((results, admin) => {
           if (!results || results.length == 0 || !admin )
             return
