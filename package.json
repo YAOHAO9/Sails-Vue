@@ -4,10 +4,20 @@
   "version": "0.0.0",
   "description": "a Sails application",
   "keywords": [],
+  "scripts": {
+    "debug": "node debug app.js",
+    "start": "node app.js",
+    "dev": "node build/dev-server.js",
+    "build": "node build/build.js",
+    "unit": "karma start test/unit/karma.conf.js --single-run",
+    "test": "npm run unit",
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "postinstall": ""
+  },
   "dependencies": {
     "babel-runtime": "^6.0.0",
     "bcrypt-nodejs": "0.0.3",
-    "bluebird": "^3.4.6",
+    "bluebird": "^3.5.1",
     "chai": "^3.5.0",
     "cheerio": "^0.22.0",
     "connect-redis": "3.0.2",
@@ -30,6 +40,7 @@
     "include-all": "^1.0.0",
     "jquery": "^3.1.1",
     "lrz": "^4.9.40",
+    "markdown-it": "^8.4.1",
     "md5": "^2.2.1",
     "moment": "^2.14.1",
     "mongodb": "^2.2.14",
@@ -44,6 +55,7 @@
     "sails-mongo": "^0.12.1",
     "sails-mysql": "^0.11.5",
     "socket.io-redis": "^3.1.0",
+    "superagent": "^3.8.3",
     "underscore": "^1.8.3",
     "vue": "^1.0.21",
     "vue-resource": "^1.0.3",
@@ -109,15 +121,6 @@
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",
     "webpack-merge": "^0.8.3"
-  },
-  "scripts": {
-    "debug": "node debug app.js",
-    "start": "node app.js",
-    "dev": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "unit": "karma start test/unit/karma.conf.js --single-run",
-    "test": "npm run unit",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "main": "app.js",
   "repository": {
