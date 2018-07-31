@@ -125,7 +125,7 @@ module.exports = {
               let $ = cheerio.load(html);
               let data = $("#codeMirror")[0].firstChild.data
               return parseImgSrc(
-                markdown.render(data),
+                markdown.render(data.replace(/$/mg,'  ')),
                 "https://segmentfault.com"
               )
             })
