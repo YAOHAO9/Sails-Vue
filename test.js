@@ -1,27 +1,14 @@
-let cheerio = require('cheerio')
-let request = require('request')
-let fs = require('fs')
-let path = require('path')
-let md5 = require('md5')
-let content = `
-      <section class="96wx-bgpic 96wx-bdc 96wx-chbg" style="width: 160px; border-radius: 50%; margin-top: -120px; text-align: center; box-sizing: border-box; margin-bottom: 0px; color: inherit; display: inline-block; overflow: hidden; border: 5px solid rgb(254, 254, 254); height: 160px !important; background-image: url(http://newcdn.96weixin.com/pic/mb2017022401.jpg); background-size: 105%; background-position: 0% 0%; background-repeat: no-repeat;" wcdn.96weixin.com/pic/mb2017022401.jpg); background-size: 105%; background-position: 0% 0%; background-repeat: no-repeat;" data-="" wxsrc="https://mmbiz.qlogo.cn/mmbiz_jpg/p6Vlqvia1UicwZCW3E18s45ibBId9UAt5icSb52XQOkg58NlHobr6rlQDWiau4pib39QnpC8dbkw7pWykk0qaVdMtRNA/0?wx_fmt=jpeg"></section>
-    `
-let urls = content.match(/url\([^\)]*\)/g)
-  .map(url => {
-    return url.replace('url(', '').replace(')', '')
+let superagent = require("superagent");
+let request = superagent
+  .get("https://segmentfault.com/u/yaohao/notes")
+  // .set('Accept','text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8')
+  // .set('accept-encoding','gzip, deflate, br')
+  .set('user-agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36')
+  // .set('referer','https://segmentfault.com/u/yaohao/notes')
+  .set("cookie", `sf_remember=1a54cd757ea26cb81e04e0c89449ca3a`)
+  .end((e, res) => {
+    if (e) {
+      return console.error(e);
+    }
+    console.log(res.text);
   })
-urls.map((url) => {
-  if (url.indexOf('http') < 0)
-    return
-  let fileFd = path.join('.tmp', 'uploads', md5(url))
-  request(url).pipe(fs.createWriteStream(fileFd))
-  return File.create({
-    fd: fileFd,
-    type: 'image/jpeg',
-    filename: url,
-    size: 0
-  }).then(file => {
-    content = content.replace(url, 'api/file/find/' + file.id)
-  })
-})
-console.log(content)

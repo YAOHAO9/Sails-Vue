@@ -38,7 +38,7 @@ import BlogIndex from './blog/Index'
 import ImageGridDetail from './blog/page/image-grid-detail'
 import PersonalCenter from './blog/page/personal-center'
 import ArticleDetail from './blog/page/article-detail'
-import VueSocketio from 'vue-socket.io';
+import VueSocketio from 'vue-socket.io'
 import vuex from './vuex/vuex'
 Vue.config.debug = true
 
@@ -47,7 +47,7 @@ Vue.use(Router)
 Vue.use(VueResource)
 Vue.use(Vum)
 Vue.use(Filters)
-Vue.use(VueSocketio, location.origin)
+Vue.use(VueSocketio, '/')
 
 let router = new Router()
 

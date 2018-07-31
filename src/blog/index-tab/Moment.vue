@@ -1,4 +1,5 @@
 <template>
+<div>
   <simple-header title="Moment">
     <header-link>
       <user-icon class="userIcon"></user-icon>
@@ -22,7 +23,7 @@
       </popup>
     </div>
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite" class="scroll">
-      <div v-for="item in list" class="item">
+      <div v-for="item in list" class="item" :key="item.id">
         <!--header-->
         <hav margin='3px 40px 3px 46px' :height="'36px'">
           <div>
@@ -38,8 +39,7 @@
         </hav>
         <hr>
         <!--content-->
-        <div class="text">
-          {{{item.content}}}
+        <div class="text" v-html="item.content">
         </div>
         <!--image-->
         <div class="blog-content" @click="showImageGridDetailPopup(item)">

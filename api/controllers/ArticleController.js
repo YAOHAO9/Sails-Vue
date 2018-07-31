@@ -16,6 +16,21 @@ let markdown = require("markdown-it")();
 let superagent = require("superagent");
 let Promise = require("bluebird");
 
+let getHtmlByUrl = (url, cookie) => {
+  return new Promise((resolve, reject) => {
+    superagent
+      .get(url)
+      .set('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36')
+      .set("cookie", cookie)
+      .end((e, res) => {
+        if (e) {
+          return reject(e);
+        }
+        resolve(res.text);
+      });
+  });
+};
+
 let bgImgUrl = content => {
   let urls = content.match(/url\([^\)]*\)/g);
   if (!urls) urls = [];
@@ -31,10 +46,10 @@ let bgImgUrl = content => {
       let fileFd = path.join(".tmp", "uploads", md5(url));
       let writeStream = fs.createWriteStream(fileFd);
       request(url).pipe(writeStream);
-      writeStream.on("finish", function() {
+      writeStream.on("finish", function () {
         resolve(fileFd);
       });
-      writeStream.on("error", function(err) {
+      writeStream.on("error", function (err) {
         reject(err);
       });
     })
@@ -56,7 +71,7 @@ let bgImgUrl = content => {
 };
 
 module.exports = {
-  create: function(req, res) {
+  create: function (req, res) {
     if (!req.body.title) {
       return res.forbidden("标题不能为空");
     }
@@ -95,22 +110,53 @@ module.exports = {
         res.serverError();
       });
   },
-  seekArticle: function(req, res) {
-    const getHtmlByRequest = request => {
-      return new Promise((resolve, reject) => {
-        request.end((e, res) => {
-          if (e) {
-            reject(e);
-          }
-          resolve(res.text);
-        });
-      });
-    };
-    let request = superagent
-      .get("https://segmentfault.com/a/1190000009651765/edit")
-      .set("cookie", "sf_remember=88e867590f7f5f0890a4c0645e4db83e");
+  segmentFaultNote: function (req, res) {
+    console.log(`sf_remember=${req.query.sf_remember}`)
 
-    getHtmlByRequest(request)
+    getHtmlByUrl("https://segmentfault.com/u/yaohao/notes", `sf_remember=${req.query.sf_remember}`)
+      .then(html => {
+        let $ = cheerio.load(html);
+        let notes = $('body > div.profile > div > div > div > div.col-md-10.profile-mine > ul > li > div > div.col-md-9.profile-mine__content--title-warp > a')
+        let notePromises = (Array(notes.length).fill(0)).map((_,index) => {
+          let note = notes[index];
+          let url = 'https://segmentfault.com' + note.attribs.href.split('?')[0] + '/edit'
+          return getHtmlByUrl(url, `sf_remember=${req.query.sf_remember}`, )
+            .then(html => {
+              let $ = cheerio.load(html);
+              let data = $("#codeMirror")[0].firstChild.data
+              return parseImgSrc(
+                markdown.render(data),
+                "https://segmentfault.com"
+              )
+            })
+            .then(html => {
+              let link =
+                '<link rel="stylesheet" href="/css/markdown.css" type="text/css">\n';
+              return ArticleContent.create({ content: link + html });
+            })
+            .then(content => {
+              return Article.create({
+                user: 1,
+                title: "Article",
+                description: "Article descript",
+                content: content,
+                icon: 3
+              });
+            })
+        })
+        return Promise.all(notePromises)
+      })
+      .then(articles => {
+        res.json(articles);
+      })
+      .catch(e => {
+        console.error(e);
+        res.serverError();
+      });
+  },
+  segmentFaultArticle: function (req, res) {
+
+    getHtmlByUrl("https://segmentfault.com/a/1190000009651765/edit", `sf_remember=${req.query.sf_remember}`)
       .then(html => {
         let $ = cheerio.load(html);
         return parseImgSrc(
@@ -124,7 +170,6 @@ module.exports = {
         return ArticleContent.create({ content: link + html });
       })
       .then(content => {
-        console.log(content);
         return Article.create({
           user: 1,
           title: "Article",
@@ -141,8 +186,8 @@ module.exports = {
         res.serverError();
       });
   },
-  update: function() {},
-  find: function(req, res) {
+  update: function () { },
+  find: function (req, res) {
     if (req.param("id")) {
       return Article.findOne(req.param("id"))
         .populate("user")
@@ -172,7 +217,7 @@ module.exports = {
         res.serverError(e.message);
       });
   },
-  findOne: function(req, res) {
+  findOne: function (req, res) {
     Article.findOne(req.param("id"))
       .populate("user")
       .populate("content")
