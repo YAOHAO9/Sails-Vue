@@ -4,8 +4,8 @@
       <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
     </form>
     <div class="image-grid-parent">
-      <hev v-for="row in rows" class="image-grid">
-        <div v-for="column in row">
+      <hev v-for="row in rows" class="image-grid" :key="row">
+        <div v-for="column in row" :key="column">
           <div v-square="{padding:'2%'}" class="selectImageParent">
             <div>
               <img :style="'display:'+column.display" src="../../../assets/images/add.png" :name="column.name" />

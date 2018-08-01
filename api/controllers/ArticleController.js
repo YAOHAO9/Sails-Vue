@@ -70,6 +70,25 @@ let bgImgUrl = content => {
   });
 };
 
+let saveMdToArticle=(html,origin)=>{
+  return parseImgSrc(
+    html,
+    origin
+  )
+  .spread((html, fileIds) => {
+    html = `<div class="markdown">${html}</div>`
+    return ArticleContent.create({ content: html })
+      .then(content => {
+        return Article.create({
+          user: 1,
+          title: "Article",
+          description: "Article descript",
+          content: content,
+          icon: fileIds[0] ? fileIds[0] : null
+        });
+      })
+  })
+}
 module.exports = {
   create: function (req, res) {
     if (!req.body.title) {
@@ -80,7 +99,7 @@ module.exports = {
     }
     if (!req.body.content) return res.forbidden("内容不能为空");
     return parseImgSrc(req.body.content)
-      .then(content => {
+      .spread(content => {
         return bgImgUrl(content);
       })
       .then(content => {
@@ -117,31 +136,14 @@ module.exports = {
       .then(html => {
         let $ = cheerio.load(html);
         let notes = $('body > div.profile > div > div > div > div.col-md-10.profile-mine > ul > li > div > div.col-md-9.profile-mine__content--title-warp > a')
-        let notePromises = (Array(notes.length).fill(0)).map((_,index) => {
+        let notePromises = (Array(notes.length).fill(0)).map((_, index) => {
           let note = notes[index];
           let url = 'https://segmentfault.com' + note.attribs.href.split('?')[0] + '/edit'
           return getHtmlByUrl(url, `sf_remember=${req.query.sf_remember}`, )
             .then(html => {
               let $ = cheerio.load(html);
-              let data = $("#codeMirror")[0].firstChild.data
-              return parseImgSrc(
-                markdown.render(data.replace(/$/mg,'  ')),
-                "https://segmentfault.com"
-              )
-            })
-            .then(html => {
-              let link =
-                '<link rel="stylesheet" href="/css/markdown.css" type="text/css">\n';
-              return ArticleContent.create({ content: link + html });
-            })
-            .then(content => {
-              return Article.create({
-                user: 1,
-                title: "Article",
-                description: "Article descript",
-                content: content,
-                icon: 3
-              });
+              let data = markdown.render($("#codeMirror")[0].firstChild.data)
+              return saveMdToArticle(data, "https://segmentfault.com")
             })
         })
         return Promise.all(notePromises)
@@ -159,24 +161,8 @@ module.exports = {
     getHtmlByUrl("https://segmentfault.com/a/1190000009651765/edit", `sf_remember=${req.query.sf_remember}`)
       .then(html => {
         let $ = cheerio.load(html);
-        return parseImgSrc(
-          markdown.render($("#myEditor")[0].firstChild.data),
-          "https://segmentfault.com"
-        );
-      })
-      .then(html => {
-        let link =
-          '<link rel="stylesheet" href="/css/markdown.css" type="text/css">\n';
-        return ArticleContent.create({ content: link + html });
-      })
-      .then(content => {
-        return Article.create({
-          user: 1,
-          title: "Article",
-          description: "Article descript",
-          content: content,
-          icon: 3
-        });
+       let data= markdown.render($("#myEditor")[0].firstChild.data)
+       return saveMdToArticle(data, "https://segmentfault.com")
       })
       .then(article => {
         res.json(article);

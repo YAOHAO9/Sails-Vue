@@ -9,7 +9,8 @@ module.exports = {
     app: [
       './src/main.js',
       './node_modules/font-awesome/css/font-awesome.min.css',
-      './src/assets/css/common.css'
+      './src/assets/css/common.css',
+      './src/assets/css/markdown.less'
     ]
   },
   output: {

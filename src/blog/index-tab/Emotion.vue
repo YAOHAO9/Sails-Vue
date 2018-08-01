@@ -1,9 +1,10 @@
 <template>
-  <simple-header title="Emotion"></simple-header>
-  <content>
-    <image-grid ></image-grid>
-  </content>
-
+  <div>
+    <simple-header title="Emotion"></simple-header>
+    <content>
+      <image-grid ></image-grid>
+    </content>
+  </div>
 </template>
 
 <script>

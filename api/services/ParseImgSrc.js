@@ -38,13 +38,14 @@ let ParseImgSrc = (content, baseHttp) => {
         })
       })
       .then(file => {
-        $(img).attr('src', 'api/file/find/' + file.id)
+        $(img).attr('src', 'api/file/find/' + file.id);
+        return file.id
       })
     tasks.push(task)
   }
   return Promise.all(tasks)
-    .then(() => {
-      return $.html()
+    .then((fileIds) => {
+      return [$.html(),fileIds]
     })
 }
 
