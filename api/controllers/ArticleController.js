@@ -149,10 +149,10 @@ module.exports = {
           let createdAt = formatDate(item('div > div.col-md-2 > span')[0].firstChild.data)
           let note = item('div > div.col-md-9.profile-mine__content--title-warp > a')[0]
           let url = 'https://segmentfault.com' + note.attribs.href.split('?')[0] + '/edit'
-          return getHtmlByUrl(url, `sf_remember=${req.query.sf_remember}`, )
+          return getHtmlByUrl(url, `sf_remember=${req.query.sf_remember}`)
             .then(html => {
               let $ = cheerio.load(html);
-              let data = markdown.render($("#codeMirror")[0].firstChild.data.replace(/$/mg,'  '))
+              let data = markdown.render($("#codeMirror")[0].firstChild.data.replace(/$/mg, '  '))
               return saveMdToArticle(data, "https://segmentfault.com", title, createdAt)
             })
         })
@@ -171,7 +171,7 @@ module.exports = {
     getHtmlByUrl("https://segmentfault.com/a/1190000009651765/edit", `sf_remember=${req.query.sf_remember}`)
       .then(html => {
         let $ = cheerio.load(html);
-        let data = markdown.render($("#myEditor")[0].firstChild.data.replace(/$/mg,'  '))
+        let data = markdown.render($("#myEditor")[0].firstChild.data.replace(/$/mg, '  '))
         return saveMdToArticle(data, "https://segmentfault.com")
       })
       .then(article => {
