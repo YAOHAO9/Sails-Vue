@@ -8,8 +8,8 @@
   <content>
     <div class="popupParent" :class="setArticalDetailPopupToFrontMost()">
       <popup :show.sync="showArticalDetail" :full="true" :show-title-bar="false">
-        <div class="detail" v-html="currentItem.contentDetail">
-        </div>
+        <div class="article-title">{{currentItem.title}}</div>
+        <div class="detail" v-html="currentItem.contentDetail"></div>
         <div class="replyNum">{{currentItem.comments.length}}&nbsp;回复</div>
         <div v-for="comment in currentItem.comments" :key="comment">
           <div class="comment head hiv">
@@ -37,11 +37,11 @@
     <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
       <div v-for="item in list" :key="item">
         <div class="item" @click="detail(item)">
-          <div class="title">{{item.title}}</div>
           <div class="content">
             <div class="icon-parent" v-if="item.icon">
                <div class="icon" :style="getImgStyle('/api/file/find/'+item.icon)"></div>
             </div>
+            <div class="title">{{item.title}}</div>
             {{item.description}}…
           </div>
           <div class="other">
@@ -283,6 +283,12 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+}
+.article-title{
+  margin: 0 auto;
+  font-size: 20px;
+  text-align: center;
+  margin: 20px;
 }
 
 .frontMost {
