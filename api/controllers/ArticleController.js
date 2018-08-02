@@ -16,7 +16,45 @@ let markdown = require("markdown-it")();
 let superagent = require("superagent");
 let Promise = require("bluebird");
 
-let getHtmlByUrl = (url, cookie) => {
+let getArticleAndSaveByUrl = (url, cookie, textAreaId) => {
+  return getHtmlByUrl(url, cookie)
+    .then(html => {
+      let $ = cheerio.load(html);
+      let list = $('body > div.profile > div > div > div > div.col-md-10.profile-mine > ul > li');
+      let notePromises = (Array(list.length).fill(0)).map((_, index) => {
+        let item = cheerio.load(list[index]);
+        let title = item('div > div.profile-mine__content--title-warp > a')[0].firstChild.data
+        let createdAt = formatDate(item('div > div.col-md-2 > span.profile-mine__content--date')[0].firstChild.data)
+        let note = item('div > div.profile-mine__content--title-warp > a')[0]
+        let url = 'https://segmentfault.com' + note.attribs.href.split('?')[0] + '/edit'
+        return getHtmlByUrl(url, cookie)
+          .then(html => {
+            let $ = cheerio.load(html);
+            let data = markdown.render($(textAreaId)[0].firstChild.data.replace(/$/mg, '  '))
+            return [data, "https://segmentfault.com", title, createdAt]
+          })
+          .spread((html, origin, title, createdAt) => {
+            return parseImgSrc(html, origin)
+              .spread((html, fileIds) => {
+                html = `<div class="markdown">${html}</div>`
+                return ArticleContent.create({ content: html })
+                  .then(content => {
+                    return Article.create({
+                      user: 1,
+                      title: title,
+                      content: content,
+                      createdAt,
+                      icon: fileIds[0] ? fileIds[0] : null
+                    });
+                  })
+              })
+          })
+      })
+      return Promise.all(notePromises)
+    })
+}
+
+let getHtmlByUrl = (url, cookie, textAreaId) => {
   return new Promise((resolve, reject) => {
     superagent
       .get(url)
@@ -28,7 +66,7 @@ let getHtmlByUrl = (url, cookie) => {
         }
         resolve(res.text);
       });
-  });
+  })
 };
 
 let bgImgUrl = content => {
@@ -70,32 +108,13 @@ let bgImgUrl = content => {
   });
 };
 
-let saveMdToArticle = (html, origin, title, createdAt) => {
-  return parseImgSrc(
-    html,
-    origin
-  )
-    .spread((html, fileIds) => {
-      html = `<div class="markdown">${html}</div>`
-      return ArticleContent.create({ content: html })
-        .then(content => {
-          return Article.create({
-            user: 1,
-            title: title,
-            content: content,
-            createdAt,
-            icon: fileIds[0] ? fileIds[0] : null
-          });
-        })
-    })
-}
-
 let formatDate = (date) => {
   if (date.indexOf('年') === -1) {
     date = `${(new Date()).getFullYear()}年${date}`
   }
   return new Date(date.replace('年', '-').replace('月', '-').replace('日', ''))
 }
+
 module.exports = {
   create: function (req, res) {
     if (!req.body.title) {
@@ -137,27 +156,7 @@ module.exports = {
       });
   },
   segmentFaultNote: function (req, res) {
-    console.log(`sf_remember=${req.query.sf_remember}`)
-
-    getHtmlByUrl("https://segmentfault.com/u/yaohao/notes", `sf_remember=${req.query.sf_remember}`)
-      .then(html => {
-        let $ = cheerio.load(html);
-        let list = $('body > div.profile > div > div > div > div.col-md-10.profile-mine > ul > li');
-        let notePromises = (Array(list.length).fill(0)).map((_, index) => {
-          let item = cheerio.load(list[index]);
-          let title = item('div > div.col-md-9.profile-mine__content--title-warp > a')[0].firstChild.data
-          let createdAt = formatDate(item('div > div.col-md-2 > span')[0].firstChild.data)
-          let note = item('div > div.col-md-9.profile-mine__content--title-warp > a')[0]
-          let url = 'https://segmentfault.com' + note.attribs.href.split('?')[0] + '/edit'
-          return getHtmlByUrl(url, `sf_remember=${req.query.sf_remember}`)
-            .then(html => {
-              let $ = cheerio.load(html);
-              let data = markdown.render($("#codeMirror")[0].firstChild.data.replace(/$/mg, '  '))
-              return saveMdToArticle(data, "https://segmentfault.com", title, createdAt)
-            })
-        })
-        return Promise.all(notePromises)
-      })
+    getArticleAndSaveByUrl('https://segmentfault.com/u/yaohao/notes', `sf_remember=${req.query.sf_remember}`, '#codeMirror')
       .then(articles => {
         res.json(articles);
       })
@@ -168,14 +167,9 @@ module.exports = {
   },
   segmentFaultArticle: function (req, res) {
 
-    getHtmlByUrl("https://segmentfault.com/a/1190000009651765/edit", `sf_remember=${req.query.sf_remember}`)
-      .then(html => {
-        let $ = cheerio.load(html);
-        let data = markdown.render($("#myEditor")[0].firstChild.data.replace(/$/mg, '  '))
-        return saveMdToArticle(data, "https://segmentfault.com")
-      })
-      .then(article => {
-        res.json(article);
+    getArticleAndSaveByUrl('https://segmentfault.com/u/yaohao/articles', `sf_remember=${req.query.sf_remember}`, '#myEditor')
+      .then(articles => {
+        res.json(articles);
       })
       .catch(e => {
         console.error(e);

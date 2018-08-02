@@ -232,7 +232,7 @@ module.exports.sockets = {
 
     })
   },
-  onDisconnect: function (session, socket) {
+  afterDisconnect: function (session, socket) {
     Promise.all([User.update({ socketId: socket.id }, { socketId: null }), User.findOne({ isAdmin: true, email: { '!': null } })])
       .spread((results, admin) => {
         if (!results || results.length == 0 || !admin)
