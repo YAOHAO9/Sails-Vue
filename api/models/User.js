@@ -12,6 +12,10 @@ module.exports = {
             type: 'string',
             defaultsTo: require("../services/RandomNameService")
         },
+        loginTimes: {
+            type: 'integer',
+            defaultsTo: 0,
+        },
         memoName: {
             type: 'string'
         },
