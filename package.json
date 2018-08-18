@@ -1,5 +1,5 @@
 {
-  "name": "sailsDemo",
+  "name": "sails-vue",
   "private": true,
   "version": "0.0.0",
   "description": "a Sails application",
@@ -12,7 +12,7 @@
     "unit": "karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "postinstall": ""
+    "postinstall": "sh post-install.sh"
   },
   "dependencies": {
     "babel-runtime": "^6.0.0",
