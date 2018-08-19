@@ -6,11 +6,10 @@
   </div>
 </template>
 <script>
-
-import store from './vuex/store'
-import Toast from './blog/components/toast'
-import PreLoader from './blog/components/preloader'
-import Vue from 'vue'
+import store from "./vuex/store";
+import Toast from "./blog/components/toast";
+import PreLoader from "./blog/components/preloader";
+import Vue from "vue";
 export default {
   store,
   components: {
@@ -19,121 +18,112 @@ export default {
   },
   created() {
     if (!this.ls) {
-      let ls = {}
+      let ls = {};
       for (var prop in localStorage) {
         try {
-          ls[prop] = JSON.parse(localStorage[prop])
-        } catch (e) {
-        }
+          ls[prop] = JSON.parse(localStorage[prop]);
+        } catch (e) {}
       }
-      this.saveLs(ls)
+      this.saveLs(ls);
     }
     Vue.http.interceptors.push((request, next) => {
-      if (!~request.url.indexOf('api/accessrecord')) {
-        let formData = new FormData()
-        formData.append('url', request.url)
-        formData.append('method', request.method)
+      if (!~request.url.indexOf("api/accessrecord")) {
+        let formData = new FormData();
+        formData.append("url", request.url);
+        formData.append("method", request.method);
         if (request.params)
-          formData.append('params', JSON.stringify(request.params))
+          formData.append("params", JSON.stringify(request.params));
         if (request.body) {
-          let body = {}
+          let body = {};
           if (request.body.forEach) {
-            request.body.forEach(function (value, key) {
-              body[key] = JSON.stringify(value)
-            })
+            request.body.forEach(function(value, key) {
+              body[key] = JSON.stringify(value);
+            });
+          } else {
+            body = request.body;
           }
-          else {
-            body = request.body
-          }
-          formData.append('body', JSON.stringify(body))
+          formData.append("body", JSON.stringify(body));
         }
-        this.$http.post('api/accessrecord/create', formData)
-          .then((res) => {
-          })
+        this.$http.post("api/accessrecord/create", formData).then(res => {});
       }
       let showPreLoader = setTimeout(() => {
-        this.showPreLoader(true)
-      }, 300)
+        this.showPreLoader(true);
+      }, 1000);
 
-      next((res) => {
-        this.$nextTick(function () {
-          clearTimeout(showPreLoader)
-          this.showPreLoader(false)
-        })
+      next(res => {
+        this.$nextTick(function() {
+          clearTimeout(showPreLoader);
+          this.showPreLoader(false);
+        });
 
         if (!res.ok) {
-          this.showToast({ text: JSON.stringify(res.body) })
+          this.showToast({ text: JSON.stringify(res.body) });
         }
-        return res
+        return res;
       });
-    })
+    });
   },
   ready() {
-    this.$http.get('api/chat/allUnreadMsgNum')
-      .then(res => {
-        this.updateUnreadMsgNum(res.body.unreadMsgNum)
-      })
+    this.$http.get("api/chat/allUnreadMsgNum").then(res => {
+      this.updateUnreadMsgNum(res.body.unreadMsgNum);
+    });
   },
   sockets: {
-    connect: function () {
+    connect: function() {
       if (this.user) {
-        this.$socket.emit('who', this.user.id)
+        this.$socket.emit("who", this.user.id);
       } else {
-        this.$http.get('api/user/get')
-          .then(res => {
-            this.saveUser(res.body)
-            this.$socket.emit('who', res.body.id)
-          })
+        this.$http.get("api/user/get").then(res => {
+          this.saveUser(res.body);
+          this.$socket.emit("who", res.body.id);
+        });
       }
     },
-    update: function (chat) {
+    update: function(chat) {
       let foundSession = _.some(this.sessions, (session, index) => {
         if (session.session == chat.session) {
-          session.list.push(chat)
-          if (session.session == '0-0')
-            return true
-          this.$broadcast('changeItem', index)
+          session.list.push(chat);
+          if (session.session == "0-0") return true;
+          this.$broadcast("changeItem", index);
           if (chat.sender.id != this.user.id)
-            this.updateUnreadMsgNum(this.unreadMsgNum + 1)
-          return true
+            this.updateUnreadMsgNum(this.unreadMsgNum + 1);
+          return true;
         }
-        return false
-      })
+        return false;
+      });
       if (!foundSession) {
         var session = {
           session: chat.session,
           name: chat.sender.name,
           receiver: chat.sender.id,
           list: []
-        }
-        this.sessions.splice(1, 0, session)
-        if (this.sessions.length > 4)
-          this.sessions.pop()
-        this.showSelectUserPopup = false
+        };
+        this.sessions.splice(1, 0, session);
+        if (this.sessions.length > 4) this.sessions.pop();
+        this.showSelectUserPopup = false;
         this.$nextTick(() => {
-          this.$broadcast('changeItem', 1)
-        })
+          this.$broadcast("changeItem", 1);
+        });
       }
-      this.$broadcast('scrollToButtom')
+      this.$broadcast("scrollToButtom");
     },
-    initSessions: function (sessions) {
-      this.saveSessions([this.sessions[0], ...sessions])
+    initSessions: function(sessions) {
+      this.saveSessions([this.sessions[0], ...sessions]);
     },
-    initSession: function (chats) {
-      chats = _.sortBy(chats, function (chat, index) { return -index })
-      _.each(this.sessions, (session) => {
+    initSession: function(chats) {
+      chats = _.sortBy(chats, function(chat, index) {
+        return -index;
+      });
+      _.each(this.sessions, session => {
         if (chats && chats.length > 0 && session.session == chats[0].session) {
-          if (session.list.length < 10)
-            session.list = chats
-          else
-            session.list = chats.concat(session.list)
+          if (session.list.length < 10) session.list = chats;
+          else session.list = chats.concat(session.list);
           if (session.list.length <= 10) {
-            this.$broadcast('scrollToButtom')
+            this.$broadcast("scrollToButtom");
           }
         }
-      })
+      });
     }
   }
-}
-
+};
 </script>
