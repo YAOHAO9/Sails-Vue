@@ -46,16 +46,7 @@ export default {
         }
         this.$http.post("api/accessrecord/create", formData).then(res => {});
       }
-      let showPreLoader = setTimeout(() => {
-        this.showPreLoader(true);
-      }, 1000);
-
       next(res => {
-        this.$nextTick(function() {
-          clearTimeout(showPreLoader);
-          this.showPreLoader(false);
-        });
-
         if (!res.ok) {
           this.showToast({ text: JSON.stringify(res.body) });
         }
