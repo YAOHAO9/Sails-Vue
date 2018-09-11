@@ -4,41 +4,37 @@
   </div>
 </template>
 <script>
-
-import IdealImageSlide from '../../../components/ideal-image-slide'
+import IdealImageSlide from "../../../components/ideal-image-slide";
 
 export default {
   data() {
     return {
       urls: []
-    }
+    };
   },
-  props: {
-
-  },
-  ready: function () {
-  },
+  props: {},
+  ready: function() {},
   components: {
     IdealImageSlide
   },
   methods: {
-    getImageUrls: function () {
+    getImageUrls: function() {
       if (this.$route.query.item) {
-        var item = JSON.parse(this.$route.query.item)
+        var item = JSON.parse(this.$route.query.item);
       } else {
-        return
+        return;
       }
-      this.urls = _.map(item.images, function (image) {
-        return 'api/file/find/' + image
-      })
-      return this.urls
+      this.urls = _.map(item.images, function(image) {
+        return "api/archive/" + image;
+      });
+      return this.urls;
     }
   }
-}
+};
 </script>
 <style scoped>
 body {
-  overflow: auto
+  overflow: auto;
 }
 
 textarea {
@@ -61,7 +57,7 @@ textarea {
   margin: 20px auto;
   height: 40px;
   border-radius: 7px;
-  color: #3690FF;
-  border: 2px solid #3690FF;
+  color: #3690ff;
+  border: 2px solid #3690ff;
 }
 </style>

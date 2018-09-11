@@ -1,59 +1,59 @@
 <template>
   <div>
-  <simple-header title="Blog">
-    <header-link>
-      <user-icon class="userIcon"></user-icon>
-    </header-link>
-  </simple-header>
-  <content>
-    <div class="popupParent" :class="setArticalDetailPopupToFrontMost()">
-      <popup :show.sync="showArticalDetail" :full="true" :show-title-bar="false">
-        <div class="article-title">{{currentItem.title}}</div>
-        <div class="detail" v-html="currentItem.contentDetail"></div>
-        <div class="replyNum">{{currentItem.comments.length}}&nbsp;回复</div>
-        <div v-for="comment in currentItem.comments" :key="comment">
-          <div class="comment head hiv">
-            <div class="avator">
-              <avator :avator="comment.user.avator"></avator>
-            </div>
-            <div>
-              <div class="hiv">
-                <div class="name">{{getUser(comment)}}</div>
-                <div class="date">{{'&nbsp;&nbsp;'+($index + 1)+'楼&nbsp;'}}{{comment.createdAt | date}}</div>
+    <simple-header title="Blog">
+      <header-link>
+        <user-icon class="userIcon"></user-icon>
+      </header-link>
+    </simple-header>
+    <content>
+      <div class="popupParent" :class="setArticalDetailPopupToFrontMost()">
+        <popup :show.sync="showArticalDetail" :full="true" :show-title-bar="false">
+          <div class="article-title">{{currentItem.title}}</div>
+          <div class="detail" v-html="currentItem.contentDetail"></div>
+          <div class="replyNum">{{currentItem.comments.length}}&nbsp;回复</div>
+          <div v-for="comment in currentItem.comments" :key="comment">
+            <div class="comment head hiv">
+              <div class="avator">
+                <avator :avator="comment.user.avator"></avator>
               </div>
-              <div class="content" v-html="comment.content"></div>
+              <div>
+                <div class="hiv">
+                  <div class="name">{{getUser(comment)}}</div>
+                  <div class="date">{{'&nbsp;&nbsp;'+($index + 1)+'楼&nbsp;'}}{{comment.createdAt | date}}</div>
+                </div>
+                <div class="content" v-html="comment.content"></div>
+              </div>
+            </div>
+            <hr>
+          </div>
+          <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
+          <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
+            确认
+          </div>
+          <back-btn class="backBtn" @click="showArticalDetail = false"></back-btn>
+        </popup>
+
+      </div>
+      <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
+        <div v-for="item in list" :key="item">
+          <div class="item" @click="detail(item)">
+            <div class="content">
+              <div class="icon-parent" v-if="item.icon">
+                <div class="icon" :style="getImgStyle('/api/archive/'+item.icon)"></div>
+              </div>
+              <div class="title">{{item.title}}</div>
+              {{item.description}}…
+            </div>
+            <div class="other">
+              <div class="name">YAOHAO</div>
+              <div class="date">{{fromNow(item.createdAt)}}</div>
             </div>
           </div>
           <hr>
         </div>
-        <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
-        <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-          确认
-        </div>
-        <back-btn class="backBtn" @click="showArticalDetail = false"></back-btn>
-      </popup>
-  
-    </div>
-    <scroll :on-refresh="onRefresh" :on-infinite="onInfinite">
-      <div v-for="item in list" :key="item">
-        <div class="item" @click="detail(item)">
-          <div class="content">
-            <div class="icon-parent" v-if="item.icon">
-               <div class="icon" :style="getImgStyle('/api/file/find/'+item.icon)"></div>
-            </div>
-            <div class="title">{{item.title}}</div>
-            {{item.description}}…
-          </div>
-          <div class="other">
-            <div class="name">YAOHAO</div>
-            <div class="date">{{fromNow(item.createdAt)}}</div>
-          </div>
-        </div>
-        <hr>
-      </div>
-    </scroll>
-    <alert :show.sync="isShowBlogTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
-  </content>
+      </scroll>
+      <alert :show.sync="isShowBlogTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
+    </content>
   </div>
 </template>
 
@@ -131,9 +131,9 @@ export default {
       };
     },
     onRefresh(done) {
-      this.$http.get("api/article?sort=createdAt DESC&limit=10").then(
+      this.$http.get("api/article?sort=-createdAt&count=10").then(
         function(res) {
-          this.list = res.body;
+          this.list = res.body.data;
           done && done();
         },
         function(err) {
@@ -144,10 +144,10 @@ export default {
     onInfinite(done) {
       var ctx = this;
       this.$http
-        .get("api/article?sort=createdAt DESC&limit=10&skip=" + ctx.list.length)
+        .get("api/article?sort=-createdAt&count=10&offset=" + ctx.list.length)
         .then(
           function(res) {
-            ctx.list = ctx.list.concat(res.body);
+            ctx.list = ctx.list.concat(res.body.data);
             done();
           },
           function(err) {
@@ -170,8 +170,8 @@ export default {
     detail(item) {
       // this.$router.go({ path: 'article-detail', query: { id: item.id } })
       this.currentItem = item;
-      this.$http.get("/api/article/find/" + item.id).then(res => {
-        this.currentItem.contentDetail = res.body.content;
+      this.$http.get("/api/article/" + item.id).then(res => {
+        this.currentItem.contentDetail = res.body.data.content.content;
         this.showArticalDetail = true;
       });
     },
@@ -284,7 +284,7 @@ export default {
   left: 0;
   right: 0;
 }
-.article-title{
+.article-title {
   margin: 0 auto;
   font-size: 20px;
   text-align: center;

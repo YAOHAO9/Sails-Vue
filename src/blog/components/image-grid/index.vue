@@ -3,7 +3,7 @@
     <hev v-for="row in rows" :child-width="childWidth" class="image-grid" :key="row">
       <div v-for="column in row" :key="column">
         <div v-square="{padding:'2%'}">
-          <div :style="getImgStyle('api/file/find/' + column)"></div>
+          <div :style="getImgStyle('api/archive/' + column)"></div>
         </div>
       </div>
     </hev>

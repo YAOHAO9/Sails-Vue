@@ -1,87 +1,87 @@
 <template>
-<div>
-  <simple-header title="Moment">
-    <header-link>
-      <user-icon class="userIcon"></user-icon>
-    </header-link>
-  </simple-header>
-  <content>
-    <actions :show.sync="showActions">
-      <action-group>
-        <action-button class="color-danger" @click="del()">Delete</action-button>
-      </action-group>
-    </actions>
-    <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
-      <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
-    </popup>
-    <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
-      <comment :item="currentItem"></comment>
-    </popup>
-    <div class="popupParent" :class="setImageGridDetailPopupToFrontMost()">
-      <popup :show.sync="showImageGridDetail" :full="true" :show-title-bar="false">
-        <image-grid-detail :item="currentItem" :close="closeImageGridDetailPopup"></image-grid-detail>
+  <div>
+    <simple-header title="Moment">
+      <header-link>
+        <user-icon class="userIcon"></user-icon>
+      </header-link>
+    </simple-header>
+    <content>
+      <actions :show.sync="showActions">
+        <action-group>
+          <action-button class="color-danger" @click="del()">Delete</action-button>
+        </action-group>
+      </actions>
+      <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
+        <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
       </popup>
-    </div>
-    <scroll :on-refresh="onRefresh" :on-infinite="onInfinite" class="scroll">
-      <div v-for="item in list" class="item" :key="item.id">
-        <!--header-->
-        <hav margin='3px 40px 3px 46px' :height="'36px'">
-          <div>
-            <avator :avator="item.user.avator"></avator>
-          </div>
-          <div class="title-parent">
-            <div class="title">{{item.user.name}}</div>
-            <div class="date">{{ new Date(item.createdAt) | date}}</div>
-          </div>
-          <div class="edit">
-            <i v-if="user && (user.id == item.user.id || user.isAdmin)" class="fa fa-chevron-down" @click="showActionsFn(item)"></i>
-          </div>
-        </hav>
-        <hr>
-        <!--content-->
-        <div class="text" v-html="item.content">
-        </div>
-        <!--image-->
-        <div class="blog-content" @click="showImageGridDetailPopup(item)">
-          <image-grid :urls="item.images"></image-grid>
-        </div>
-        <hr>
-        <!--footer-->
-        <hev center>
-          <div class="btn" :class="operated(item.disapproves)" @click="disapprove(item)">
-            <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
-          </div>
-          <div class="btn" @click="comment(item)">
-            <i class="fa fa-commenting">{{item.comments && item.comments.length}}</i>
-          </div>
-          <div class="btn" :class="operated(item.approves)" @click="approve(item)">
-            <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
-          </div>
-        </hev>
-        <hr>
+      <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
+        <comment :item="currentItem"></comment>
+      </popup>
+      <div class="popupParent" :class="setImageGridDetailPopupToFrontMost()">
+        <popup :show.sync="showImageGridDetail" :full="true" :show-title-bar="false">
+          <image-grid-detail :item="currentItem" :close="closeImageGridDetailPopup"></image-grid-detail>
+        </popup>
       </div>
-    </scroll>
-    <alert :show.sync="isShowMomentTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
-    <add-btn class="addBtn" @click="showAddMomentPopup = true"></add-btn>
-  
-  </content>
+      <scroll :on-refresh="onRefresh" :on-infinite="onInfinite" class="scroll">
+        <div v-for="item in list" class="item" :key="item.id">
+          <!--header-->
+          <hav margin='3px 40px 3px 46px' :height="'36px'">
+            <div>
+              <avator :avator="item.user.avator"></avator>
+            </div>
+            <div class="title-parent">
+              <div class="title">{{item.user.name}}</div>
+              <div class="date">{{ new Date(item.createdAt) | date}}</div>
+            </div>
+            <div class="edit">
+              <i v-if="user && (user.id == item.user.id || user.isAdmin)" class="fa fa-chevron-down" @click="showActionsFn(item)"></i>
+            </div>
+          </hav>
+          <hr>
+          <!--content-->
+          <div class="text" v-html="item.content">
+          </div>
+          <!--image-->
+          <div class="blog-content" @click="showImageGridDetailPopup(item)">
+            <image-grid :urls="item.images"></image-grid>
+          </div>
+          <hr>
+          <!--footer-->
+          <hev center>
+            <div class="btn" :class="operated(item.disapproves)" @click="disapprove(item)">
+              <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
+            </div>
+            <div class="btn" @click="comment(item)">
+              <i class="fa fa-commenting">{{item.comments && item.comments.length}}</i>
+            </div>
+            <div class="btn" :class="operated(item.approves)" @click="approve(item)">
+              <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
+            </div>
+          </hev>
+          <hr>
+        </div>
+      </scroll>
+      <alert :show.sync="isShowMomentTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
+      <add-btn class="addBtn" @click="showAddMomentPopup = true"></add-btn>
+
+    </content>
 </template>
 
 <script>
-import { SimpleHeader, HeaderLink } from '../../components/header'
-import Content from '../../components/content'
-import Hav from '../../components/hav'
-import ImageGrid from '../components/image-grid'
-import AddBtn from '../components/add-btn'
-import Scroll from '../../components/scroll'
-import Popup from '../../components/popup'
-import AddMoment from '../fragment/add-moment'
-import Comment from '../fragment/comment'
-import ImageGridDetail from '../fragment/image-grid-detail'
-import Avator from '../components/avator'
-import UserIcon from '../components/user-icon'
-import { Actions, ActionButton, ActionGroup } from '../../components/actions'
-import { Alert } from '../../components/modal'
+import { SimpleHeader, HeaderLink } from "../../components/header";
+import Content from "../../components/content";
+import Hav from "../../components/hav";
+import ImageGrid from "../components/image-grid";
+import AddBtn from "../components/add-btn";
+import Scroll from "../../components/scroll";
+import Popup from "../../components/popup";
+import AddMoment from "../fragment/add-moment";
+import Comment from "../fragment/comment";
+import ImageGridDetail from "../fragment/image-grid-detail";
+import Avator from "../components/avator";
+import UserIcon from "../components/user-icon";
+import { Actions, ActionButton, ActionGroup } from "../../components/actions";
+import { Alert } from "../../components/modal";
 
 export default {
   data() {
@@ -92,14 +92,14 @@ export default {
       showCommentPopup: false,
       showImageGridDetail: false,
       currentItem: {},
-      alertDate:'2017/05/31',
+      alertDate: "2017/05/31",
       alertContent: `
         谢天谢地你来了，既然来了那就留下点什么吧!证明你来过不是么？比如分享一个你认为好玩的、有趣的瞬间可以么！
         `
-    }
+    };
   },
-  ready: function () {
-    this.onRefresh()
+  ready: function() {
+    this.onRefresh();
   },
   components: {
     HeaderLink,
@@ -122,117 +122,119 @@ export default {
   },
   methods: {
     onRefresh(done) {
-      this.$http.get('api/moment?sort=createdAt DESC&limit=10')
-        .then(function (res) {
-          this.list = res.body
-          done && done()
-        }, function (err) {
-          done && done()
-        })
+      this.$http.get("api/moment?sort=-createdAt&count=10").then(
+        function(res) {
+          this.list = res.body.data;
+          done && done();
+        },
+        function(err) {
+          done && done();
+        }
+      );
     },
     onInfinite(done) {
-      var ctx = this
-      this.$http.get('api/moment?sort=createdAt DESC&limit=10&skip=' + ctx.list.length)
-        .then(function (res) {
-          ctx.list = ctx.list.concat(res.body)
-          done()
-        },
-        function (err) {
-          done()
-        })
+      var ctx = this;
+      this.$http
+        .get("api/moment?sort=-createdAt&count=10&offset=" + ctx.list.length)
+        .then(
+          function(res) {
+            ctx.list = ctx.list.concat(res.body.data);
+            done();
+          },
+          function(err) {
+            done();
+          }
+        );
     },
     closeAddMomentPopup() {
-      var ctx = this
-      ctx.onRefresh(function () {
-        ctx.showAddMomentPopup = false
-      })
+      var ctx = this;
+      ctx.onRefresh(function() {
+        ctx.showAddMomentPopup = false;
+      });
     },
     closeCommentPoupu() {
-      var ctx = this
-      ctx.onRefresh(function () {
-        ctx.showAddMomentPopup = false
-      })
+      var ctx = this;
+      ctx.onRefresh(function() {
+        ctx.showAddMomentPopup = false;
+      });
     },
     showActionsFn(item) {
-      this.currentItem = item
-      this.showActions = true
+      this.currentItem = item;
+      this.showActions = true;
     },
     showImageGridDetailPopup(item) {
-      this.currentItem = item
-      this.showImageGridDetail = true
+      this.currentItem = item;
+      this.showImageGridDetail = true;
     },
     closeImageGridDetailPopup() {
-      this.showImageGridDetail = false
+      this.showImageGridDetail = false;
     },
     setImageGridDetailPopupToFrontMost() {
-      if (this.showImageGridDetail)
-        return 'frontMost'
-      this.$nextTick(function () {
-        setTimeout(function () {
-          $('.popupParent').removeClass('frontMost')
-        }, 400)
-      })
-      return 'frontMost'
+      if (this.showImageGridDetail) return "frontMost";
+      this.$nextTick(function() {
+        setTimeout(function() {
+          $(".popupParent").removeClass("frontMost");
+        }, 400);
+      });
+      return "frontMost";
     },
     approve(item) {
-      var ctx = this
-      ctx.$http.get('api/moment/approve/' + item.id)
-        .then(function (updatedItem) {
-          item.approves = updatedItem.body.approves
-          item.disapproves = updatedItem.body.disapproves
-        })
+      var ctx = this;
+      ctx.$http
+        .get("api/moment/approve/" + item.id)
+        .then(function(updatedItem) {
+          item.approves = updatedItem.body.approves;
+          item.disapproves = updatedItem.body.disapproves;
+        });
     },
     disapprove(item) {
-      var ctx = this
-      ctx.$http.get('api/moment/disapprove/' + item.id)
-        .then(function (updatedItem) {
-          item.approves = updatedItem.body.approves
-          item.disapproves = updatedItem.body.disapproves
-        })
+      var ctx = this;
+      ctx.$http
+        .get("api/moment/disapprove/" + item.id)
+        .then(function(updatedItem) {
+          item.approves = updatedItem.body.approves;
+          item.disapproves = updatedItem.body.disapproves;
+        });
     },
     comment(item) {
-      this.currentItem = item
+      this.currentItem = item;
       this.showCommentPopup = true;
     },
     operated(arr) {
-      if (this.user)
-        return arr.indexOf(this.user.id) >= 0 ? 'operated' : ''
-      else
-        return false
+      if (this.user) return arr.indexOf(this.user.id) >= 0 ? "operated" : "";
+      else return false;
     },
     del() {
-      this.showActions = false
-      this.$http.delete('api/moment/delete/' + this.currentItem.id)
+      this.showActions = false;
+      this.$http
+        .delete("api/moment/delete/" + this.currentItem.id)
         .then(res => {
-          let delMoment = res.body
-          let delMomentIndex = 0
-          let found = _.some(this.list, (moment) => {
-            delMomentIndex++
-            return moment.id == delMoment.id
-          })
-          if (found)
-            this.list.splice(delMomentIndex - 1, 1)
-        })
+          let delMoment = res.body;
+          let delMomentIndex = 0;
+          let found = _.some(this.list, moment => {
+            delMomentIndex++;
+            return moment.id == delMoment.id;
+          });
+          if (found) this.list.splice(delMomentIndex - 1, 1);
+        });
     },
     edit() {
-      this.showActions = false
+      this.showActions = false;
     },
-    isShowMomentTip(date){
-      if (!this.ls.hideMomentTip)
-         return true
+    isShowMomentTip(date) {
+      if (!this.ls.hideMomentTip) return true;
       if (new Date(date).getTime() > new Date(this.ls.hideMomentTip).getTime())
-         return true
-      return false
+        return true;
+      return false;
     },
     onOk(date) {
-      return function(){
-        this.ls.hideMomentTip = new Date(date)
-        this.saveLs(this.ls)
-      }
+      return function() {
+        this.ls.hideMomentTip = new Date(date);
+        this.saveLs(this.ls);
+      };
     }
   }
-}
-
+};
 </script>
 <style lang="less" scoped>
 .userIcon {
@@ -266,12 +268,12 @@ img {
 .title {
   font-weight: 900;
   font-size: 13px;
-  color: #333333
+  color: #333333;
 }
 
 .date {
   font-size: 8px;
-  color: #888888
+  color: #888888;
 }
 
 .text {
@@ -288,8 +290,8 @@ i {
   color: #929292;
 }
 
-.operated>i {
-  color: #61CDE7;
+.operated > i {
+  color: #61cde7;
 }
 
 .popupParent {
@@ -301,7 +303,7 @@ i {
 }
 
 .frontMost {
-  z-index: 9999
+  z-index: 9999;
 }
 
 .addBtn {
