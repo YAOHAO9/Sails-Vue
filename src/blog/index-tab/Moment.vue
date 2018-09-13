@@ -209,7 +209,7 @@ export default {
       this.$http
         .delete("api/moment/delete/" + this.currentItem.id)
         .then(res => {
-          let delMoment = res.body;
+          let delMoment = res.body.data;
           let delMomentIndex = 0;
           let found = _.some(this.list, moment => {
             delMomentIndex++;

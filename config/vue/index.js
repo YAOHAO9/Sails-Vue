@@ -20,11 +20,8 @@ module.exports = {
     env: require('./dev.env'),
     port: 8088,
     proxyTable: {
-      '/api/archive': 'http://127.0.0.1:3000',
-      '/api/moment': 'http://127.0.0.1:3000',
-      '/api/article': 'http://127.0.0.1:3000',
-      '/api': 'http://127.0.0.1:1337',
-      '/socket.io': 'http://127.0.0.1:1337'
+      '/api': 'http://127.0.0.1:3000',
+      '/socket.io': 'http://127.0.0.1:3000'
     }
   }
 }

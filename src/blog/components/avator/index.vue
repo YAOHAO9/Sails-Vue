@@ -8,7 +8,7 @@
 export default {
   props: {
     avator: {
-      type: String,
+      type: String | Number,
       default: null
     }
   },

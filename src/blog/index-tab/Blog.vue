@@ -81,7 +81,6 @@ export default {
       alertDate: "2017/05/31",
       alertContent: `
         这是我的个人博客板块，我会在这里发布一些技术类的博客，欢迎前来交流学习。
-        （PS：因为各种原因还没有一篇真正意义上的技术类博客诞生，下面的几篇是我测试程序是否可用的测试文章，请自觉忽略。。。）
         `
     };
   },
@@ -117,7 +116,7 @@ export default {
           ctx.submitCb && ctx.submitCb();
           ctx.submiting = false;
           ctx.content = "";
-          ctx.currentItem.comments.push(res.body);
+          ctx.currentItem.comments.push(res.body.data);
         });
     },
     fromNow(date) {
@@ -187,19 +186,19 @@ export default {
     approve(item) {
       var ctx = this;
       ctx.$http
-        .get("api/article/approve/" + item.id)
+        .put("api/article/approve/" + item.id)
         .then(function(updatedItem) {
-          item.approves = updatedItem.body.approves;
-          item.disapproves = updatedItem.body.disapproves;
+          item.approves = updatedItem.body.data.approves;
+          item.disapproves = updatedItem.body.data.disapproves;
         });
     },
     disapprove(item) {
       var ctx = this;
       ctx.$http
-        .get("api/article/disapprove/" + item.id)
+        .put("api/article/disapprove/" + item.id)
         .then(function(updatedItem) {
-          item.approves = updatedItem.body.approves;
-          item.disapproves = updatedItem.body.disapproves;
+          item.approves = updatedItem.body.data.approves;
+          item.disapproves = updatedItem.body.data.disapproves;
         });
     },
     comment(item) {
@@ -224,8 +223,8 @@ export default {
     getUser(comment) {
       if (isNaN(comment.user)) return comment.user.name;
       else {
-        this.$http.get("/api/user/find/" + comment.user).then(res => {
-          comment.user = res.body;
+        this.$http.get("/api/user/" + comment.user).then(res => {
+          comment.user = res.body.data;
         });
       }
     }

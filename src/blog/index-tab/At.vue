@@ -74,13 +74,13 @@ export default {
           var formData = new FormData();
           formData.append("content", ctx.content);
           formData.append("session", ctx.defaultSession.session);
-          formData.append("sender", ctx.user.id);
-          formData.append("receiver", ctx.defaultSession.receiver);
+          formData.append("senderId", ctx.user.id);
+          formData.append("receiverId", ctx.defaultSession.receiverId);
           formData.append("image", rst.file);
 
           ctx.$http.post("api/chat/sendImage", formData).then(res => {
-            if (res.body.session != "0-0") {
-              ctx.defaultSession.list.push(res.body);
+            if (res.body.data.session != "0-0") {
+              ctx.defaultSession.list.push(res.body.data);
             }
           });
         })
@@ -119,19 +119,19 @@ export default {
       this[type] = true;
     },
     getAllUser(done) {
-      let receivers = [];
+      let receiverIds = [];
       _.map(this.sessions, session => {
-        if (session.receiver) {
-          receivers.push(session.receiver);
+        if (session.receiverId) {
+          receiverIds.push(session.receiver);
         }
       });
       this.$http
         .put(
-          "/api/user/getOtherUser?limit=20&skip=0&t=" + new Date().getTime(),
-          { exclude: receivers }
+          "/api/user/getOtherUser?count=20&offset=0&t=" + new Date().getTime(),
+          { exclude: receiverIds }
         )
         .then(res => {
-          this.userList = _.map(res.body, user => {
+          this.userList = _.map(res.body.data, user => {
             user.unreadNum = 0;
             return user;
           });
@@ -143,23 +143,23 @@ export default {
         });
     },
     onInfinite(done) {
-      let receivers = [];
+      let receiverIds = [];
       _.map(this.sessions, session => {
-        if (session.receiver) {
-          receivers.push(session.receiver);
+        if (session.receiverId) {
+          receiverIds.push(session.receiver);
         }
       });
       this.$http
         .put(
-          "/api/user/getOtherUser?limit=20&skip=" +
+          "/api/user/getOtherUser?count=20&offset=" +
             this.userList.length +
             "&t=" +
             new Date().getTime(),
-          { exclude: receivers }
+          { exclude: receiverIds }
         )
         .then(
           res => {
-            let infiniteUsers = _.map(res.body, user => {
+            let infiniteUsers = _.map(res.body.data, user => {
               user.unreadNum = 0;
               return user;
             });
@@ -179,7 +179,7 @@ export default {
       var session = {
         session: sessionStr,
         name: user.name,
-        receiver: user.id,
+        receiverId: user.id,
         list: []
       };
       this.sessions.splice(1, 0, session);
@@ -202,8 +202,8 @@ export default {
       this.$socket.emit("submit", {
         content: this.content,
         session: this.defaultSession.session,
-        sender: this.user.id,
-        receiver: this.defaultSession.receiver
+        senderId: this.user.id,
+        receiverId: this.defaultSession.receiverId
       });
       this.content = "";
     },
@@ -226,9 +226,9 @@ export default {
     getUnreadNum(sender) {
       if (sender.unreadNum) return true;
       this.$http
-        .put("/api/chat/getUnreadNum", { sender: sender.id })
+        .put("/api/chat/getUnreadNum", { senderId: sender.id })
         .then(res => {
-          sender.unreadNum = res.body.unreadNum;
+          sender.unreadNum = res.body.data.unreadNum;
         });
       return false;
     },

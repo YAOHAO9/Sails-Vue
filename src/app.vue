@@ -48,7 +48,7 @@ export default {
       }
       next(res => {
         if (!res.ok) {
-          this.showToast({ text: JSON.stringify(res.body) });
+          this.showToast({ text: JSON.stringify(res.body.data) });
         }
         return res;
       });
@@ -56,7 +56,7 @@ export default {
   },
   ready() {
     this.$http.get("api/chat/allUnreadMsgNum").then(res => {
-      this.updateUnreadMsgNum(res.body.unreadMsgNum);
+      this.updateUnreadMsgNum(res.body.data.unreadMsgNum);
     });
   },
   sockets: {
@@ -64,9 +64,9 @@ export default {
       if (this.user) {
         this.$socket.emit("who", this.user.id);
       } else {
-        this.$http.get("api/user/get").then(res => {
-          this.saveUser(res.body);
-          this.$socket.emit("who", res.body.id);
+        this.$http.get("api/user/whoami").then(res => {
+          this.saveUser(res.body.data);
+          this.$socket.emit("who", res.body.data.id);
         });
       }
     },
@@ -86,7 +86,7 @@ export default {
         var session = {
           session: chat.session,
           name: chat.sender.name,
-          receiver: chat.sender.id,
+          receiverId: chat.sender.id,
           list: []
         };
         this.sessions.splice(1, 0, session);

@@ -1,33 +1,33 @@
 <template>
-    <div class="message">
-        <ul>
-            <li v-for="item in list" :key="item">
-                <div v-if="user && item.sender" :read="read(item)" @dblclick="dblClick(item.id)">
-                    <p class="time" v-if="isShowTime($index)">
-                        <span>{{ item.createdAt | date }}</span>
-                    </p>
+  <div class="message">
+    <ul>
+      <li v-for="item in list" :key="item">
+        <div v-if="user && item.sender" :read="read(item)" @dblclick="dblClick(item.id)">
+          <p class="time" v-if="isShowTime($index)">
+            <span>{{ item.createdAt | date }}</span>
+          </p>
 
-                    <div class="hiv" :class="{ self: user.id == item.sender.id }">
-                        <div class="head" v-if="user.id != item.sender.id ">
-                            <avator :avator="item.sender.avator"></avator>
-                        </div>
-                        <div class="content">
-                            <div class="name">{{item.sender.name}}</div>
-                            <div class="text" v-if="item.type == 'image'">
-                                <img @load="loadImage($index)" :src="'api/archive/'+item.img" />
-                            </div>
-                            <div class="text" v-else>
-                                {{ item.content }}
-                            </div>
-                        </div>
-                        <div class="head" v-if="user.id == item.sender.id ">
-                            <avator :avator="item.sender.avator"></avator>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+          <div class="hiv" :class="{ self: user.id == item.sender.id }">
+            <div class="head" v-if="user.id != item.sender.id ">
+              <avator :avator="item.sender.avator"></avator>
+            </div>
+            <div class="content">
+              <div class="name">{{item.sender.name}}</div>
+              <div class="text" v-if="item.type == 'image'">
+                <img @load="loadImage($index)" :src="'api/archive/'+item.img" />
+              </div>
+              <div class="text" v-else>
+                {{ item.content }}
+              </div>
+            </div>
+            <div class="head" v-if="user.id == item.sender.id ">
+              <avator :avator="item.sender.avator"></avator>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 <script>
 import Avator from "../avator";
@@ -72,7 +72,7 @@ export default {
         !item.read
       ) {
         this.$http.put("/api/chat/read", { chatId: item.id }).then(res => {
-          item.read = res.body.read;
+          item.read = res.body.data.read;
           if (item.read) {
             let unreadMsgNum = this.unreadMsgNum - 1;
             if (unreadMsgNum < 0) unreadMsgNum = 0;
