@@ -1,22 +1,22 @@
 <template>
-  <div class="comment">
-    <form class="form">
-      <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
-    </form>
+  <div class="discussion">
     <div class="scroll">
-      <div class="item hiv" v-for="comment in item.comments" :key="comment">
+      <div class="item hiv" v-for="discussion in discussions" :key="discussion.id">
         <div class="portraitParent">
-          <avator :avator="comment.user.avator"></avator>
+          <avator :avator="discussion.user ? discussion.user.avator :''"></avator>
         </div>
-        <div class="commentInfo">
+        <div class="discussionInfo">
           <div class="info">
-            <span class="name">{{(comment.user.name || getCommentDetails(comment))}}</span>
-            <span class="date">{{ new Date(comment.createdAt) | date}}</span>
+            <span class="name">{{ discussion.user.name }}</span>
+            <span class="date">{{ new Date(discussion.createdAt) | date}}</span>
           </div>
-          <div class="content" v-html="comment.content">
+          <div class="content" v-html="discussion.content">
           </div>
         </div>
       </div>
+      <form class="form">
+        <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
+      </form>
       <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
         确认
       </div>
@@ -24,26 +24,32 @@
   </div>
 </template>
 <script>
-import Avator from "../../components/avator";
+import Avator from "../components/avator";
 export default {
   data() {
     return {
       content: "",
-      submiting: false
+      submiting: false,
+      discussions: []
     };
   },
   props: {
+    type: String,
     item: {
       type: Object,
       default: function() {
-        return {};
+        return { user: {} };
       }
     },
     submitCb: {
       type: Function
     }
   },
-  ready: function() {},
+  ready: function() {
+    this.$http.get(`api/discussion/${this.type}/${this.item.id}`).then(res => {
+      this.discussions = res.body.data;
+    });
+  },
   components: {
     Avator
   },
@@ -51,29 +57,23 @@ export default {
     submit: function() {
       var ctx = this;
       this.submiting = true;
-      var formData = new FormData();
-      formData.append("content", this.content);
       if (!this.content || this.content == "") {
         this.showToast("留下点什么吧");
         this.submiting = false;
         return;
       }
       this.$http
-        .post("api/comment/moment/" + this.item.id, formData)
+        .post(`api/discussion/${this.type}/${this.item.id}`, {
+          content: this.content
+        })
         .then(res => {
           ctx.submitCb && ctx.submitCb();
           ctx.submiting = false;
           ctx.content = "";
-          ctx.item.comments.push(res.body.data);
+          ctx.item.discussions.push(res.body.data);
+          res.body.data.user = this.user;
+          ctx.discussions.push(res.body.data);
         });
-    },
-    getCommentDetails: function(comment) {
-      var ctx = this;
-      this.$http.get("api/comment/" + comment.id).then(function(res) {
-        for (var prop in res.body.data) {
-          comment[prop] = res.body.data[prop];
-        }
-      });
     }
   }
 };
@@ -82,14 +82,15 @@ export default {
 body {
   overflow: auto;
 }
+.discussion {
+  position: relative;
+}
 .form {
-  position: absolute;
   width: 100%;
   background-color: #efeff4;
 }
 .scroll {
   height: 100%;
-  padding: 95px 0 0px 0;
   overflow: auto;
 }
 textarea {
@@ -115,7 +116,7 @@ textarea {
   margin: 0 5px;
   overflow: hidden;
 }
-.commentInfo {
+.discussionInfo {
   width: 100%;
 }
 .info {

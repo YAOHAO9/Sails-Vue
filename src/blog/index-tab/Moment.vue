@@ -14,8 +14,8 @@
       <popup :show.sync="showAddMomentPopup" :full="true" :title="''" :show-title-bar="true">
         <add-moment :submit-cb='closeAddMomentPopup'></add-moment>
       </popup>
-      <popup :show.sync="showCommentPopup" :full="true" :title="''" :show-title-bar="true">
-        <comment :item="currentItem"></comment>
+      <popup :show.sync="showDiscussionPopup" :full="true" :title="''" :show-title-bar="true">
+        <discussion :item="currentItem" :type="'moment'"></discussion>
       </popup>
       <div class="popupParent" :class="setImageGridDetailPopupToFrontMost()">
         <popup :show.sync="showImageGridDetail" :full="true" :show-title-bar="false">
@@ -51,8 +51,8 @@
             <div class="btn" :class="operated(item.disapproves)" @click="disapprove(item)">
               <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
             </div>
-            <div class="btn" @click="comment(item)">
-              <i class="fa fa-commenting">{{item.comments && item.comments.length}}</i>
+            <div class="btn" @click="discussion(item)">
+              <i class="fa fa-commenting">{{item.discussions && item.discussions.length}}</i>
             </div>
             <div class="btn" :class="operated(item.approves)" @click="approve(item)">
               <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
@@ -76,7 +76,7 @@ import AddBtn from "../components/add-btn";
 import Scroll from "../../components/scroll";
 import Popup from "../../components/popup";
 import AddMoment from "../fragment/add-moment";
-import Comment from "../fragment/comment";
+import Discussion from "../fragment/discussion";
 import ImageGridDetail from "../fragment/image-grid-detail";
 import Avator from "../components/avator";
 import UserIcon from "../components/user-icon";
@@ -89,7 +89,7 @@ export default {
       list: [],
       showActions: false,
       showAddMomentPopup: false,
-      showCommentPopup: false,
+      showDiscussionPopup: false,
       showImageGridDetail: false,
       currentItem: {},
       alertDate: "2017/05/31",
@@ -111,7 +111,7 @@ export default {
     Scroll,
     Popup,
     AddMoment,
-    Comment,
+    Discussion,
     Avator,
     UserIcon,
     ImageGridDetail,
@@ -152,7 +152,7 @@ export default {
         ctx.showAddMomentPopup = false;
       });
     },
-    closeCommentPoupu() {
+    closeDiscussionPoupu() {
       var ctx = this;
       ctx.onRefresh(function() {
         ctx.showAddMomentPopup = false;
@@ -181,28 +181,31 @@ export default {
     approve(item) {
       var ctx = this;
       ctx.$http
-        .get("api/moment/approve/" + item.id)
+        .put("api/moment/approve/" + item.id)
         .then(function(updatedItem) {
-          item.approves = updatedItem.body.approves;
-          item.disapproves = updatedItem.body.disapproves;
+          item.approves = updatedItem.body.data.approves;
+          item.disapproves = updatedItem.body.data.disapproves;
         });
     },
     disapprove(item) {
       var ctx = this;
       ctx.$http
-        .get("api/moment/disapprove/" + item.id)
+        .put("api/moment/disapprove/" + item.id)
         .then(function(updatedItem) {
-          item.approves = updatedItem.body.approves;
-          item.disapproves = updatedItem.body.disapproves;
+          item.approves = updatedItem.body.data.approves;
+          item.disapproves = updatedItem.body.data.disapproves;
         });
     },
-    comment(item) {
+    discussion(item) {
       this.currentItem = item;
-      this.showCommentPopup = true;
+      this.showDiscussionPopup = true;
     },
     operated(arr) {
-      if (this.user) return arr.indexOf(this.user.id) >= 0 ? "operated" : "";
-      else return false;
+      if (this.user) {
+        return arr.indexOf(this.user.id) >= 0 ? "operated" : "";
+      } else {
+        return false;
+      }
     },
     del() {
       this.showActions = false;

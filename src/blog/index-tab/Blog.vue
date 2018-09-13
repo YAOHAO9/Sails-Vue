@@ -10,26 +10,8 @@
         <popup :show.sync="showArticalDetail" :full="true" :show-title-bar="false">
           <div class="article-title">{{currentItem.title}}</div>
           <div class="detail" v-html="currentItem.contentDetail"></div>
-          <div class="replyNum">{{currentItem.comments.length}}&nbsp;回复</div>
-          <div v-for="comment in currentItem.comments" :key="comment">
-            <div class="comment head hiv">
-              <div class="avator">
-                <avator :avator="comment.user.avator"></avator>
-              </div>
-              <div>
-                <div class="hiv">
-                  <div class="name">{{getUser(comment)}}</div>
-                  <div class="date">{{'&nbsp;&nbsp;'+($index + 1)+'楼&nbsp;'}}{{comment.createdAt | date}}</div>
-                </div>
-                <div class="content" v-html="comment.content"></div>
-              </div>
-            </div>
-            <hr>
-          </div>
-          <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
-          <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-            确认
-          </div>
+          <div class="replyNum">{{currentItem.discussions.length}}&nbsp;回复</div>
+          <discussion :item="currentItem" :type="'article'"></discussion>
           <back-btn class="backBtn" @click="showArticalDetail = false"></back-btn>
         </popup>
 
@@ -62,7 +44,7 @@ import { SimpleHeader, HeaderLink } from "../../components/header";
 import Content from "../../components/content";
 import Scroll from "../../components/scroll";
 import Popup from "../../components/popup";
-import Comment from "../fragment/comment";
+import Discussion from "../fragment/discussion";
 import Avator from "../components/avator";
 import UserIcon from "../components/user-icon";
 import BackBtn from "../components/back-btn";
@@ -76,7 +58,7 @@ export default {
       list: [],
       showArticalDetail: false,
       showAddArticlePopup: false,
-      showCommentPopup: false,
+      showDiscussionPopup: false,
       currentItem: {},
       alertDate: "2017/05/31",
       alertContent: `
@@ -93,7 +75,7 @@ export default {
     Content,
     Scroll,
     Popup,
-    Comment,
+    Discussion,
     Avator,
     UserIcon,
     BackBtn,
@@ -103,20 +85,21 @@ export default {
     submit: function() {
       var ctx = this;
       this.submiting = true;
-      var formData = new FormData();
-      formData.append("content", this.content);
       if (!this.content || this.content == "") {
         this.showToast("留下点什么吧");
         this.submiting = false;
         return;
       }
       this.$http
-        .post("api/comment/article/" + this.currentItem.id, formData)
+        .post("api/discussion/article/" + this.currentItem.id, {
+          content: this.content
+        })
         .then(res => {
           ctx.submitCb && ctx.submitCb();
           ctx.submiting = false;
           ctx.content = "";
-          ctx.currentItem.comments.push(res.body.data);
+          res.body.data.user = this.user;
+          ctx.currentItem.discussions.push(res.body.data);
         });
     },
     fromNow(date) {
@@ -160,7 +143,7 @@ export default {
         ctx.showAddArticlePopup = false;
       });
     },
-    closeCommentPoupu() {
+    closeDiscussionPoupu() {
       var ctx = this;
       ctx.onRefresh(function() {
         ctx.showAddArticlePopup = false;
@@ -201,9 +184,9 @@ export default {
           item.disapproves = updatedItem.body.data.disapproves;
         });
     },
-    comment(item) {
+    discussion(item) {
       this.currentItem = item;
-      this.showCommentPopup = true;
+      this.showDiscussionPopup = true;
     },
     operated(arr) {
       return arr.indexOf(this.user.id) >= 0 ? "operated" : "";
@@ -220,11 +203,12 @@ export default {
         this.saveLs(this.ls);
       };
     },
-    getUser(comment) {
-      if (isNaN(comment.user)) return comment.user.name;
+    getUser(discussion) {
+      if (discussion.user && discussion.user.avator)
+        return discussion.user.name;
       else {
-        this.$http.get("/api/user/" + comment.user).then(res => {
-          comment.user = res.body.data;
+        this.$http.get("/api/user/" + discussion.userId).then(res => {
+          discussion.user = res.body.data;
         });
       }
     }
@@ -305,26 +289,26 @@ export default {
   background-color: #f6f6f6;
 }
 
-.comment {
+.discussion {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-.comment .avator {
+.discussion .avator {
   width: 46px;
 }
 
-.comment .name {
+.discussion .name {
   color: #666;
   font-size: 12px;
 }
 
-.comment .date {
+.discussion .date {
   color: #0088cc;
   font-size: 12px;
 }
 
-.comment .content {
+.discussion .content {
   padding-top: 5px;
   font-size: 13px;
   padding-right: 5px;
