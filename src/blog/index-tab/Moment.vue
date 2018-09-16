@@ -61,7 +61,7 @@
           <hr>
         </div>
       </scroll>
-      <alert :show.sync="isShowMomentTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
+      <alert :show.sync="isShowMomentTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
       <add-btn class="addBtn" @click="showAddMomentPopup = true"></add-btn>
 
     </content>
@@ -93,6 +93,7 @@ export default {
       showImageGridDetail: false,
       currentItem: {},
       alertDate: "2017/05/31",
+      isShowMomentTip: false,
       alertContent: `
         谢天谢地你来了，既然来了那就留下点什么吧!证明你来过不是么？比如分享一个你认为好玩的、有趣的瞬间可以么！
         `
@@ -100,6 +101,13 @@ export default {
   },
   ready: function() {
     this.onRefresh();
+    this.isShowMomentTip = (() => {
+      if (!this.ls.hideMomentTip) return true;
+      return new Date(this.alertDate).getTime() >
+        new Date(this.ls.hideMomentTip).getTime()
+        ? true
+        : false;
+    })();
   },
   components: {
     HeaderLink,
@@ -223,12 +231,6 @@ export default {
     },
     edit() {
       this.showActions = false;
-    },
-    isShowMomentTip(date) {
-      if (!this.ls.hideMomentTip) return true;
-      if (new Date(date).getTime() > new Date(this.ls.hideMomentTip).getTime())
-        return true;
-      return false;
     },
     onOk(date) {
       return function() {

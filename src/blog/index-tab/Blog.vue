@@ -34,7 +34,7 @@
           <hr>
         </div>
       </scroll>
-      <alert :show.sync="isShowBlogTip(alertDate)" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
+      <alert :show.sync="isShowBlogTip" :title="'温馨提示'" :content="alertContent" :on-ok="onOk(alertDate)"></alert>
     </content>
   </div>
 </template>
@@ -61,6 +61,7 @@ export default {
       showDiscussionPopup: false,
       currentItem: {},
       alertDate: "2017/05/31",
+      isShowBlogTip: false,
       alertContent: `
         这是我的个人博客板块，我会在这里发布一些技术类的博客，欢迎前来交流学习。
         `
@@ -68,6 +69,13 @@ export default {
   },
   ready: function() {
     this.onRefresh();
+    this.isShowBlogTip = (() => {
+      if (!this.ls.hideBlogTip) return true;
+      return new Date(this.alertDate).getTime() >
+        new Date(this.ls.hideBlogTip).getTime()
+        ? true
+        : false;
+    })();
   },
   components: {
     HeaderLink,
@@ -190,12 +198,6 @@ export default {
     },
     operated(arr) {
       return arr.indexOf(this.user.id) >= 0 ? "operated" : "";
-    },
-    isShowBlogTip(date) {
-      if (!this.ls.hideBlogTip) return true;
-      if (new Date(date).getTime() > new Date(this.ls.hideBlogTip).getTime())
-        return true;
-      return false;
     },
     onOk(date) {
       return function() {
