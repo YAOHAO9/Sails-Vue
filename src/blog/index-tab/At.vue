@@ -131,6 +131,11 @@ export default {
     Avator,
     Alert
   },
+  events: {
+    chatListScrollToButtom: function() {
+      this.scrollToButtom();
+    }
+  },
   methods: {
     scrollToButtom: function() {
       this.$nextTick(() => {
@@ -254,36 +259,6 @@ export default {
         this.ls.hideAtTip = new Date(date);
         this.saveLs(this.ls);
       };
-    }
-  },
-  sockets: {
-    update: function(chat) {
-      let foundSession = _.some(this.sessions, (session, index) => {
-        if (session.session == chat.session) {
-          session.list.push(chat);
-          if (session.session == "0-0") return true;
-          this.$broadcast("changeItem", index);
-          if (chat.sender.id != this.user.id)
-            this.updateUnreadMsgNum(this.unreadMsgNum + 1);
-          return true;
-        }
-        return false;
-      });
-      if (!foundSession) {
-        var session = {
-          session: chat.session,
-          name: chat.sender.name,
-          receiverId: chat.sender.id,
-          list: []
-        };
-        this.sessions.splice(1, 0, session);
-        if (this.sessions.length > 4) this.sessions.pop();
-        this.showSelectUserPopup = false;
-        this.$nextTick(() => {
-          this.$broadcast("changeItem", 1);
-        });
-      }
-      this.scrollToButtom();
     }
   }
 };

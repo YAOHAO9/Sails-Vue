@@ -13,10 +13,10 @@
             </div>
             <div class="content">
               <div class="name">{{item.sender.name}}</div>
-              <div class="text" v-if="item.type == 'image'">
+              <div class="content-wrapper img" v-if="item.type == 'image'">
                 <img @load="loadImage($index)" :src="'api/archive/'+item.img" />
               </div>
-              <div class="text" v-else>
+              <div class="content-wrapper" v-else>
                 {{ item.content }}
               </div>
             </div>
@@ -122,7 +122,7 @@ export default {
       font-size: 12px;
       color: gray;
     }
-    .text {
+    .content-wrapper {
       display: inline-block;
       position: relative;
       padding: 0 10px;
@@ -133,8 +133,10 @@ export default {
       word-break: break-all;
       background-color: #bbe9ff;
       border-radius: 4px;
-      img {
-        padding-top: 10px;
+      &.img {
+        overflow: hidden;
+        padding: 0;
+        line-height: 0;
       }
       &:before {
         content: " ";
@@ -148,7 +150,7 @@ export default {
   }
   .self {
     text-align: right;
-    .text {
+    .content-wrapper {
       background-color: #b2e281;
       &:before {
         right: inherit;

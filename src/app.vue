@@ -65,13 +65,41 @@ export default {
   sockets: {
     connect: function() {
       if (this.user) {
-        this.$socket.emit("who", this.user.id);
+        this.$socket.emit("whoami", this.user.id);
       } else {
         this.$http.get("api/user/whoami").then(res => {
           this.saveUser(res.body.data);
-          this.$socket.emit("who", res.body.data.id);
+          this.$socket.emit("whoami", res.body.data.id);
         });
       }
+    },
+    update: function(chat) {
+      let foundSession = _.some(this.sessions, (session, index) => {
+        if (session.session == chat.session) {
+          session.list.push(chat);
+          if (session.session == "0-0") return true;
+          this.$broadcast("changeItem", index);
+          if (chat.sender.id != this.user.id)
+            this.updateUnreadMsgNum(this.unreadMsgNum + 1);
+          return true;
+        }
+        return false;
+      });
+      if (!foundSession) {
+        var session = {
+          session: chat.session,
+          name: chat.sender.name,
+          receiverId: chat.sender.id,
+          list: []
+        };
+        this.sessions.splice(1, 0, session);
+        if (this.sessions.length > 4) this.sessions.pop();
+        this.showSelectUserPopup = false;
+        this.$nextTick(() => {
+          this.$broadcast("changeItem", 1);
+        });
+      }
+      this.$broadcast("chatListScrollToButtom");
     }
   }
 };

@@ -247,9 +247,11 @@ export default {
 }
 
 .item {
-  margin-top: 8px;
+  margin: 8px 4px 0;
   padding-top: 2px;
   background-color: white;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .portrait {
@@ -266,8 +268,8 @@ img {
 }
 
 .blog-content {
-  width: 70%;
-  margin: 0 auto;
+  width: 75%;
+  margin: 4px auto;
 }
 
 .title {
