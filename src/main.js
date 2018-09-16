@@ -42,7 +42,7 @@ import VueSocketio from 'vue-socket.io'
 import vuex from './vuex/vuex'
 Vue.config.debug = true
 
-Vue.mixin({vuex})
+Vue.mixin({ vuex })
 Vue.use(Router)
 Vue.use(VueResource)
 Vue.use(Vum)

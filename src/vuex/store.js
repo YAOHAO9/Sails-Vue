@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const state = {
   user: null,
   indexView: 'moment',
-  unreadMsgNum: 0,
+  unreadMsgCount: 0,
   sessions: [
     {
       session: "0-0",
@@ -53,8 +53,8 @@ const mutations = {
     }
     // localStorage.clear()
   },
-  SAVEUNREADMSGNUM(state, val) {
-    state.unreadMsgNum = val
+  SAVEUNREADMSGCOUNT(state, val) {
+    state.unreadMsgCount = val
   }
 }
 

@@ -59,7 +59,7 @@ export default {
       this.saveUser(res.body.data);
     });
     this.$http.get("api/chat/allUnreadMsgCount").then(res => {
-      this.updateUnreadMsgNum(res.body.data);
+      this.updateUnreadMsgCount(res.body.data);
     });
   },
   sockets: {
@@ -80,7 +80,7 @@ export default {
           if (session.session == "0-0") return true;
           this.$broadcast("changeItem", index);
           if (chat.sender.id != this.user.id)
-            this.updateUnreadMsgNum(this.unreadMsgNum + 1);
+            this.updateUnreadMsgCount(this.unreadMsgCount + 1);
           return true;
         }
         return false;

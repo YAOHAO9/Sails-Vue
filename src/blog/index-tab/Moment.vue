@@ -279,7 +279,7 @@ img {
 }
 
 .date {
-  font-size: 8px;
+  font-size: 10px;
   color: #888888;
 }
 

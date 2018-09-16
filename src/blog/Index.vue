@@ -11,7 +11,7 @@
       </footer-item>
       <footer-item v-bind:class="{ 'active sky-bule' : currentView === 'at' }" v-on:click="changeView('at')">
         <i class="fa fa-at"></i>
-        <span class="badge" v-show="unreadMsgNum">{{unreadMsgNum}}</span>
+        <span class="badge" v-show="unreadMsgCount">{{unreadMsgCount}}</span>
         <label>Chat</label>
       </footer-item>
     </page-footer>
@@ -20,49 +20,48 @@
 </template>
 
 <script>
-  import { Footer, Item } from '../components/footer'
-  import Moment from './index-tab/Moment'
-  import Blog from './index-tab/Blog'
-  import Note from './index-tab/Note'
-  import At from './index-tab/At'
+import { Footer, Item } from "../components/footer";
+import Moment from "./index-tab/Moment";
+import Blog from "./index-tab/Blog";
+import Note from "./index-tab/Note";
+import At from "./index-tab/At";
 
-  export default {
-    components: {
-      'page-footer': Footer,
-      'footer-item': Item,
-      Blog,
-      Moment,
-      Note,
-      At
-    },
-    data() {
-      return {
-      }
-    },
-    methods: {
-      changeView(view) {
-        this.saveCurrentView(view)
-      }
+export default {
+  components: {
+    "page-footer": Footer,
+    "footer-item": Item,
+    Blog,
+    Moment,
+    Note,
+    At
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    changeView(view) {
+      this.saveCurrentView(view);
     }
   }
+};
 </script>
 
 <style lang="less" scoped>
-  i {
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 5px;
-    /*background-color: #8E8E93;*/
-  }
-  
-  i::before {
-    zoom: 0.8;
-    font-size: 30px;
-  }
-  label{
-    font-size:13px;
-    line-height:13px;
-  }
+i {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 5px;
+  /*background-color: #8E8E93;*/
+}
+
+i::before {
+  zoom: 0.8;
+  font-size: 30px;
+}
+label {
+  font-size: 13px;
+  line-height: 13px;
+}
 </style>
