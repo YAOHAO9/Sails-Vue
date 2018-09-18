@@ -2,7 +2,7 @@
 @import '../variables.less';
 @import '../mixins.less';
 
-@layerHeight:  2.2rem;
+@layerHeight:  44px;
 .pull-to-refresh-layer {
     position: relative;
     left:0; 
@@ -16,11 +16,11 @@
         .preloader;
     }
     .pull-to-refresh-arrow {
-        width: 0.65rem;
-        height: 1rem;
+        width: 13px;
+        height: 20px;
         background: no-repeat center;
         .encoded-svg-background("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 40'><polygon points='9,22 9,0 17,0 17,22 26,22 13.5,40 0,22' fill='#8c8c8c'/></svg>");
-        background-size: 0.65rem  1rem;
+        background-size: 13px  20px;
         z-index: 10;
         transform: rotate(0deg) translate3d(0,0,0);
         transition-duration: 300ms;
@@ -81,7 +81,7 @@
 .pull-up .label-up,
 .refreshing .label-refresh {
   display: block;
-  padding-left: .5rem;
+  padding-left: 10px;
 }
 
 .pull-to-refresh-layer {
@@ -91,7 +91,7 @@
 }
 
 .infinite-layer {
-  height: 0.2rem;
+  height: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,5 +100,5 @@
 
 .infinite-preloader {
   .preloader;
-  margin-right: .5rem;
+  margin-right: 10px;
 }

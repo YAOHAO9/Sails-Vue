@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Modal from './Modal'
+import Modal from "./Modal";
 
 export default {
   props: {
@@ -27,27 +27,27 @@ export default {
     input: {
       type: String,
       required: false,
-      default: ''
+      default: ""
     },
     title: {
       type: String,
       required: false,
-      default: 'Alert'
+      default: "Alert"
     },
     content: {
       type: String,
       required: false,
-      default: ''
+      default: ""
     },
     okText: {
       type: String,
       required: false,
-      default: 'OK'
+      default: "OK"
     },
     cancelText: {
       type: String,
       required: false,
-      default: 'Cancel'
+      default: "Cancel"
     },
     onOk: {
       type: Function,
@@ -62,34 +62,34 @@ export default {
     Modal
   },
   methods: {
-    _onOk () {
-      if (!this.input) return false
+    _onOk() {
+      if (!this.input) return false;
       if (this.onOk) {
-        this.onOk(this.input)
+        this.onOk(this.input);
       }
-      this.show = false
+      this.show = false;
     },
-    _onCancel () {
-      this.show = false
+    _onCancel() {
+      this.show = false;
       if (this.onCancel) {
-        this.onCancel()
+        this.onCancel();
       }
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
 @import "../variables.less";
 p {
-  margin: .5rem 0;
+  margin: 10px 0;
 }
 .modal-input {
-  height: 1.6rem;
-  line-height: 1.6rem;
-  width: 9rem;
+  height: 32px;
+  line-height: 32px;
+  width: 180px;
   font-size: @font-size-default;
   border: 0;
-  padding: 0 .5rem;
+  padding: 0 10px;
 }
 </style>

@@ -1,8 +1,16 @@
 <template>
   <div>
-    <router-view transition="slide"></router-view>
-    <pre-loader :show="preLoader.show"></pre-loader>
-    <toast :show="toast.show" :text="toast.text"></toast>
+    <div>
+      <div class="bg-parent">
+        <div class="bg">
+          <div class="inner">
+            <router-view transition="slide"></router-view>
+            <pre-loader :show="preLoader.show"></pre-loader>
+            <toast :show="toast.show" :text="toast.text"></toast>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -104,3 +112,29 @@ export default {
   }
 };
 </script>
+
+<style lang="less" scoped>
+.bg-parent {
+  border-radius: 36px;
+  width: 323px;
+  height: 677px;
+  margin-top: 10px;
+  margin-left: 100px;
+  overflow: hidden;
+  .bg {
+    background-image: url("./assets/images/phone_bg.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 325px;
+    height: 678px;
+    padding: 35px 10px;
+    .inner {
+      width: 305px;
+      height: 608px;
+      background-color: #eee;
+      overflow: auto;
+      position: relative;
+    }
+  }
+}
+</style>
