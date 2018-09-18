@@ -1,36 +1,37 @@
 <template>
-  <div>
-    <row>
-      <wrapper :padding="'20px 100px'" class="wrapper">
-        <div class="bg-parent">
-          <div class="bg">
-            <div class="inner">
-              <router-view transition="slide"></router-view>
-              <pre-loader :show="preLoader.show"></pre-loader>
-              <toast :show="toast.show" :text="toast.text"></toast>
-            </div>
-          </div>
-        </div>
-      </wrapper>
-      <column :padding="'0 100px 0 0'">
-        <div class="description">
-          欢迎来到YAOHAO的个人网站，在这里您暂时叫“{{user.name}}”，您可以点击头像，进入个人信息编辑界面，编辑您的头像和姓名。在这里您可以分享你的所见所闻，也可以直接跟我小主一对一聊天。我也会第一时间通知小主， 有时可能不会那么及时，希望您能耐心等待，或者休息一会，再来逛逛。(PS:在这里没人知道您的真实身份，希望您可以畅所欲言)
-        </div>
+    <div>
         <row>
-          <img style="width:200px" :src="qrcode" />
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机扫码体验</div>
+            <wrapper :padding="'20px 100px'" class="wrapper">
+                <div class="bg-parent">
+                    <div class="bg">
+                        <div class="inner">
+                            <router-view transition="slide"></router-view>
+                            <pre-loader :show="preLoader.show"></pre-loader>
+                            <toast :show="toast.show" :text="toast.text"></toast>
+                        </div>
+                    </div>
+                </div>
+            </wrapper>
+            <column :padding="'0 100px 0 0'">
+                <div class="description">
+                    欢迎来到YAOHAO的个人网站，在这里您暂时叫“{{user.name}}”，您可以点击头像，进入个人信息编辑界面，编辑您的头像和姓名。在这里您可以分享你的所见所闻，也可以直接跟我小主一对一聊天。我也会第一时间通知小主， 有时可能不会那么及时，希望您能耐心等待，或者休息一会，再来逛逛。(PS:在这里没人知道您的真实身份，希望您可以畅所欲言)
+                </div>
+                <row>
+                    <img style="width:200px" :src="qrcode" />
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机扫码体验</div>
+                </row>
+            </column>
         </row>
-      </column>
-    </row>
-    <div class="copyright">
-      © 2014-2018 YAOHAO 版权所有 闽ICP备 15000277号-1
+        <div class="copyright">
+            © 2014-2018 YAOHAO 版权所有 闽ICP备 15000277号-1
+        </div>
     </div>
-  </div>
 </template>
 <script>
 import store from "./vuex/store";
 import Toast from "./blog/components/toast";
 import PreLoader from "./blog/components/preloader";
+
 import Vue from "vue";
 export default {
   data: () => {

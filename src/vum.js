@@ -5,6 +5,9 @@ import Transitionend from './directives/transitionend'
 import Square from './directives/square'
 /*components*/
 import Hev from './components/hev'
+import Row from './components/row/row'
+import Column from './components/col/column'
+import Wrapper from './components/wrapper/wrapper'
 /*others*/
 import db from './db'
 import Vue from 'vue'
@@ -62,6 +65,10 @@ export default {
     Vue.directive('transitionend', Transitionend)
     Vue.directive('square', Square)
     Vue.component('hev', Hev)
+    Vue.component('row', Row)
+    Vue.component('column', Column)
+    Vue.component('wrapper', Wrapper)
+
   },
   router(router) {
     const rc = new RouterConfig(router)

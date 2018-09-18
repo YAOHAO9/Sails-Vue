@@ -49,13 +49,13 @@
           <!--footer-->
           <hev center>
             <div class="btn" :class="operated(item.disapproves)" @click="disapprove(item)">
-              <i class="fa fa-thumbs-down">{{item.disapproves && item.disapproves.length}}</i>
+              <i class="fa fa-thumbs-down">&nbsp;{{item.disapproves && item.disapproves.length}}</i>
             </div>
             <div class="btn" @click="discussion(item)">
-              <i class="fa fa-commenting">{{item.discussions && item.discussions.length}}</i>
+              <i class="fa fa-commenting">&nbsp;{{item.discussions && item.discussions.length}}</i>
             </div>
             <div class="btn" :class="operated(item.approves)" @click="approve(item)">
-              <i class="fa fa-thumbs-up">{{item.approves && item.approves.length}}</i>
+              <i class="fa fa-thumbs-up">&nbsp;{{item.approves && item.approves.length}}</i>
             </div>
           </hev>
           <hr>
@@ -295,6 +295,7 @@ i {
   line-height: 32px;
   border-radius: 5px;
   color: #929292;
+  font-size: 15px;
 }
 
 .operated > i {
