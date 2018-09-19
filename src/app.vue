@@ -1,30 +1,7 @@
 <template>
   <div>
-    <row>
-      <wrapper :padding="'20px 100px'" class="wrapper">
-        <div class="bg-parent">
-          <div class="bg">
-            <div class="inner">
-              <router-view transition="slide"></router-view>
-              <pre-loader :show="preLoader.show"></pre-loader>
-              <toast :show="toast.show" :text="toast.text"></toast>
-            </div>
-          </div>
-        </div>
-      </wrapper>
-      <column :padding="'0 100px 0 0'">
-        <div class="description">
-          欢迎来到YAOHAO的个人网站，在这里您暂时叫“{{user.name}}”，您可以点击头像，进入个人信息编辑界面，编辑您的头像和姓名。在这里您可以分享你的所见所闻，也可以直接跟我小主一对一聊天。我也会第一时间通知小主， 有时可能不会那么及时，希望您能耐心等待，或者休息一会，再来逛逛。(PS:在这里没人知道您的真实身份，希望您可以畅所欲言)
-        </div>
-        <row>
-          <img style="width:200px" :src="qrcode" />
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机扫码体验</div>
-        </row>
-      </column>
-    </row>
-    <div class="copyright">
-      © 2014-2018 YAOHAO 版权所有 闽ICP备 15000277号-1
-    </div>
+    <pc v-if="isPc()"></pc>
+    <wap v-else></wap>
   </div>
 </template>
 <script>
@@ -32,16 +9,24 @@ import store from "./vuex/store";
 import Toast from "./blog/components/toast";
 import PreLoader from "./blog/components/preloader";
 import Vue from "vue";
+import Pc from "./blog/page/pc";
+import Wap from "./blog/page/wap";
 export default {
-  data: () => {
-    return {
-      qrcode: ""
-    };
-  },
   store,
   components: {
     Toast,
-    PreLoader
+    PreLoader,
+    Pc,
+    Wap
+  },
+  methods: {
+    isPc() {
+      if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   },
   created() {
     if (!this.ls) {
@@ -88,9 +73,6 @@ export default {
     this.$http.get("api/chat/allUnreadMsgCount").then(res => {
       this.updateUnreadMsgCount(res.body.data);
     });
-    this.$http.get(`api/user/qrcode?origin=${location.origin}`).then(res => {
-      this.qrcode = res.body.data;
-    });
   },
   sockets: {
     connect: function() {
@@ -135,38 +117,3 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.bg-parent {
-  border-radius: 36px;
-  width: 323px;
-  height: 677px;
-  overflow: hidden;
-  .bg {
-    background-image: url("./assets/images/phone_bg.png");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    width: 325px;
-    height: 678px;
-    padding: 35px 10px;
-    .inner {
-      width: 305px;
-      height: 608px;
-      background-color: #eee;
-      overflow: auto;
-      position: relative;
-      border-radius: 10px;
-    }
-  }
-}
-.description {
-  text-indent: 2em;
-  margin-bottom: 50px;
-}
-.copyright {
-  margin: 20px;
-  text-align: center;
-  font-size: 13px;
-  color: #888;
-  line-height: 1.6;
-}
-</style>

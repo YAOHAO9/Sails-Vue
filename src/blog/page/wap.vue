@@ -6,8 +6,8 @@
     </div>
 </template>
 <script>
-import Toast from "./blog/components/toast";
-import PreLoader from "./blog/components/preloader";
+import Toast from "../../blog/components/toast";
+import PreLoader from "../../blog/components/preloader";
 export default {
   components: {
     Toast,
