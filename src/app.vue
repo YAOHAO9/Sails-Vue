@@ -112,6 +112,11 @@ export default {
         });
       }
       this.$broadcast("chatListScrollToButtom");
+    },
+    synchronize: function(data) {
+      location.href = `/api/user/redirect?encrypted=${
+        data.encrypted
+      }&redirect=${location.origin}`;
     }
   }
 };

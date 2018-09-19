@@ -1,24 +1,32 @@
 <template>
-  <div>
-    <div class="avator">
-      <img v-if="(user || getUser()) && !user.avator" name="avator" src="../../../assets/images/blog/widget_dface.png" />
-      <img v-if="user && user.avator" name="avator" :src="'api/archive/'+user.avator" />
-      <input class="avatorInput" name="avator" type="file" multiple="multiple" accept="image/*" />
-    </div>
-    <div class="hiv">
-      <span>name:</span> <input v-model="form.name" :value="user && user.name" placeholder="请输入你的名字" />
-    </div>
-    <hr/>
-    <!--<div class="hiv">
+  <div class="page">
+    <page-header>
+      <header-link :left="true" @click="goHome()">返回</header-link>
+      <header-title>同步</header-title>
+    </page-header>
+    <content>
+      <div class="avator">
+        <img v-if="(user || getUser()) && !user.avator" name="avator" src="../../../assets/images/blog/widget_dface.png" />
+        <img v-if="user && user.avator" name="avator" :src="'api/archive/'+user.avator" />
+        <input class="avatorInput" name="avator" type="file" multiple="multiple" accept="image/*" />
+      </div>
+      <div class="hiv">
+        <span>name:</span> <input v-model="form.name" :value="user && user.name" placeholder="请输入你的名字" />
+      </div>
+      <hr/>
+      <!--<div class="hiv">
       <span>email:</span> <input v-model="user.email" placeholder="请输入你的邮箱地址" />
     </div>
     <hr/>-->
-    <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-      确认
-    </div>
+      <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
+        确认
+      </div>
+    </content>
   </div>
 </template>
 <script>
+import { Header, HeaderLink, HeaderTitle } from "../../../components/header";
+import Content from "../../../components/content";
 import IdealImageSlide from "../../../components/ideal-image-slide";
 import Lrz from "lrz";
 
@@ -49,10 +57,17 @@ export default {
     });
   },
   components: {
+    "page-header": Header,
+    HeaderLink,
+    HeaderTitle,
+    Content,
     IdealImageSlide,
     Lrz
   },
   methods: {
+    goHome() {
+      this.$router.go({ path: "/" });
+    },
     selectHeder: function(name) {
       $("input[name=" + name + "]");
       $("input[name=" + name + "]").trigger("click");

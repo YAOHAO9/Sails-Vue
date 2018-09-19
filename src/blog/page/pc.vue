@@ -1,32 +1,32 @@
 <template>
-    <div>
-        <row>
-            <wrapper :padding="'20px 100px'" class="wrapper">
-                <div class="bg-parent">
-                    <div class="bg">
-                        <div class="inner">
-                            <wap></wap>
-                        </div>
-                    </div>
-                </div>
-            </wrapper>
-            <column :padding="'0 100px 0 0'">
-                <div class="description" v-if="!isPrintFinish">
-                    {{description}}
-                </div>
-                <div class="description" v-else>
-                    {{preDescription + user.name + postDescription}}
-                </div>
-                <row>
-                    <img style="width:200px" :src="qrcode" />
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机扫码体验</div>
-                </row>
-            </column>
-        </row>
-        <div class="copyright">
-            ©2014-2018 YAOHAO 版权所有 闽ICP备 15000277号-1
+  <div>
+    <row>
+      <wrapper :padding="'20px 100px'" class="wrapper">
+        <div class="bg-parent">
+          <div class="bg">
+            <div class="inner">
+              <wap></wap>
+            </div>
+          </div>
         </div>
+      </wrapper>
+      <column :padding="'0 100px 0 0'">
+        <div class="description" v-if="!isPrintFinish">
+          {{description}}
+        </div>
+        <div class="description" v-else>
+          {{preDescription + user.name + postDescription}}
+        </div>
+        <row>
+          <img style="width:200px" :src="qrcode" />
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机扫码体验</div>
+        </row>
+      </column>
+    </row>
+    <div class="copyright">
+      ©2014-2018 YAOHAO 版权所有 闽ICP备 15000277号-1
     </div>
+  </div>
 </template>
 <script>
 import store from "../../vuex/store";
@@ -61,7 +61,7 @@ export default {
           if (this.description === description) {
             this.isPrintFinish = true;
           }
-        }, i * 100);
+        }, i * 50);
       });
     });
   }

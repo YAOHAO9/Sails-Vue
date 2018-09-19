@@ -30,7 +30,8 @@ export default {
       return {
         backgroundSize: "cover",
         backgroundImage: `url('${url}')`,
-        borderRadius: "5%"
+        borderRadius: "5%",
+        backgroundPosition: "center"
       };
     }
   },

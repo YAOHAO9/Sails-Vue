@@ -16,7 +16,8 @@ export default {
     getImgStyle(url) {
       return {
         backgroundSize: "cover",
-        backgroundImage: `url('${url}')`
+        backgroundImage: `url('${url}')`,
+        backgroundPosition: "center"
       };
     }
   }
