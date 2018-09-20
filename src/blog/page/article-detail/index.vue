@@ -41,14 +41,4 @@ input {
   background-color: #f2f2f2;
   text-indent: 1em;
 }
-.submit {
-  line-height: 40px;
-  text-align: center;
-  width: 40%;
-  margin: 100px auto;
-  height: 40px;
-  border-radius: 7px;
-  color: #3690ff;
-  border: 2px solid #3690ff;
-}
 </style>

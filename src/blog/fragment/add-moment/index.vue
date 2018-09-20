@@ -15,13 +15,15 @@
         </div>
       </hev>
     </div>
-    <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-      确认
-    </div>
+    <wrapper :padding="'30px'">
+      <button type="light" @click="!submiting && submit()" :class="{'disabled':submiting}">确认</button>
+    </wrapper>
   </div>
 </template>
 <script>
 import ImageGrid from "../../components/image-grid";
+import { Button } from "../../../components/buttons";
+
 import Lrz from "lrz";
 
 export default {
@@ -88,6 +90,7 @@ export default {
   },
   components: {
     ImageGrid,
+    Button,
     Lrz
   },
   methods: {
@@ -120,7 +123,6 @@ export default {
         return;
       }
       formData.append("content", this.content);
-      formData.append("origin", location.origin);
       _.each(compressPictures, function(compressPicture) {
         formData.append("images", compressPicture.file);
       });
@@ -190,16 +192,5 @@ textarea {
   bottom: 0;
   left: 0;
   right: 0;
-}
-
-.submit {
-  line-height: 40px;
-  text-align: center;
-  width: 40%;
-  margin: 10px auto;
-  height: 40px;
-  border-radius: 7px;
-  color: #3690ff;
-  border: 2px solid #3690ff;
 }
 </style>

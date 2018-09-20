@@ -77,11 +77,17 @@ export default {
   sockets: {
     connect: function() {
       if (this.user) {
-        this.$socket.emit("whoami", this.user.id);
+        this.$socket.emit("whoami", {
+          userId: this.user.id,
+          accessOrigin: location.origin
+        });
       } else {
         this.$http.get("api/user/whoami").then(res => {
           this.saveUser(res.body.data);
-          this.$socket.emit("whoami", res.body.data.id);
+          this.$socket.emit("whoami", {
+            userId: res.body.data.id,
+            accessOrigin: location.origin
+          });
         });
       }
     },

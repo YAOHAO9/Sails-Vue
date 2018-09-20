@@ -17,13 +17,14 @@
       <form class="form">
         <textarea placeholder="这一刻的想法..." v-model="content"></textarea>
       </form>
-      <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-        确认
-      </div>
+      <wrapper :padding="'30px'">
+        <button type="light" @click="!submiting && submit()" :class="{'disabled':submiting}">确认</button>
+      </wrapper>
     </div>
   </div>
 </template>
 <script>
+import { Button } from "../../components/buttons";
 import Avator from "../components/avator";
 export default {
   data() {
@@ -51,7 +52,8 @@ export default {
     });
   },
   components: {
-    Avator
+    Avator,
+    Button
   },
   methods: {
     submit: function() {
@@ -133,15 +135,5 @@ textarea {
 }
 .content {
   font-size: 13px;
-}
-.submit {
-  line-height: 40px;
-  text-align: center;
-  width: 40%;
-  margin: 20px auto;
-  height: 40px;
-  border-radius: 7px;
-  color: #3690ff;
-  border: 2px solid #3690ff;
 }
 </style>

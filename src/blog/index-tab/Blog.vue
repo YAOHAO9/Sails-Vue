@@ -333,15 +333,4 @@ textarea {
   padding: 0 15px;
   height: 80px;
 }
-
-.submit {
-  line-height: 40px;
-  text-align: center;
-  width: 40%;
-  margin: 10px auto;
-  height: 40px;
-  border-radius: 7px;
-  color: #3690ff;
-  border: 2px solid #3690ff;
-}
 </style>

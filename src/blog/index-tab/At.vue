@@ -85,7 +85,6 @@ export default {
           formData.append("senderId", ctx.user.id);
           formData.append("receiverId", ctx.defaultSession.receiverId);
           formData.append("image", rst.file);
-          formData.append("origin", location.origin);
 
           ctx.$http.post("api/chat/sendImage", formData).then(res => {
             if (res.body.data.session != "0-0") {

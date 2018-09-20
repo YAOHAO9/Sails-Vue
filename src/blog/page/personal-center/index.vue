@@ -18,13 +18,14 @@
       <span>email:</span> <input v-model="user.email" placeholder="请输入你的邮箱地址" />
     </div>
     <hr/>-->
-      <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-        确认
-      </div>
+      <wrapper :padding="'30px'">
+        <button type="light" @click="!submiting && submit()" :class="{'disabled':submiting}">确认</button>
+      </wrapper>
     </content>
   </div>
 </template>
 <script>
+import { Button } from "../../../components/buttons";
 import { Header, HeaderLink, HeaderTitle } from "../../../components/header";
 import Content from "../../../components/content";
 import IdealImageSlide from "../../../components/ideal-image-slide";
@@ -62,7 +63,8 @@ export default {
     HeaderTitle,
     Content,
     IdealImageSlide,
-    Lrz
+    Lrz,
+    Button
   },
   methods: {
     goHome() {
@@ -126,15 +128,5 @@ input {
   height: 35px;
   background-color: #f2f2f2;
   text-indent: 1em;
-}
-.submit {
-  line-height: 40px;
-  text-align: center;
-  width: 40%;
-  margin: 100px auto;
-  height: 40px;
-  border-radius: 7px;
-  color: #3690ff;
-  border: 2px solid #3690ff;
 }
 </style>

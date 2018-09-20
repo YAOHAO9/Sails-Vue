@@ -19,7 +19,12 @@
         </div>
         <row>
           <img style="width:200px" :src="qrcode" />
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机扫码体验</div>
+          <column :padding="'30px'">
+            <div>手机扫码体验</div>
+            <wrapper :width="'100px'" :padding="'20px 0 0'">
+              <button type="light" @click="!submiting && reset()" :class="{'disabled':submiting}">重置账号</button>
+            </wrapper>
+          </column>
         </row>
       </column>
     </row>
@@ -29,6 +34,7 @@
   </div>
 </template>
 <script>
+import { Button } from "../../components/buttons";
 import store from "../../vuex/store";
 import Toast from "../../blog/components/toast";
 import PreLoader from "../../blog/components/preloader";
@@ -41,10 +47,11 @@ export default {
       preDescription: `欢迎来到YAOHAO的个人网站，在这里您暂时叫"`,
       postDescription: `”，您可以点击头像，进入个人信息编辑界面，编辑您的头像和姓名。在这里您可以分享你的所见所闻，也可以直接跟我小主一对一聊天。我也会第一时间通知小主， 有时可能不会那么及时，希望您能耐心等待，或者休息一会，再来逛逛。(PS:在这里没人知道您的真实身份，希望您可以畅所欲言)`,
       description: "",
-      isPrintFinish: false
+      isPrintFinish: false,
+      submiting: false
     };
   },
-  components: { Wap },
+  components: { Wap, Button },
   ready() {
     this.$http.get(`api/user/qrcode?origin=${location.origin}`).then(res => {
       this.qrcode = res.body.data;
@@ -64,6 +71,11 @@ export default {
         }, i * 50);
       });
     });
+  },
+  methods: {
+    reset() {
+      location.href = "/api/user/reset";
+    }
   }
 };
 </script>
