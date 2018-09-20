@@ -10,7 +10,7 @@
           </div>
         </div>
       </wrapper>
-      <column :padding="'0 100px 0 0'">
+      <column :padding="'0 100px 0 0'" class="font">
         <div class="description" v-if="!isPrintFinish">
           {{description}}
         </div>
@@ -107,7 +107,17 @@ export default {
   text-indent: 2em;
   margin-bottom: 50px;
 }
+
+.font {
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+}
 .copyright {
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft Yahei", sans-serif;
+  -webkit-font-smoothing: antialiased;
   margin: 20px;
   text-align: center;
   font-size: 13px;
