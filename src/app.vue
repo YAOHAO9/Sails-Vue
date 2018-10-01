@@ -76,20 +76,13 @@ export default {
   },
   sockets: {
     connect: function() {
-      if (this.user) {
+      this.$http.get("api/user/whoami").then(res => {
+        this.saveUser(res.body.data);
         this.$socket.emit("whoami", {
-          userId: this.user.id,
+          userId: res.body.data.id,
           accessOrigin: location.origin
         });
-      } else {
-        this.$http.get("api/user/whoami").then(res => {
-          this.saveUser(res.body.data);
-          this.$socket.emit("whoami", {
-            userId: res.body.data.id,
-            accessOrigin: location.origin
-          });
-        });
-      }
+      });
     },
     update: function(chat) {
       let foundSession = _.some(this.sessions, (session, index) => {
