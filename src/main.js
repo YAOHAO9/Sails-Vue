@@ -38,11 +38,12 @@ import BlogIndex from './blog/Index'
 import ImageGridDetail from './blog/page/image-grid-detail'
 import PersonalCenter from './blog/page/personal-center'
 import ArticleDetail from './blog/page/article-detail'
+import Synchronize from './blog/page/synchronize'
 import VueSocketio from 'vue-socket.io'
 import vuex from './vuex/vuex'
 Vue.config.debug = true
 
-Vue.mixin({vuex})
+Vue.mixin({ vuex })
 Vue.use(Router)
 Vue.use(VueResource)
 Vue.use(Vum)
@@ -66,6 +67,10 @@ router.map({
   '/article-detail': {
     name: 'Article detail',
     component: ArticleDetail
+  },
+  '/synchronize': {
+    name: 'Synchronize',
+    component: Synchronize
   },
   '/index': {
     name: 'index',

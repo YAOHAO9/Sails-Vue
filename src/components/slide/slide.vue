@@ -13,19 +13,19 @@ export default {
       twoWay: true
     }
   },
-  ready () {
-    console.log('child', this.$el)
+  ready() {
+    console.log("child", this.$el);
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import './slide.less';
+@import "./slide.less";
 </style>
 
 <style lang="less">
 .slide {
-  height: 12rem;
+  height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;

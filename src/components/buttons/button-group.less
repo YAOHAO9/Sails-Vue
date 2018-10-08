@@ -11,7 +11,7 @@
 }
 
 .buttons-group {
-  margin: 1rem 0;
+  margin: 20px 0;
   .button {
     border-radius: 0 0 0 0;
     width: 100%;
@@ -23,27 +23,25 @@
       color: white;
       z-index: 100;
     }
-    &:active {
-    }
   }
   .button:first-child {
-    border-radius: 0.25rem 0 0 0.25rem;
+    border-radius: 5px 0 0 5px;
     .hairline-remove(left);
   }
   .button:last-child {
-    border-radius: 0 0.25rem 0.25rem 0;
+    border-radius: 0 5px 5px 0;
   }
   .button.button-round:first-child {
-    border-radius: 1.35rem 0 0 1.35rem;
+    border-radius: 27px 0 0 27px;
   }
   .button.button-round:last-child {
-    border-radius: 0 1.35rem 1.35rem 0;
+    border-radius: 0 27px 27px 0;
   }
 }
 
 .buttons-group.button-bordered {
-  border-radius: .25rem;
-  .hairline-border(@color-primary, .25rem);
+  border-radius: 5px;
+  .hairline-border(@color-primary, 5px);
 
   .button {
     position: relative;
@@ -100,10 +98,10 @@
   .hairline(bottom, #d0d0d0);
   .button {
     color: @color-text-secondary;
-    font-size: 0.8rem;
+    font-size: 16px;
     width: 100%;
-    height: 2rem;
-    line-height: 2rem;
+    height: 40px;
+    line-height: 40px;
     -webkit-box-flex:1;
     -ms-flex:1;
     border: 0;

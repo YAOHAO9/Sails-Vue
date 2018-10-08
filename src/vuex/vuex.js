@@ -21,8 +21,8 @@ export default {
     ls: function (state) {
       return state.localStoage
     },
-    unreadMsgNum: function (state) {
-      return state.unreadMsgNum
+    unreadMsgCount: function (state) {
+      return state.unreadMsgCount
     }
   },
   actions: {
@@ -54,8 +54,8 @@ export default {
     saveLs: function (store, val) {
       store.dispatch('SAVELOCALSTORAGE', val)
     },
-    updateUnreadMsgNum: function (store, val) {
-      store.dispatch('SAVEUNREADMSGNUM', val)
+    updateUnreadMsgCount: function (store, val) {
+      store.dispatch('SAVEUNREADMSGCOUNT', val)
     }
   }
 }

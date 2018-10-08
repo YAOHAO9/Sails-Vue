@@ -1,14 +1,14 @@
 <template>
   <div class="portrait">
     <img v-if="!avator" src="../../../assets/images/blog/widget_dface.png" />
-    <div v-if="avator" class="avator" :style="getImgStyle('api/file/find/'+avator)"></div>
+    <div v-if="avator" class="avator" :style="getImgStyle('api/archive/'+avator)"></div>
   </div>
 </template>
 <script>
 export default {
   props: {
     avator: {
-      type: String,
+      type: String | Number,
       default: null
     }
   },
@@ -16,7 +16,8 @@ export default {
     getImgStyle(url) {
       return {
         backgroundSize: "cover",
-        backgroundImage: `url('${url}')`
+        backgroundImage: `url('${url}')`,
+        backgroundPosition: "center"
       };
     }
   }

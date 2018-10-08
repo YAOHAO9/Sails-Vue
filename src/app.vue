@@ -1,8 +1,7 @@
 <template>
   <div>
-    <router-view transition="slide"></router-view>
-    <pre-loader :show="preLoader.show"></pre-loader>
-    <toast :show="toast.show" :text="toast.text"></toast>
+    <pc v-if="isPc()"></pc>
+    <wap v-else></wap>
   </div>
 </template>
 <script>
@@ -10,11 +9,24 @@ import store from "./vuex/store";
 import Toast from "./blog/components/toast";
 import PreLoader from "./blog/components/preloader";
 import Vue from "vue";
+import Pc from "./blog/page/pc";
+import Wap from "./blog/page/wap";
 export default {
   store,
   components: {
     Toast,
-    PreLoader
+    PreLoader,
+    Pc,
+    Wap
+  },
+  methods: {
+    isPc() {
+      if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   },
   created() {
     if (!this.ls) {
@@ -48,27 +60,29 @@ export default {
       }
       next(res => {
         if (!res.ok) {
-          this.showToast({ text: JSON.stringify(res.body) });
+          this.showToast({ text: JSON.stringify(res.body.data) });
         }
         return res;
       });
     });
   },
   ready() {
-    this.$http.get("api/chat/allUnreadMsgNum").then(res => {
-      this.updateUnreadMsgNum(res.body.unreadMsgNum);
+    this.$http.get("api/user/whoami").then(res => {
+      this.saveUser(res.body.data);
+    });
+    this.$http.get("api/chat/allUnreadMsgCount").then(res => {
+      this.updateUnreadMsgCount(res.body.data);
     });
   },
   sockets: {
     connect: function() {
-      if (this.user) {
-        this.$socket.emit("who", this.user.id);
-      } else {
-        this.$http.get("api/user/get").then(res => {
-          this.saveUser(res.body);
-          this.$socket.emit("who", res.body.id);
+      this.$http.get("api/user/whoami").then(res => {
+        this.saveUser(res.body.data);
+        this.$socket.emit("whoami", {
+          userId: res.body.data.id,
+          accessOrigin: location.origin
         });
-      }
+      });
     },
     update: function(chat) {
       let foundSession = _.some(this.sessions, (session, index) => {
@@ -77,7 +91,7 @@ export default {
           if (session.session == "0-0") return true;
           this.$broadcast("changeItem", index);
           if (chat.sender.id != this.user.id)
-            this.updateUnreadMsgNum(this.unreadMsgNum + 1);
+            this.updateUnreadMsgCount(this.unreadMsgCount + 1);
           return true;
         }
         return false;
@@ -86,7 +100,7 @@ export default {
         var session = {
           session: chat.session,
           name: chat.sender.name,
-          receiver: chat.sender.id,
+          receiverId: chat.sender.id,
           list: []
         };
         this.sessions.splice(1, 0, session);
@@ -96,25 +110,14 @@ export default {
           this.$broadcast("changeItem", 1);
         });
       }
-      this.$broadcast("scrollToButtom");
+      this.$broadcast("chatListScrollToButtom");
     },
-    initSessions: function(sessions) {
-      this.saveSessions([this.sessions[0], ...sessions]);
-    },
-    initSession: function(chats) {
-      chats = _.sortBy(chats, function(chat, index) {
-        return -index;
-      });
-      _.each(this.sessions, session => {
-        if (chats && chats.length > 0 && session.session == chats[0].session) {
-          if (session.list.length < 10) session.list = chats;
-          else session.list = chats.concat(session.list);
-          if (session.list.length <= 10) {
-            this.$broadcast("scrollToButtom");
-          }
-        }
-      });
+    synchronize: function(data) {
+      location.href = `/api/user/redirect?encrypted=${
+        data.encrypted
+      }&redirect=${location.origin}`;
     }
   }
 };
 </script>
+

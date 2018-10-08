@@ -25,27 +25,27 @@
     <div class="months {{ transition ? 'transition' : ''}}" v-swipe:start="_start" v-swipe:move="_move" v-swipe:end="_end">
       <div class="months-inner" v-bind:style="{ transform: 'translate3d(' + diff + 'px, 0, 0)' }" v-transitionend="_transitionend">
         <div class="month prev-year-month" v-if="changeyear">
-          <div v-bind:class="_dateClass(d)" v-for="d in prevYearDates" track-by="$index">
+          <div v-bind:class="_dateClass(d)" v-for="d in prevYearDates" track-by="$index" :key="d">
             <span>{{d.d}}</span>
           </div>
         </div>
         <div class="month prev-month" v-show="!changeyear">
-          <div v-bind:class="_dateClass(d)" v-for="d in prevMonthDates" track-by="$index">
+          <div v-bind:class="_dateClass(d)" v-for="d in prevMonthDates" track-by="$index" :key="d">
             <span>{{d.d}}</span>
           </div>
         </div>
         <div class="month current-month">
-          <div v-bind:class="_dateClass(d)" v-for="d in currentMonthDates" track-by="$index" @click="select(d)">
+          <div v-bind:class="_dateClass(d)" v-for="d in currentMonthDates" track-by="$index" @click="select(d)" :key="d">
             <span>{{d.d}}</span>
           </div>
         </div>
         <div class="month next-month" v-show="!changeyear">
-          <div v-bind:class="_dateClass(d)" v-for="d in nextMonthDates" track-by="$index">
+          <div v-bind:class="_dateClass(d)" v-for="d in nextMonthDates" track-by="$index" :key="d">
             <span>{{d.d}}</span>
           </div>
         </div>
         <div class="month next-year-month" v-if="changeyear">
-          <div v-bind:class="_dateClass(d)" v-for="d in nextYearDates" track-by="$index">
+          <div v-bind:class="_dateClass(d)" v-for="d in nextYearDates" track-by="$index" :key="d">
             <span>{{d.d}}</span>
           </div>
         </div>
@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import Store from './store'
-import moment from 'moment'
+import Store from "./store";
+import moment from "moment";
 
-const FORMAT = 'YYYY-MM-DD'
+const FORMAT = "YYYY-MM-DD";
 
 export default {
   props: {
@@ -69,7 +69,7 @@ export default {
     },
     format: {
       type: String,
-      default: 'YYYY-MM-DD'
+      default: "YYYY-MM-DD"
     },
     max: {
       type: String,
@@ -92,112 +92,111 @@ export default {
       default: undefined
     }
   },
-  data () {
-    const store = new Store()
-    this.store = store
-    const data = this.store.data
-    data.transition = false
-    data.diff = 0
-    data.width = 0
-    data.changeyear = false // tag to show: change month or change year
-    return data
+  data() {
+    const store = new Store();
+    this.store = store;
+    const data = this.store.data;
+    data.transition = false;
+    data.diff = 0;
+    data.width = 0;
+    data.changeyear = false; // tag to show: change month or change year
+    return data;
   },
   methods: {
-    nextMonth () {
-      if (this.reachMax) return false
-      this.transition = true
-      this.diff = -this.width
+    nextMonth() {
+      if (this.reachMax) return false;
+      this.transition = true;
+      this.diff = -this.width;
     },
-    prevMonth () {
-      if (this.reachMin) return false
-      this.transition = true
-      this.diff = this.width
+    prevMonth() {
+      if (this.reachMin) return false;
+      this.transition = true;
+      this.diff = this.width;
     },
-    nextYear () {
-      if (this.reachMaxYear) return false
-      this.store.genYearDates()
-      this.transition = true
-      this.changeyear = true // add a tag
-      this.diff = -this.width
+    nextYear() {
+      if (this.reachMaxYear) return false;
+      this.store.genYearDates();
+      this.transition = true;
+      this.changeyear = true; // add a tag
+      this.diff = -this.width;
     },
-    prevYear () {
-      if (this.reachMinYear) return false
-      this.store.genYearDates()
-      this.transition = true
-      this.changeyear = true // add a tag
-      this.diff = this.width
+    prevYear() {
+      if (this.reachMinYear) return false;
+      this.store.genYearDates();
+      this.transition = true;
+      this.changeyear = true; // add a tag
+      this.diff = this.width;
     },
-    select (d) {
-      console.log('select', d)
+    select(d) {
+      console.log("select", d);
       if (d.nextMonth) {
-        this.nextMonth()
-        this.toSelectDate = d.date
+        this.nextMonth();
+        this.toSelectDate = d.date;
       } else if (d.prevMonth) {
-        this.prevMonth()
-        this.toSelectDate = d.date
+        this.prevMonth();
+        this.toSelectDate = d.date;
       } else {
-        this.store.select(d.date)
+        this.store.select(d.date);
       }
     },
-    _start (point) {
-    },
-    _move (point, diff, time) {
-      const x = diff.x
+    _start(point) {},
+    _move(point, diff, time) {
+      const x = diff.x;
       if (this.reachMax && x < 0) {
-        this.diff = -Math.pow(-x, 0.7)
+        this.diff = -Math.pow(-x, 0.7);
       } else if (this.reachMin && x > 0) {
-        this.diff = Math.pow(x, 0.7)
+        this.diff = Math.pow(x, 0.7);
       } else {
-        this.diff = x
+        this.diff = x;
       }
     },
-    _end (point, diff, time) {
-      if (!diff) return false
-      const x = diff.x
+    _end(point, diff, time) {
+      if (!diff) return false;
+      const x = diff.x;
       if ((this.reachMax && x < 0) || (this.reachMin && x > 0)) {
-        this.transition = true
-        this.diff = 0
-        return false
+        this.transition = true;
+        this.diff = 0;
+        return false;
       }
       if (x > 100 || (x > 30 && time < 200)) {
-        this.prevMonth()
+        this.prevMonth();
       } else if (x < -100 || (x < -30 && time < 200)) {
-        this.nextMonth()
+        this.nextMonth();
       } else {
-        this.transition = true
-        this.diff = 0
+        this.transition = true;
+        this.diff = 0;
       }
     },
-    _transitionend () {
-      console.log('transitionend')
-      this.transition = false
-      const store = this.store
+    _transitionend() {
+      console.log("transitionend");
+      this.transition = false;
+      const store = this.store;
       if (this.diff > 0) {
-        this.changeyear ? store.prevYear() : store.prevMonth()
+        this.changeyear ? store.prevYear() : store.prevMonth();
       } else if (this.diff < 0) {
-        this.changeyear ? store.nextYear() : store.nextMonth()
+        this.changeyear ? store.nextYear() : store.nextMonth();
       }
-      if (this.toSelectDate) this.store.select(this.toSelectDate)
-      this.toSelectDate = undefined
-      this.diff = 0
-      this.changeyear = false
+      if (this.toSelectDate) this.store.select(this.toSelectDate);
+      this.toSelectDate = undefined;
+      this.diff = 0;
+      this.changeyear = false;
     },
-    _sameDate (a, b) {
-      return moment(a).format(FORMAT) === moment(b).format(FORMAT)
+    _sameDate(a, b) {
+      return moment(a).format(FORMAT) === moment(b).format(FORMAT);
     },
-    _dateClass (d) {
+    _dateClass(d) {
       return {
         date: true,
         selected: this._sameDate(d.date, this.selectedDate),
-        'today': this._sameDate(d.date, this.today),
-        'disabled': d.disabled,
-        'current-date': d.currentMonth,
-        'prev-date': d.prevMonth,
-        'next-date': d.nextMonth
-      }
+        today: this._sameDate(d.date, this.today),
+        disabled: d.disabled,
+        "current-date": d.currentMonth,
+        "prev-date": d.prevMonth,
+        "next-date": d.nextMonth
+      };
     }
   },
-  ready () {
+  ready() {
     this.store.config({
       min: this.min,
       max: this.max,
@@ -205,22 +204,22 @@ export default {
       disableDates: this.disableDates,
       disableWeekend: this.disableWeekend,
       format: this.format
-    })
+    });
     if (this.date) {
-      this.store.select(this.date)
+      this.store.select(this.date);
     }
 
-    this.date = moment(this.store.data.selectedDate).format(this.format)
-    this.width = this.$el.getBoundingClientRect().width
+    this.date = moment(this.store.data.selectedDate).format(this.format);
+    this.width = this.$el.getBoundingClientRect().width;
   },
   watch: {
-    selectedDate (v, ov) {
-      this.date = moment(v).format(this.format)
+    selectedDate(v, ov) {
+      this.date = moment(v).format(this.format);
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import './calendar.less';
+@import "./calendar.less";
 </style>

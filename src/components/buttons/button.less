@@ -9,7 +9,7 @@
   text-decoration: none;
   text-align: center;
   display: block;
-  border-radius: 0.25rem;
+  border-radius: 5px;
   line-height: @btn-height;
   box-sizing: border-box;
   appearance: none;
@@ -18,7 +18,7 @@
   white-space: nowrap;
   position: relative;
   text-overflow:ellipsis;
-  font-size: 0.8rem;
+  font-size: 16px;
   cursor: pointer;
   input[type="submit"]&, input[type="button"]&{
     width: 100%;
@@ -30,11 +30,11 @@
   &.button-round,
   .button-round & {
     &, &:after {
-      border-radius: (@btn-height - 0.1rem);
+      border-radius: (@btn-height - 2px);
     }
 
     &.button-large:after {
-      border-radius: (@btn-large-height - 0.1rem);
+      border-radius: (@btn-large-height - 2px);
     }
   }
   &.active {
@@ -44,23 +44,23 @@
   }
   &.button-large,
   .button-large & {
-    font-size: 0.9rem;
+    font-size: 18px;
     height: @btn-large-height;
     line-height: @btn-large-height;
   }
   &.button-small,
   .button-small & {
-    font-size: 0.7rem;
+    font-size: 14px;
     display: inline-block;
     height: @btn-small-height;
     line-height: @btn-small-height;
   }
   i.icon {
     &:first-child {
-      margin-right: 0.5rem;
+      margin-right: 10px;
     }
     &:last-child {
-      margin-left: 0.5rem;
+      margin-left: 10px;
     }
     &:first-child:last-child {
       margin-left: 0;
@@ -78,7 +78,7 @@
 
 .button-light {
   .button-variant(#f7f7f7, #dedede);
-  .hairline-border(rgba(0,0,0,.2), .25rem);
+  .hairline-border(rgba(0,0,0,.2), 5px);
   color: @color-text-secondary;
 }
 .button-dark {
@@ -129,7 +129,7 @@
 .button.button-bordered,
 .button-bordered .button {
   background-color: transparent;
-  .hairline-border(@color-primary, .25rem);
+  .hairline-border(@color-primary, 5px);
 
   .bordered-variant(@color-primary, @color-primary-active);
 

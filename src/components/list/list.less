@@ -4,8 +4,8 @@
 
 @border-color: @color-split;
 .list {
-  margin: 1rem 0;
-  font-size: 0.85rem;
+  margin: 20px 0;
+  font-size: 17px;
 
   ul {
     .hairline(top, @border-color);
@@ -17,14 +17,14 @@
   }
 
   .list-title, .list-append {
-    font-size: .8rem;
+    font-size: 16px;
     color: @color-text-gray;
-    padding: .2rem .75rem;
+    padding: 4px 15px;
   }
 
   .list-append {
-    padding: .3rem .75rem;
-    font-size: .7rem;
+    padding: 6px 15px;
+    font-size: 15px;
   }
 
   li + li {
@@ -36,7 +36,7 @@
   .item-inner {
     width: 100%;
     display: flex;
-    padding: 0 0 0 .75rem;
+    padding: 0 0 0 15px;
     position: relative;
   }
 
@@ -44,32 +44,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: .25rem 0;
+    padding: 5px 0;
   }
 
   .item-content {
     width: 100%;
     position: relative;
-    padding: .4rem .75rem .4rem 0;
+    padding: 8px .15px 8px 0;
   }
 
   .item-link .item-content {
-    padding-right: 1.4rem;
+    padding-right: 28px;
   }
 
   .item-link .link-arrow {
-    font-size: .7rem;
+    font-size: 14px;
     position: absolute;
-    right: .3rem;
+    right: 6px;
     top: 50%;
-    height: 1rem;
-    width: .8rem;
+    height: 20px;
+    width: 16px;
     color: #c7c7c7;
-    margin-top: -.5rem;
+    margin-top: -10px;
   }
 
   .item-media + .item-content {
-    margin-left: .75rem;
+    margin-left: 15px;
   }
 
   .item-title-row {
@@ -83,18 +83,18 @@
   }
 
   .item-after {
-    margin-left: .5rem;
+    margin-left: 10px;
     color: @color-text-gray;
     flex-shrink: 1;
   }
 
   .item-subtitle {
-    font-size: .75rem;
+    font-size: 15px;
   }
 
   .item-text {
     color: @color-text-secondary;
-    font-size: .75rem;
+    font-size: 15px;
   }
 
   .list-group-title {
@@ -102,8 +102,8 @@
     background: #f7f7f7;
     color: #000;
     font-weight: 500;
-    line-height: 1.1rem;
-    height: 1.1rem;
+    line-height: 22px;
+    height: 22px;
 
     + li .item-content {
       .hairline-remove(top);
@@ -111,7 +111,7 @@
   }
 
   .item-after .badge {
-    vertical-align: .1rem;
+    vertical-align: 2px;
   }
 }
 
@@ -119,13 +119,13 @@
 label.label-checkbox {
   cursor: pointer;
   .item-content {
-    padding-right: 2rem;
+    padding-right: 40px;
   }
   i.icon-form-checkbox {
     width: 22px;
     height: 22px;
     position: absolute;
-    right: .5rem;
+    right: 10px;
     top: 50%;
     transform: translate3d(0, -50%, 0);
     border-radius: 22px;
@@ -164,7 +164,7 @@ label.label-radio {
   input[type="checkbox"], input[type="radio"] {
     display: none;
     ~ .item-content {
-      padding-right: 2rem;
+      padding-right: 40px;
     }
     &:checked ~ .icon-form-radio{
       content: " ";
@@ -172,7 +172,7 @@ label.label-radio {
       .encoded-svg-background("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 10'><polygon fill='@{color-primary}' points='11.6,0 4.4,7.2 1.4,4.2 0,5.6 4.4,10 4.4,10 4.4,10 13,1.4 '/></svg>");
       background-position: center;
       background-size: 15px 11px;
-      width: 2rem;
+      width: 40px;
       height: 100%;
       position: absolute;
       top: 0;

@@ -15,146 +15,153 @@
         </div>
       </hev>
     </div>
-    <div class="submit" @click="!submiting && submit()" :class="{'disabled':submiting}">
-      确认
-    </div>
+    <wrapper :padding="'30px'">
+      <button type="light" @click="!submiting && submit()" :class="{'disabled':submiting}">确认</button>
+    </wrapper>
   </div>
 </template>
 <script>
+import ImageGrid from "../../components/image-grid";
+import { Button } from "../../../components/buttons";
 
-import ImageGrid from '../../components/image-grid'
-import Lrz from 'lrz'
+import Lrz from "lrz";
 
 export default {
   data() {
     return {
-      rows: (function () {
-        var rows = []
+      rows: (function() {
+        var rows = [];
         var nameIndex = 0;
         for (var i = 0; i < 3; i++) {
-          var row = []
+          var row = [];
           for (var j = 0; j < 3; j++) {
-            (function (name) {
-              row.push({ display: 'none', name: name })
-            })("image" + nameIndex++)
+            (function(name) {
+              row.push({ display: "none", name: name });
+            })("image" + nameIndex++);
           }
-          rows.push(row)
+          rows.push(row);
         }
-        rows[0][0].display = 'block'
-        return rows
+        rows[0][0].display = "block";
+        return rows;
       })(),
       content: "",
       submiting: false,
       loadImging: false
-    }
+    };
   },
   props: {
     submitCb: {
       type: Function
     }
   },
-  ready: function () {
+  ready: function() {
     var ctx = this;
     for (var i = 0; i < 3; i++) {
-      var row = this.rows[i]
+      var row = this.rows[i];
       for (var j = 0; j < 3; j++) {
-        (function (column) {
-          $('input[name=' + column.name + ']')[0].addEventListener('change', function () {
-            ctx.loadImging = true
-            lrz(this.files[0], { width: 1000 })
-              .then(function (rst) {
-                // 处理成功会执行
-                // document.getElementById('HeadIcon').src= rst.base64;
-                // formData.append('ImgUrlImage',rst.file);
-                column.compressPicture = rst
-                var img = $('img[name=' + column.name + ']')[0]
-                img.src = column.compressPicture.base64;
-                ctx.refresh()
-              })
-              .catch((err) => {
-                // 处理失败会执行
-                this.showToast("处理失败");
-              })
-              .always(function () {
-                // 不管是成功失败，都会执行
-                ctx.loadImging = false
-              });
-          });
-        })(row[j])
+        (function(column) {
+          $("input[name=" + column.name + "]")[0].addEventListener(
+            "change",
+            function() {
+              ctx.loadImging = true;
+              lrz(this.files[0], { width: 1000 })
+                .then(function(rst) {
+                  // 处理成功会执行
+                  // document.getElementById('HeadIcon').src= rst.base64;
+                  // formData.append('ImgUrlImage',rst.file);
+                  column.compressPicture = rst;
+                  var img = $("img[name=" + column.name + "]")[0];
+                  img.src = column.compressPicture.base64;
+                  ctx.refresh();
+                })
+                .catch(err => {
+                  // 处理失败会执行
+                  this.showToast("处理失败");
+                })
+                .always(function() {
+                  // 不管是成功失败，都会执行
+                  ctx.loadImging = false;
+                });
+            }
+          );
+        })(row[j]);
       }
     }
   },
   components: {
     ImageGrid,
+    Button,
     Lrz
   },
   methods: {
-    isLoadImging: function () {
+    isLoadImging: function() {
       if (this.loadImging) {
-        this.showToast('请稍等，正在加载上一张图片...')
-        return false
+        this.showToast("请稍等，正在加载上一张图片...");
+        return false;
       }
-      return true
+      return true;
     },
-    submit: function () {
-      this.submiting = true
-      var formData = new FormData()
-      var compressPictures = []
-      _.each(this.rows, function (row) {
-        _.each(row, function (column) {
+    submit: function() {
+      this.submiting = true;
+      var formData = new FormData();
+      var compressPictures = [];
+      _.each(this.rows, function(row) {
+        _.each(row, function(column) {
           if (column.compressPicture) {
-            compressPictures.push(column.compressPicture)
-            column.compressPicture = false
-            column.display = 'node'
+            compressPictures.push(column.compressPicture);
+            column.compressPicture = false;
+            column.display = "node";
           }
-        })
-      })
-      if ((!this.content || this.content == '') && compressPictures.length == 0) {
-        this.showToast('留下点什么吧')
-        this.submiting = false
-        return
+        });
+      });
+      if (
+        (!this.content || this.content == "") &&
+        compressPictures.length == 0
+      ) {
+        this.showToast("留下点什么吧");
+        this.submiting = false;
+        return;
       }
-      formData.append("content", this.content)
-      _.each(compressPictures, function (compressPicture) {
-        formData.append("images", compressPicture.file)
-      })
-      this.$http.post('api/moment/create', formData)
-        .then((response) => {
-          this.submitCb && this.submitCb()
-          this.submiting = false
-        })
+      formData.append("content", this.content);
+      _.each(compressPictures, function(compressPicture) {
+        formData.append("images", compressPicture.file);
+      });
+      this.$http.post("api/moment/create", formData).then(response => {
+        this.submitCb && this.submitCb();
+        this.submiting = false;
+      });
     },
-    refresh: function () {
-      var compressPictures = []
-      _.each(this.rows, function (row) {
-        _.each(row, function (column) {
+    refresh: function() {
+      var compressPictures = [];
+      _.each(this.rows, function(row) {
+        _.each(row, function(column) {
           if (column.compressPicture) {
-            compressPictures.push(column.compressPicture)
-            column.compressPicture = false
-            column.display = 'node'
+            compressPictures.push(column.compressPicture);
+            column.compressPicture = false;
+            column.display = "node";
           }
-        })
-      })
+        });
+      });
       var index = 0;
-      _.each(this.rows, function (row) {
-        _.each(row, function (column) {
+      _.each(this.rows, function(row) {
+        _.each(row, function(column) {
           if (index < compressPictures.length) {
-            column.compressPicture = compressPictures[index++]
-            var img = $('img[name=' + column.name + ']')[0]
+            column.compressPicture = compressPictures[index++];
+            var img = $("img[name=" + column.name + "]")[0];
             img.src = column.compressPicture.base64;
-            column.display = 'block'
+            column.display = "block";
           } else if (index++ == compressPictures.length) {
-            column.display = 'block'
+            column.display = "block";
           }
-        })
-      })
+        });
+      });
     }
   }
-}
+};
 </script>
 <style scoped>
 body {
-  overflow: auto
+  overflow: auto;
 }
 
 textarea {
@@ -185,16 +192,5 @@ textarea {
   bottom: 0;
   left: 0;
   right: 0;
-}
-
-.submit {
-  line-height: 40px;
-  text-align: center;
-  width: 40%;
-  margin: 10px auto;
-  height: 40px;
-  border-radius: 7px;
-  color: #3690FF;
-  border: 2px solid #3690FF;
 }
 </style>
