@@ -18,14 +18,14 @@
           {{preDescription + user.name + postDescription}}
         </div>
         <row>
-          <img style="width:200px" :src="qrcode" />
+          <img style="width:160px" :src="qrcode" />
           <column :padding="'30px'">
             <div>手机扫码体验</div>
             <wrapper :width="'100px'" :padding="'20px 0 0'">
               <button type="light" @click="!submiting && reset()" :class="{'disabled':submiting}">重置账号</button>
             </wrapper>
           </column>
-          <img style="width:200px" :src="apkDownloadQrcode" />
+          <img style="width:160px" :src="apkDownloadQrcode" />
           <column :padding="'30px'">
             <div>ReactNative</div>
             <wrapper :padding="'20px 0 0'">
