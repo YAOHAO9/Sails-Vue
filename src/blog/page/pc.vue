@@ -25,6 +25,13 @@
               <button type="light" @click="!submiting && reset()" :class="{'disabled':submiting}">重置账号</button>
             </wrapper>
           </column>
+          <img style="width:200px" :src="apkDownloadQrcode" />
+          <column :padding="'30px'">
+            <div>ReactNative</div>
+            <wrapper :padding="'20px 0 0'">
+              <div>Android版本下载</div>
+            </wrapper>
+          </column>
         </row>
       </column>
     </row>
@@ -44,6 +51,7 @@ export default {
   data: () => {
     return {
       qrcode: "",
+      apkDownloadQrcode: "",
       preDescription: `欢迎来到YAOHAO的个人网站，在这里您暂时叫"`,
       postDescription: `”，您可以点击头像，进入个人信息编辑界面，编辑您的头像和姓名。在这里您可以分享你的所见所闻，也可以直接跟我小主一对一聊天。我也会第一时间通知小主， 有时可能不会那么及时，希望您能耐心等待，或者休息一会，再来逛逛。`,
       description: "",
@@ -56,6 +64,15 @@ export default {
     this.$http.get(`api/user/qrcode?origin=${location.origin}`).then(res => {
       this.qrcode = res.body.data;
     });
+    this.$http
+      .get(
+        `api/archive/customQrcode?origin=${
+          location.origin
+        }&url=${"/mobileblog.apk"}`
+      )
+      .then(res => {
+        this.apkDownloadQrcode = res.body.data;
+      });
     this.$http.get("api/user/whoami").then(res => {
       this.saveUser(res.body.data);
       const user = res.body.data;
