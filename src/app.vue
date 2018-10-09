@@ -113,7 +113,7 @@ export default {
       this.$broadcast("chatListScrollToButtom");
     },
     synchronize: function(data) {
-      location.href = `/api/user/redirect?encrypted=${
+      location.href = `/api/web/changeLoginUser?encrypted=${
         data.encrypted
       }&redirect=${location.origin}`;
     }

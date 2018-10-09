@@ -30,7 +30,7 @@ export default {
   },
   ready() {
     this.$http
-      .get(`api/user/encryptedUser?encrypted=${this.$route.query.encrypted}`)
+      .get(`/api/user/encryptedUser?encrypted=${this.$route.query.encrypted}`)
       .then(res => {
         this.qrcodeUser = res.body.data;
       });
@@ -42,14 +42,14 @@ export default {
     phoneToPc() {
       this.submiting = true;
       this.$http
-        .get(`api/user/synchronizeToPc?socketId=${this.$route.query.socketId}`)
+        .get(`/api/user/synchronizeToPc?socketId=${this.$route.query.socketId}`)
         .then(() => {
           this.submiting = false;
           this.goHome();
         });
     },
     pcToPhone() {
-      location.href = `/api/user/redirect?encrypted=${
+      location.href = `/api/web/changeLoginUser?encrypted=${
         this.$route.query.encrypted
       }&redirect=${location.origin}`;
     }

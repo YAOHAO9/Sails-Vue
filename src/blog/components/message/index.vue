@@ -14,7 +14,7 @@
             <div class="content">
               <div class="name">{{item.sender.name}}</div>
               <div class="content-wrapper img" v-if="item.type == 'image'">
-                <img @load="loadImage($index)" :src="'api/archive/'+item.img" />
+                <img @load="loadImage($index)" :src="'/api/archive/'+item.img" />
               </div>
               <div class="content-wrapper" v-else>
                 {{ item.content }}

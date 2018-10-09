@@ -237,7 +237,7 @@ export default {
       if (currentSession.list.length >= 10) offset = currentSession.list.length;
       this.$http
         .get(
-          `api/chat/find?offset=${offset}&count=${10}&sort=-createdAt&session=${
+          `/api/chat/find?offset=${offset}&count=${10}&sort=-createdAt&session=${
             currentSession.session
           }`
         )

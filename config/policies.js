@@ -6,7 +6,7 @@
  * You can apply one or more policies to a given controller, or protect
  * its actions individually.
  *
- * Any policy file (e.g. `api/policies/authenticated.js`) can be accessed
+ * Any policy file (e.g. `/api/policies/authenticated.js`) can be accessed
  * below by its filename, minus the extension, (e.g. "authenticated")
  *
  * For more information on how policies work, see:

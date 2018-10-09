@@ -7,13 +7,13 @@
     <content>
       <div class="avator">
         <img v-if="(user || getUser()) && !user.avator" name="avator" src="../../../assets/images/blog/widget_dface.png" />
-        <img v-if="user && user.avator" name="avator" :src="'api/archive/'+user.avator" />
+        <img v-if="user && user.avator" name="avator" :src="'/api/archive/'+user.avator" />
         <input class="avatorInput" name="avator" type="file" multiple="multiple" accept="image/*" />
       </div>
       <div class="hiv">
         <span>name:</span> <input v-model="form.name" :value="user && user.name" placeholder="请输入你的名字" />
       </div>
-      <hr/>
+      <hr />
       <!--<div class="hiv">
       <span>email:</span> <input v-model="user.email" placeholder="请输入你的邮箱地址" />
     </div>

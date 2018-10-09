@@ -1,7 +1,7 @@
 <template>
   <div class="portrait">
     <img v-if="!avator" src="../../../assets/images/blog/widget_dface.png" />
-    <div v-if="avator" class="avator" :style="getImgStyle('api/archive/'+avator)"></div>
+    <div v-if="avator" class="avator" :style="getImgStyle('/api/archive/'+avator)"></div>
   </div>
 </template>
 <script>

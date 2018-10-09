@@ -47,7 +47,7 @@ export default {
     }
   },
   ready: function() {
-    this.$http.get(`api/discussion/${this.type}/${this.item.id}`).then(res => {
+    this.$http.get(`/api/discussion/${this.type}/${this.item.id}`).then(res => {
       this.discussions = res.body.data;
     });
   },
@@ -65,7 +65,7 @@ export default {
         return;
       }
       this.$http
-        .post(`api/discussion/${this.type}/${this.item.id}`, {
+        .post(`/api/discussion/${this.type}/${this.item.id}`, {
           content: this.content
         })
         .then(res => {

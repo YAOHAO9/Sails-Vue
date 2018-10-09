@@ -61,12 +61,12 @@ export default {
   },
   components: { Wap, Button },
   ready() {
-    this.$http.get(`api/user/qrcode?origin=${location.origin}`).then(res => {
+    this.$http.get(`/api/user/qrcode?origin=${location.origin}`).then(res => {
       this.qrcode = res.body.data;
     });
     this.$http
       .get(
-        `api/archive/customQrcode?origin=${
+        `/api/archive/customQrcode?origin=${
           location.origin
         }&url=${"/mobileblog.apk"}`
       )
