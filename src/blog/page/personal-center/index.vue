@@ -76,7 +76,7 @@ export default {
     },
     getUser: function() {
       var ctx = this;
-      ctx.$http.get("api/user/whoami").then(res => {
+      ctx.$http.get("/api/user/whoami").then(res => {
         ctx.saveUser(res.body.data);
       });
     },
@@ -89,7 +89,7 @@ export default {
       var formData = new FormData();
       formData.append("name", ctx.form.name);
       if (ctx.form.file) formData.append("avator", ctx.form.file);
-      this.$http.post("api/user/update/" + ctx.user.id, formData).then(res => {
+      this.$http.post("/api/user/update/" + ctx.user.id, formData).then(res => {
         ctx.saveUser(res.body.data);
         this.showToast("保存成功！");
         history.go(-1);

@@ -25,7 +25,7 @@ export default {
   methods: {
     getImageUrls: function() {
       this.urls = _.map(this.item.images, function(image) {
-        return "api/archive/" + image;
+        return "/api/archive/" + image;
       });
       return this.urls;
     }

@@ -99,7 +99,7 @@ export default {
         return;
       }
       this.$http
-        .post("api/discussion/article/" + this.currentItem.id, {
+        .post("/api/discussion/article/" + this.currentItem.id, {
           content: this.content
         })
         .then(res => {
@@ -122,7 +122,7 @@ export default {
       };
     },
     onRefresh(done) {
-      this.$http.get("api/article?sort=-createdAt&count=10").then(
+      this.$http.get("/api/article?sort=-createdAt&count=10").then(
         function(res) {
           this.list = res.body.data;
           done && done();
@@ -135,7 +135,7 @@ export default {
     onInfinite(done) {
       var ctx = this;
       this.$http
-        .get("api/article?sort=-createdAt&count=10&offset=" + ctx.list.length)
+        .get("/api/article?sort=-createdAt&count=10&offset=" + ctx.list.length)
         .then(
           function(res) {
             ctx.list = ctx.list.concat(res.body.data);
@@ -178,7 +178,7 @@ export default {
     approve(item) {
       var ctx = this;
       ctx.$http
-        .put("api/article/approve/" + item.id)
+        .put("/api/article/approve/" + item.id)
         .then(function(updatedItem) {
           item.approves = updatedItem.body.data.approves;
           item.disapproves = updatedItem.body.data.disapproves;
@@ -187,7 +187,7 @@ export default {
     disapprove(item) {
       var ctx = this;
       ctx.$http
-        .put("api/article/disapprove/" + item.id)
+        .put("/api/article/disapprove/" + item.id)
         .then(function(updatedItem) {
           item.approves = updatedItem.body.data.approves;
           item.disapproves = updatedItem.body.data.disapproves;

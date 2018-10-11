@@ -39,12 +39,13 @@ export default {
       this.saveLs(ls);
     }
     Vue.http.interceptors.push((request, next) => {
-      if (!~request.url.indexOf("api/accessrecord")) {
-        let formData = new FormData();
-        formData.append("url", request.url);
-        formData.append("method", request.method);
-        if (request.params)
-          formData.append("params", JSON.stringify(request.params));
+      if (!~request.url.indexOf("/api/accessrecord")) {
+        let formData = {};
+        formData.url = request.url;
+        formData.method = request.method;
+        if (request.params) {
+          formData.params = request.params;
+        }
         if (request.body) {
           let body = {};
           if (request.body.forEach) {
@@ -54,9 +55,9 @@ export default {
           } else {
             body = request.body;
           }
-          formData.append("body", JSON.stringify(body));
+          formData.body = JSON.stringify(body);
         }
-        this.$http.post("api/accessrecord/create", formData).then(res => {});
+        this.$http.post("/api/accessrecord/create", formData).then(res => {});
       }
       next(res => {
         if (!res.ok) {
@@ -67,16 +68,16 @@ export default {
     });
   },
   ready() {
-    this.$http.get("api/user/whoami").then(res => {
+    this.$http.get("/api/user/whoami").then(res => {
       this.saveUser(res.body.data);
     });
-    this.$http.get("api/chat/allUnreadMsgCount").then(res => {
+    this.$http.get("/api/chat/allUnreadMsgCount").then(res => {
       this.updateUnreadMsgCount(res.body.data);
     });
   },
   sockets: {
     connect: function() {
-      this.$http.get("api/user/whoami").then(res => {
+      this.$http.get("/api/user/whoami").then(res => {
         this.saveUser(res.body.data);
         this.$socket.emit("whoami", {
           userId: res.body.data.id,

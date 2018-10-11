@@ -86,7 +86,7 @@ export default {
           formData.append("receiverId", ctx.defaultSession.receiverId);
           formData.append("image", rst.file);
 
-          ctx.$http.post("api/chat/sendImage", formData).then(res => {
+          ctx.$http.post("/api/chat/sendImage", formData).then(res => {
             if (res.body.data.session != "0-0") {
               ctx.defaultSession.list.push(res.body.data);
             }

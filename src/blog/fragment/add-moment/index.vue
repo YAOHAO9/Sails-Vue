@@ -126,7 +126,7 @@ export default {
       _.each(compressPictures, function(compressPicture) {
         formData.append("images", compressPicture.file);
       });
-      this.$http.post("api/moment/create", formData).then(response => {
+      this.$http.post("/api/moment/create", formData).then(response => {
         this.submitCb && this.submitCb();
         this.submiting = false;
       });

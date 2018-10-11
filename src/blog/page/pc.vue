@@ -73,7 +73,7 @@ export default {
       .then(res => {
         this.apkDownloadQrcode = res.body.data;
       });
-    this.$http.get("api/user/whoami").then(res => {
+    this.$http.get("/api/user/whoami").then(res => {
       this.saveUser(res.body.data);
       const user = res.body.data;
       const description = `${this.preDescription}${user.name}${

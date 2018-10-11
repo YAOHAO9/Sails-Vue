@@ -55,7 +55,7 @@ export default {
     dblClick(id) {
       let delItemIndex = 0;
       if (this.user.isAdmin)
-        this.$http.delete("api/chat/" + id).then(res => {
+        this.$http.delete("/api/chat/" + id).then(res => {
           let found = _.some(this.list, item => {
             delItemIndex++;
             return item.id == id;

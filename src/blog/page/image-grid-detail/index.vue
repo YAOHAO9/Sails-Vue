@@ -25,7 +25,7 @@ export default {
         return;
       }
       this.urls = _.map(item.images, function(image) {
-        return "api/archive/" + image;
+        return "/api/archive/" + image;
       });
       return this.urls;
     }

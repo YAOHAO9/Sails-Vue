@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     onRefresh(done) {
-      this.$http.get("api/moment?sort=-createdAt&count=10").then(
+      this.$http.get("/api/moment?sort=-createdAt&count=10").then(
         function(res) {
           this.list = res.body.data;
           done && done();
@@ -143,7 +143,7 @@ export default {
     onInfinite(done) {
       var ctx = this;
       this.$http
-        .get("api/moment?sort=-createdAt&count=10&offset=" + ctx.list.length)
+        .get("/api/moment?sort=-createdAt&count=10&offset=" + ctx.list.length)
         .then(
           function(res) {
             ctx.list = ctx.list.concat(res.body.data);
@@ -189,7 +189,7 @@ export default {
     approve(item) {
       var ctx = this;
       ctx.$http
-        .put("api/moment/approve/" + item.id)
+        .put("/api/moment/approve/" + item.id)
         .then(function(updatedItem) {
           item.approves = updatedItem.body.data.approves;
           item.disapproves = updatedItem.body.data.disapproves;
@@ -198,7 +198,7 @@ export default {
     disapprove(item) {
       var ctx = this;
       ctx.$http
-        .put("api/moment/disapprove/" + item.id)
+        .put("/api/moment/disapprove/" + item.id)
         .then(function(updatedItem) {
           item.approves = updatedItem.body.data.approves;
           item.disapproves = updatedItem.body.data.disapproves;
@@ -218,7 +218,7 @@ export default {
     del() {
       this.showActions = false;
       this.$http
-        .delete("api/moment/delete/" + this.currentItem.id)
+        .delete("/api/moment/delete/" + this.currentItem.id)
         .then(res => {
           let delMoment = res.body.data;
           let delMomentIndex = 0;
