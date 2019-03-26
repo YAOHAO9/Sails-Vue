@@ -61,9 +61,6 @@ export default {
   },
   components: { Wap, Button },
   ready() {
-    this.$http.get(`/api/user/qrcode?origin=${location.origin}`).then(res => {
-      this.qrcode = res.body.data;
-    });
     this.$http
       .get(
         `/api/archive/customQrcode?origin=${
@@ -75,6 +72,9 @@ export default {
       });
     this.$http.get("/api/user/whoami").then(res => {
       this.saveUser(res.body.data);
+      this.$http.get(`/api/user/qrcode?origin=${location.origin}`).then(res => {
+        this.qrcode = res.body.data;
+      });
       const user = res.body.data;
       const description = `${this.preDescription}${user.name}${
         this.postDescription
