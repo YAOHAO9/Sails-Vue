@@ -234,13 +234,12 @@ export default {
     del() {
       this.showActions = false;
       this.$http
-        .delete("/api/moment/delete/" + this.currentItem.id)
+        .delete("/api/moment/" + this.currentItem.id)
         .then(res => {
-          let delMoment = res.body.data;
           let delMomentIndex = 0;
           let found = _.some(this.list, moment => {
             delMomentIndex++;
-            return moment.id == delMoment.id;
+            return moment.id == this.currentItem.id;
           });
           if (found) this.list.splice(delMomentIndex - 1, 1);
         });
