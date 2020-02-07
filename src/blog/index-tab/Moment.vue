@@ -188,20 +188,36 @@ export default {
     },
     approve(item) {
       var ctx = this;
+      var approveOperated  =this.operated(item.approves) !== ""
+      var disapproveOperated  =this.operated(item.disapproves) !== ""
+      var action = approveOperated ? 0:1
+
       ctx.$http
-        .put("/api/moment/approve/" + item.id)
+        .put("/api/moment/approve/" + item.id, {action})
         .then(function(updatedItem) {
-          item.approves = updatedItem.body.data.approves;
-          item.disapproves = updatedItem.body.data.disapproves;
+          if(action === 0){
+            item.approves = item.approves.filter(userId=>userId != this.user.id)
+          }else{
+            item.approves = [...item.approves,this.user.id]
+          }
+          item.disapproves = item.disapproves.filter(userId=>userId != this.user.id)
         });
     },
     disapprove(item) {
       var ctx = this;
+      var approveOperated  =this.operated(item.approves) !== ""
+      var disapproveOperated  =this.operated(item.disapproves) !== ""
+      var action = disapproveOperated ? 0:2
+
       ctx.$http
-        .put("/api/moment/disapprove/" + item.id)
+        .put("/api/moment/approve/" + item.id, {action})
         .then(function(updatedItem) {
-          item.approves = updatedItem.body.data.approves;
-          item.disapproves = updatedItem.body.data.disapproves;
+          if(action === 0){
+            item.disapproves = item.disapproves.filter(userId=>userId != this.user.id)
+          }else{
+            item.disapproves = [...item.disapproves,this.user.id]
+          }
+          item.approves = item.approves.filter(userId=>userId != this.user.id)
         });
     },
     discussion(item) {
@@ -212,7 +228,7 @@ export default {
       if (this.user) {
         return arr.indexOf(this.user.id) >= 0 ? "operated" : "";
       } else {
-        return false;
+        return "";
       }
     },
     del() {
